@@ -25,8 +25,12 @@ export const loadStatus = createAsyncThunk(
   async (query: QueryParams, thunkApi) => {
     let state = thunkApi.getState() as RootState;
     let helper = state.endpoint.zkWasmServiceHelper;
-    let tasks = await helper.loadTasks(query);
-    return tasks;
+    let tasksInfo = await helper.loadTasks(query);
+    if (tasksInfo) {
+       return tasksInfo.data;
+    } else {
+       return [];
+    }
   }
 );
 
