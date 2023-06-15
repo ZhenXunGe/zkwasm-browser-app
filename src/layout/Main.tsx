@@ -32,7 +32,7 @@ export function Main() {
 
   useEffect(() => {
     initGameInstance().then((ins: any) => {
-            alert("game loaded");
+            console.log("init instance:", ins.get_status());
     });
   }, []);
 

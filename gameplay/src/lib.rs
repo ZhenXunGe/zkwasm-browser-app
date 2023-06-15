@@ -40,7 +40,7 @@ struct Consequence {
     currency: i32,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 struct Choice {
     consequence: Consequence,
     description: String,
@@ -77,7 +77,7 @@ impl Status {
     }
 
     pub fn choose(&self, choice_index: usize) -> Choice {
-        let choice = self.context.unwrap()[choice_index];
+        let choice = self.context.as_ref().unwrap()[choice_index].clone();
         self.apply_consequence(choice.consequence);
         choice
     }
@@ -101,6 +101,11 @@ pub fn get_status() -> Status {
     status
 }
 */
+
+#[wasm_bindgen]
+pub fn get_status() -> i32 {
+    12
+}
 
 #[wasm_bindgen]
 pub fn zkmain() {
