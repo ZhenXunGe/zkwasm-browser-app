@@ -69,7 +69,7 @@ impl Consequence {
     }
 }
 
-#[derive(Clone)]
+#[derive(Copy, Clone)]
 struct Choice {
     consequence: Consequence,
     description_id: u32,
@@ -91,6 +91,11 @@ impl RuleEngine {
     }
 }
 
+// calculate status after applying consequence
+fn cal_cons(status: u32, consq: i32) -> u32 {
+    u32::try_from(i32::try_from(status).unwrap() + consq).unwrap()
+}
+
 impl Status {
     pub fn new() -> Self {
         Status {
@@ -105,7 +110,7 @@ impl Status {
             currency: 10,
             context: None,
         }
-    }
+   }
     pub fn act(&mut self, acttype: ActionType, rules: &RuleEngine) -> Vec<Choice> {
         let choices = rules.pick_rule(self, acttype);
         self.context = Some(choices.clone());
@@ -113,13 +118,22 @@ impl Status {
     }
 
     pub fn choose(&mut self, choice_index: usize) -> Choice {
-        let choice = self.context.as_ref().unwrap()[choice_index].clone();
+        let choice = self.context.as_ref().unwrap()[choice_index];
         self.apply_consequence(choice.consequence);
         choice
     }
 
+    // calculate new status value
     fn apply_consequence(&mut self, consq: Consequence) {
-        self.wisdom += 1;
+        self.wisdom = cal_cons(self.wisdom, consq.wisdom);
+        self.attack = cal_cons(self.attack, consq.attack);
+        self.luck = cal_cons(self.luck, consq.luck);
+        self.charm = cal_cons(self.charm, consq.charm);
+        self.family = cal_cons(self.family, consq.family);
+        self.speed = cal_cons(self.speed, consq.speed);
+        self.defence = cal_cons(self.defence, consq.defence);
+        self.age = cal_cons(self.age, consq.age);
+        self.currency = cal_cons(self.currency, consq.currency);
     }
 }
 
