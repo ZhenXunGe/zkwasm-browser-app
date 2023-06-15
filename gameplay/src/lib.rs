@@ -5,6 +5,9 @@ use zkwasm_rust_sdk::{
     require,
     wasm_dbg,
 };
+extern crate num;
+#[macro_use]
+extern crate num_derive;
 
 pub fn get_account(account: u32) -> [u64; 4] {
     Merkle::get(account as u64)
@@ -69,7 +72,7 @@ impl Consequence {
 #[derive(Clone)]
 struct Choice {
     consequence: Consequence,
-    description: String,
+    description_id: u32,
     ratio: u32,
 }
 
@@ -81,7 +84,7 @@ impl RuleEngine {
         vec![
             Choice {
                 consequence:Consequence::new_delta(0,0,0,0,0,0,0,0,0),
-                description:"about to inc your wisdom".to_string(),
+                description_id: 0,
                 ratio: 20,
             }
         ]
@@ -134,9 +137,9 @@ static mut STATUS: Status = Status {
     context: None,
 };
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, FromPrimitive)]
 enum ActionType {
-    Working,
+    Working = 0,
     Exploring,
     Coasting,
 }
@@ -156,12 +159,32 @@ pub fn get_wisdom() -> u32 {
     }
 }
 
+
 #[wasm_bindgen]
-pub fn step() {
+pub fn get_choices() -> Vec<u32> {
+    unsafe {
+        let choices = STATUS.context.as_ref();
+        choices.map_or(vec![], |x| {
+            x.iter().map(|x| {
+                x.description_id
+            }).collect::<Vec<u32>>()
+        })
+    }
+}
+
+#[wasm_bindgen]
+pub fn action(at: u32) {
+    let action_type = num::FromPrimitive::from_u32(at).unwrap();
     let rule_engine = RuleEngine {};
     unsafe {
-        let choices = STATUS.act(ActionType::Exploring, &rule_engine);
-        STATUS.choose(0);
+        let _choices = STATUS.act(action_type, &rule_engine);
+    }
+}
+
+#[wasm_bindgen]
+pub fn choose(at: usize) {
+    unsafe {
+        STATUS.choose(at);
     }
 }
 
