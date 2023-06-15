@@ -32,7 +32,10 @@ export function Main() {
 
   useEffect(() => {
     initGameInstance().then((ins: any) => {
-            console.log("init instance:", ins.get_status());
+            console.log("current wisdom", ins.get_wisdom());
+            ins.step();
+            console.log("post wisdom", ins.get_wisdom());
+
     });
   }, []);
 
