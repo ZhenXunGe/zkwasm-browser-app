@@ -5,9 +5,12 @@ use zkwasm_rust_sdk::{
     require,
     wasm_dbg,
 };
+use std::sync::Mutex;
 extern crate num;
 #[macro_use]
 extern crate num_derive;
+#[macro_use]
+extern crate lazy_static;
 
 pub fn get_account(account: u32) -> [u64; 4] {
     Merkle::get(account as u64)
@@ -69,7 +72,7 @@ impl Consequence {
     }
 }
 
-#[derive(Clone)]
+#[derive(Copy, Clone)]
 struct Choice {
     consequence: Consequence,
     description_id: u32,
@@ -89,6 +92,11 @@ impl RuleEngine {
             }
         ]
     }
+}
+
+// calculate status after applying consequence
+fn cal_cons(status: u32, consq: i32) -> u32 {
+    u32::try_from(i32::try_from(status).unwrap() + consq).unwrap()
 }
 
 impl Status {
@@ -113,29 +121,32 @@ impl Status {
     }
 
     pub fn choose(&mut self, choice_index: usize) -> Choice {
-        let choice = self.context.as_ref().unwrap()[choice_index].clone();
+        let choice = self.context.as_ref().unwrap()[choice_index];
         self.apply_consequence(choice.consequence);
         choice
     }
 
+    // calculate new status value
     fn apply_consequence(&mut self, consq: Consequence) {
-        self.wisdom += 1;
+        self.wisdom = cal_cons(self.wisdom, consq.wisdom);
+        self.attack = cal_cons(self.attack, consq.attack);
+        self.luck = cal_cons(self.luck, consq.luck);
+        self.charm = cal_cons(self.charm, consq.charm);
+        self.family = cal_cons(self.family, consq.family);
+        self.speed = cal_cons(self.speed, consq.speed);
+        self.defence = cal_cons(self.defence, consq.defence);
+        self.age = cal_cons(self.age, consq.age);
+        self.currency = cal_cons(self.currency, consq.currency);
     }
 }
 
 //static STATUS: Status = Status::new();
-static mut STATUS: Status = Status {
-    wisdom: 10,
-    attack: 10,
-    luck: 10,
-    charm: 10,
-    family: 10,
-    speed: 10,
-    defence: 10,
-    age: 10,
-    currency: 10,
-    context: None,
-};
+lazy_static! {
+    static ref STATUS: Mutex<Status> = {
+        let status = Status::new();
+        Mutex::new(status)
+    };
+}
 
 #[derive(Copy, Clone, FromPrimitive)]
 enum ActionType {
@@ -154,38 +165,31 @@ pub fn get_status() -> Status {
 
 #[wasm_bindgen]
 pub fn get_wisdom() -> u32 {
-    unsafe {
-        STATUS.wisdom
-    }
+    STATUS.lock().unwrap().wisdom
 }
 
 
 #[wasm_bindgen]
 pub fn get_choices() -> Vec<u32> {
-    unsafe {
-        let choices = STATUS.context.as_ref();
-        choices.map_or(vec![], |x| {
-            x.iter().map(|x| {
-                x.description_id
-            }).collect::<Vec<u32>>()
-        })
-    }
+    let binding = STATUS.lock().unwrap();
+    let choices = binding.context.as_ref();
+    choices.map_or(vec![], |x| {
+        x.iter().map(|x| {
+            x.description_id
+        }).collect::<Vec<u32>>()
+    })
 }
 
 #[wasm_bindgen]
 pub fn action(at: u32) {
     let action_type = num::FromPrimitive::from_u32(at).unwrap();
     let rule_engine = RuleEngine {};
-    unsafe {
-        let _choices = STATUS.act(action_type, &rule_engine);
-    }
+    let _choices = STATUS.lock().unwrap().act(action_type, &rule_engine);
 }
 
 #[wasm_bindgen]
 pub fn choose(at: usize) {
-    unsafe {
-        STATUS.choose(at);
-    }
+    STATUS.lock().unwrap().choose(at);
 }
 
 #[wasm_bindgen]
