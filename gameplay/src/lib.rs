@@ -113,7 +113,7 @@ impl Status {
             currency: 10,
             context: None,
         }
-   }
+    }
     pub fn act(&mut self, acttype: ActionType, rules: &RuleEngine) -> Vec<Choice> {
         let choices = rules.pick_rule(self, acttype);
         self.context = Some(choices.clone());
