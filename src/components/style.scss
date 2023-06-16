@@ -117,3 +117,39 @@
     font-size: 14px;
   }
 }
+
+.statusBar {
+  background-color: var(--button-main);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-family: "Be Vietnam";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+
+  width: 500px;
+  margin: 0 auto;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .tag {
+    font-family: "Be Vietnam";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+
+    color: var(--blue-text-color);
+    position: relative;
+    top: -5px;
+  }
+  .value {
+    font-family: "Be Vietnam";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: end;
+    color: var(--blue-text-color);
+  }
+}

@@ -19,21 +19,33 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "./style.scss";
 import "bootswatch/dist/slate/bootstrap.min.css";
 import CurrencyDisplay from "../components/Currency";
+import StatusDisplay from "../components/Status";
 import { Container } from "react-bootstrap";
 import { MainNavBar } from "../components/Nav";
 import Title from "../images/2048_title.png";
 
 export function Main() {
   const dispatch = useAppDispatch();
-  const [currency, setCurrency] = useState(20);
   const [submitURI, setSubmitURI] = useState("");
+  const [wisdom, setWisdom] = useState(0);
+  const [attack, setAttack] = useState(0);
+  const [luck, setLuck] = useState(0);
+  const [charm, setCharm] = useState(0);
+  const [family, setFamily] = useState(0);
+  const [speed, setSpeed] = useState(0);
+  const [defence, setDefence] = useState(0);
+  const [age, setAge] = useState(0);
+  const [currency, setCurrency] = useState(0);
 
   let ready = useAppSelector(tasksLoaded);
 
   useEffect(() => {
     initGameInstance().then((ins: any) => {
             console.log("current wisdom", ins.get_wisdom());
-            ins.step();
+            ins.action(0);
+            ins.choose(0);
+            ins.get_choices();
+            setWisdom(ins.get_wisdom());
             console.log("post wisdom", ins.get_wisdom());
 
     });
@@ -53,11 +65,23 @@ export function Main() {
             <img src={Title} height="40px" alt="title" className="me-4" />
             <CurrencyDisplay
               tag="Best"
-              value={12}
+              value={currency}
               className="high-score mx-2"
             ></CurrencyDisplay>
           </Col>
         </Row>
+        <StatusDisplay
+          tag="Status"
+          wisdom={wisdom}
+          attack={attack}
+          luck={luck}
+          charm={charm}
+          family={family}
+          speed={speed}
+          defence={defence}
+          age={age}
+          className="statusBar"
+        ></StatusDisplay>
         <Row className="mt-3">
           <Col>
             <div className="content">
