@@ -23,18 +23,74 @@ import { Container } from "react-bootstrap";
 import { MainNavBar } from "../components/Nav";
 import Title from "../images/2048_title.png";
 
+class State {
+    wisdom: number;
+    attack: number;
+    luck: number;
+    charm: number;
+    family: number;
+    speed: number;
+    defence: number;
+    age: number;
+    currency: number;
+    constructor(wisdom: number,
+            attack:number,
+            luck:number,
+            charm:number,
+            family:number,
+            speed:number,
+            defence:number,
+            age:number,
+            currency:number)
+    {
+        this.wisdom = wisdom;
+        this.attack = attack;
+        this.luck = luck;
+        this.charm = charm;
+        this.family = family;
+        this.speed = speed;
+        this.defence = defence;
+        this.age = age;
+        this.currency = currency;
+    }
+}
+
 export function Main() {
   const dispatch = useAppDispatch();
-  const [currency, setCurrency] = useState(20);
+  const [state, setState] = useState(new State(0,0,0,0,0,0,0,0,0));
   const [submitURI, setSubmitURI] = useState("");
 
   let ready = useAppSelector(tasksLoaded);
 
+  let updateState = (ins:any) => {
+      setState(new State(
+         ins.get_wisdom(),
+         ins.get_attack(),
+         ins.get_luck(),
+         ins.get_charm(),
+         ins.get_family(),
+         ins.get_speed(),
+         ins.get_defence(),
+         ins.get_age(),
+         ins.get_currency(),
+      ));
+  }
+
   useEffect(() => {
     initGameInstance().then((ins: any) => {
-            console.log("current wisdom", ins.get_wisdom());
-            ins.step();
-            console.log("post wisdom", ins.get_wisdom());
+        ins.init_rg();
+        updateState(ins);
+        console.log("current state", state);
+        ins.action();
+        let event = ins.get_event()
+        console.log("event_id", event);
+        //display the choices
+        ins.choose(0);
+        updateState(ins);
+        console.log("post state", state);
+        console.log("post state", state);
+        console.log("post state", state);
+        console.log("post state", state);
 
     });
   }, []);
@@ -46,7 +102,7 @@ export function Main() {
 
   return (
     <>
-      <MainNavBar currency={currency} handleRestart={restartGame}></MainNavBar>
+      <MainNavBar currency={0} handleRestart={restartGame}></MainNavBar>
       <Container className="justify-content-center mb-4">
         <Row className="justify-content-md-center  m-auto mt-3">
           <Col className="d-flex justify-content-between align-items-center p-0 game-width">

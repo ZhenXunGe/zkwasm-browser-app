@@ -27,7 +27,7 @@ struct Status {
     pub defence: u32,
     pub age: u32,
     pub currency: u32,
-    pub context: Option<Vec<Choice>>
+    pub context: Option<Event>
 }
 
 #[derive(Copy, Clone)]
@@ -73,21 +73,27 @@ impl Consequence {
 struct Choice {
     consequence: Consequence,
     description_id: u32,
-    ratio: u32,
+}
+
+#[derive(Clone)]
+struct Event {
+    event_id: u32,
+    choices: Vec<Choice>,
 }
 
 struct RuleEngine {
+    leads: Vec<Vec<Event>>,
 }
 
 impl RuleEngine {
-    pub fn pick_rule(&self, s: &Status, acttype: ActionType) -> Vec<Choice> {
-        vec![
-            Choice {
-                consequence:Consequence::new_delta(0,0,0,0,0,0,0,0,0),
-                description_id: 0,
-                ratio: 20,
-            }
-        ]
+    fn select_leads(&self) -> usize {
+        0
+    }
+    fn select_event(&self) -> usize {
+        0
+    }
+    pub fn pick_event(&self, s: &Status, acttype: ActionType) -> &Event {
+        &self.leads[self.select_leads()][self.select_event()]
     }
 }
 
@@ -106,22 +112,31 @@ impl Status {
             context: None,
         }
     }
-    pub fn act(&mut self, acttype: ActionType, rules: &RuleEngine) -> Vec<Choice> {
-        let choices = rules.pick_rule(self, acttype);
-        self.context = Some(choices.clone());
-        choices
+    pub fn act(&mut self, acttype: ActionType, rules: &RuleEngine) {
+        let event = rules.pick_event(self, acttype);
+        self.context = Some(event.clone());
     }
 
     pub fn choose(&mut self, choice_index: usize) -> Choice {
-        let choice = self.context.as_ref().unwrap()[choice_index].clone();
+        let choice = self.context.as_ref().unwrap().choices[choice_index].clone();
         self.apply_consequence(choice.consequence);
         choice
     }
 
     fn apply_consequence(&mut self, consq: Consequence) {
-        self.wisdom += 1;
+        self.wisdom = ((self.wisdom as i32) + consq.wisdom)as u32;
+        self.attack = ((self.wisdom as i32) + consq.attack)as u32;
+        self.luck = ((self.wisdom as i32) + consq.luck)as u32;
+        self.charm = ((self.wisdom as i32) + consq.charm)as u32;
+        self.family = ((self.wisdom as i32) + consq.family)as u32;
+        self.speed = ((self.wisdom as i32) + consq.speed)as u32;
+        self.defence = ((self.wisdom as i32) + consq.defence)as u32;
+        self.age = ((self.wisdom as i32) + consq.age)as u32;
+        self.currency = ((self.wisdom as i32) + consq.currency)as u32;
     }
 }
+
+static mut RG: Option<RuleEngine> = None;
 
 //static STATUS: Status = Status::new();
 static mut STATUS: Status = Status {
@@ -144,40 +159,111 @@ enum ActionType {
     Coasting,
 }
 
-/*
 #[wasm_bindgen]
-pub fn get_status() -> Status {
-    let status = Status::new();
-    status
+pub fn init_rg() {
+    unsafe {
+        RG = Some (RuleEngine {
+            leads: vec![
+                vec![
+                    Event {
+                        event_id: 0,
+                        choices: vec![
+                            Choice {
+                                consequence:Consequence::new_delta(1,0,0,0,0,0,0,0,0),
+                                description_id: 0,
+                            }
+                        ]
+                    }
+                ]
+            ]
+        })
+    }
 }
-*/
 
 #[wasm_bindgen]
-pub fn get_wisdom() -> u32 {
+pub fn get_wisdom() -> u32{
     unsafe {
         STATUS.wisdom
     }
 }
 
+#[wasm_bindgen]
+pub fn get_attack() -> u32 {
+    unsafe {
+        STATUS.attack
+    }
+}
 
 #[wasm_bindgen]
-pub fn get_choices() -> Vec<u32> {
+pub fn get_luck() -> u32 {
     unsafe {
-        let choices = STATUS.context.as_ref();
-        choices.map_or(vec![], |x| {
-            x.iter().map(|x| {
-                x.description_id
-            }).collect::<Vec<u32>>()
-        })
+        STATUS.luck
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_charm() -> u32 {
+    unsafe {
+        STATUS.charm
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_family() -> u32 {
+    unsafe {
+        STATUS.family
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_speed() -> u32 {
+    unsafe {
+        STATUS.speed
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_defence() -> u32 {
+    unsafe {
+        STATUS.defence
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_age() -> u32 {
+    unsafe {
+        STATUS.age
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_currency() -> u32 {
+    unsafe {
+        STATUS.currency
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_choice(index: usize) -> u32 {
+    unsafe {
+        let event = STATUS.context.as_ref();
+        event.unwrap().choices[index].description_id
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_event() -> u32 {
+    unsafe {
+        let event = STATUS.context.as_ref();
+        event.unwrap().event_id
     }
 }
 
 #[wasm_bindgen]
 pub fn action(at: u32) {
     let action_type = num::FromPrimitive::from_u32(at).unwrap();
-    let rule_engine = RuleEngine {};
     unsafe {
-        let _choices = STATUS.act(action_type, &rule_engine);
+        STATUS.act(action_type, RG.as_ref().unwrap());
     }
 }
 
