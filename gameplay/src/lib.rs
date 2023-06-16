@@ -9,6 +9,8 @@ extern crate num;
 #[macro_use]
 extern crate num_derive;
 
+mod stdpack;
+
 pub fn get_account(account: u32) -> [u64; 4] {
     Merkle::get(account as u64)
 }
@@ -164,17 +166,7 @@ pub fn init_rg() {
     unsafe {
         RG = Some (RuleEngine {
             leads: vec![
-                vec![
-                    Event {
-                        event_id: 0,
-                        choices: vec![
-                            Choice {
-                                consequence:Consequence::new_delta(1,0,0,0,0,0,0,0,0),
-                                description_id: 0,
-                            }
-                        ]
-                    }
-                ]
+                stdpack::standard_pack()
             ]
         })
     }
