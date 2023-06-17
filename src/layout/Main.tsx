@@ -22,6 +22,7 @@ import CurrencyDisplay from "../components/Currency";
 import { Container } from "react-bootstrap";
 import { MainNavBar } from "../components/Nav";
 import Title from "../images/2048_title.png";
+import { eventsTable } from "../data/gameplay";
 
 class State {
     wisdom: number;
@@ -80,20 +81,22 @@ export function Main() {
     initGameInstance().then((ins: any) => {
         ins.init_rg();
         updateState(ins);
-        console.log("current state", state);
-        ins.action();
-        let event = ins.get_event()
-        console.log("event_id", event);
-        //display the choices
-        ins.choose(0);
-        updateState(ins);
-        console.log("post state", state);
-        console.log("post state", state);
-        console.log("post state", state);
-        console.log("post state", state);
-
     });
   }, []);
+
+  function simulate(acttype: number) {
+    initGameInstance().then((ins: any) => {
+      console.log("current state", state);
+      ins.action();
+      let event_id = ins.get_event();
+      let event = eventsTable[event_id];
+      console.log("event description:", event.description);
+      console.log("event choices:", event.choices.length);
+      console.log("choose from", event.choices);
+      ins.choose(0);
+      updateState(ins);
+    });
+  }
 
   function restartGame() {
     //reload the window for now
@@ -104,19 +107,14 @@ export function Main() {
     <>
       <MainNavBar currency={0} handleRestart={restartGame}></MainNavBar>
       <Container className="justify-content-center mb-4">
-        <Row className="justify-content-md-center  m-auto mt-3">
-          <Col className="d-flex justify-content-between align-items-center p-0 game-width">
-            <img src={Title} height="40px" alt="title" className="me-4" />
-            <CurrencyDisplay
-              tag="Best"
-              value={12}
-              className="high-score mx-2"
-            ></CurrencyDisplay>
-          </Col>
-        </Row>
         <Row className="mt-3">
           <Col>
             <div className="content">
+               <div className="actions">
+                  <div onClick={()=>simulate(0)}> working </div>
+                  <div onClick={()=>simulate(1)}> exploring </div>
+                  <div onClick={()=>simulate(2)}> coasting </div>
+               </div>
             </div>
           </Col>
         </Row>

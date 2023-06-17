@@ -127,14 +127,14 @@ impl Status {
 
     fn apply_consequence(&mut self, consq: Consequence) {
         self.wisdom = ((self.wisdom as i32) + consq.wisdom)as u32;
-        self.attack = ((self.wisdom as i32) + consq.attack)as u32;
-        self.luck = ((self.wisdom as i32) + consq.luck)as u32;
-        self.charm = ((self.wisdom as i32) + consq.charm)as u32;
-        self.family = ((self.wisdom as i32) + consq.family)as u32;
-        self.speed = ((self.wisdom as i32) + consq.speed)as u32;
-        self.defence = ((self.wisdom as i32) + consq.defence)as u32;
-        self.age = ((self.wisdom as i32) + consq.age)as u32;
-        self.currency = ((self.wisdom as i32) + consq.currency)as u32;
+        self.attack = ((self.attack as i32) + consq.attack)as u32;
+        self.luck = ((self.luck as i32) + consq.luck)as u32;
+        self.charm = ((self.charm as i32) + consq.charm)as u32;
+        self.family = ((self.family as i32) + consq.family)as u32;
+        self.speed = ((self.speed as i32) + consq.speed)as u32;
+        self.defence = ((self.defence as i32) + consq.defence)as u32;
+        self.age = ((self.age as i32) + consq.age)as u32;
+        self.currency = ((self.currency as i32) + consq.currency)as u32;
     }
 }
 

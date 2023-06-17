@@ -6,7 +6,7 @@ use crate::{
 
 fn create_choice(dscp_id: &mut u32, consq: Consequence) -> Choice {
     let c = Choice {
-        consequence:Consequence::new_delta(1,0,0,0,0,0,0,0,0),
+        consequence: consq,
         description_id: *dscp_id,
     };
     *dscp_id += 1;
@@ -15,7 +15,8 @@ fn create_choice(dscp_id: &mut u32, consq: Consequence) -> Choice {
 
 #[macro_export]
 macro_rules! consequence {
-    ($wisdom: expr, $attack: expr, $luck: expr) => 
+    ($wisdom:expr, $attack:expr, $luck:expr, $charm:expr, $family:expr,
+        $speed:expr, $defence:expr, $age:expr, $currency:expr) =>
     {
         Consequence {
             wisdom: $wisdom,
@@ -31,8 +32,28 @@ macro_rules! consequence {
     }
 }
 
+#[macro_export]
+macro_rules! cost_consequence {
+    ($currency:expr) =>
+    {
+        Consequence {
+            wisdom: 0,
+            attack: 0,
+            luck: 0,
+            charm: 0,
+            family: 0,
+            speed: 0,
+            defence: 0,
+            age: 0,
+            currency: $currency,
+        }
+    }
+}
 
-const v: Consequence = consequence!(0, 0, 0);
+
+const WISDOM_INC_BASIC: Consequence = consequence!(1,0,0,0,0,0,0,0,-1);
+const WISDOM_DEC_BASIC: Consequence = consequence!(-1,0,0,0,0,0,0,0,-1);
+const COST_BASIC: Consequence = cost_consequence!(-1);
 
 
 pub(crate) fn standard_pack() -> Vec<Event> {
@@ -41,14 +62,14 @@ pub(crate) fn standard_pack() -> Vec<Event> {
         Event {
             event_id: 0,
             choices: vec![
-                create_choice(&mut dscp_id, 
-                    Consequence::new_delta(1,0,0,0,0,0,0,0,-4)
+                create_choice(&mut dscp_id,
+                    WISDOM_INC_BASIC
                 ),
-                create_choice(&mut dscp_id, 
-                    Consequence::new_delta(0,0,0,0,0,0,0,0,-1)
+                create_choice(&mut dscp_id,
+                    COST_BASIC
                 ),
-                create_choice(&mut dscp_id, 
-                    Consequence::new_delta(-1,0,0,0,0,0,0,0,0)
+                create_choice(&mut dscp_id,
+                    WISDOM_DEC_BASIC
                 ),
             ]
         }
