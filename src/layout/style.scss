@@ -36,6 +36,7 @@ div.content {
   margin: auto;
   width: 500px;
   height: 900px;
+  position:relative;
   background-size: 500px 900px;
   background-image: url("../images/layer2-bg.png");
   --cell-size: 110px;
@@ -97,6 +98,104 @@ div.board-cell-out div {
   background-color: var(--navbar-bg);
   border-radius: 15px;
   width: 500px !important;
+}
+
+.actions {
+  position:absolute;
+  left:380px;
+  top: 140px;
+}
+
+.action-exploring {
+  width:80px;
+  height:40px;
+  background-size: 80px 40px;
+  background-image: url("../images/layer4_exploring_btn.png");
+}
+
+.action-working {
+  width:80px;
+  height:40px;
+  background-size: 80px 40px;
+  background-image: url("../images/layer4_working_btn.png");
+}
+
+.action-coasting {
+  width:80px;
+  height:40px;
+  background-size: 80px 40px;
+  background-image: url("../images/layer4_coasting_btn.png");
+}
+
+.items {
+  position: absolute;
+  left: 40px;
+  top: 440px;
+  .item {
+    display: inline-block;
+    width:50px;
+    height:50px;
+    margin:10px;
+    background-size: 50px 50px;
+    background-image: url("../images/layer3_sticker3.png");
+  }
+}
+
+.stickers {
+  position: absolute;
+  left: 32px;
+  top: 86px;
+  .sticker {
+    width:44px;
+    height:44px;
+    margin:5px;
+    background-size: 44px 44px;
+    background-image: url("../images/layer3_sticker1.png");
+  }
+}
+
+.bag {
+  position: absolute;
+  left:20px;
+  top: 370px;
+  width: 110px;
+  height: 55px;
+  background-size: 110px 80px;
+  background-image: url("../images/layer1_bag_btn.png");
+}
+
+.map {
+  position: absolute;
+  left:375px;
+  top: 370px;
+  width: 100px;
+  height: 60px;
+  background-size: 100px 80px;
+  background-image: url("../images/layer1_instance_btn.png");
+}
+
+.charactor {
+  position: absolute;
+  left:200px;
+  top: 220px;
+  width: 80px;
+  height: 130px;
+  background-size: 80px 130px;
+  background-image: url("../images/layer1_charactor.png");
+}
+
+.historys {
+  position: absolute;
+  left: 30px;
+  top: 580px;
+  .history {
+    width:430px;
+    height:80px;
+    margin:10px;
+    background-size: 430px 80px;
+    background-image: url("../images/layer3_message.png");
+  }
+
 }
 
 .sell-button {

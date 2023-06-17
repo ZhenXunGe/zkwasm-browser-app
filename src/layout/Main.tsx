@@ -111,9 +111,35 @@ export function Main() {
           <Col>
             <div className="content">
                <div className="actions">
-                  <div onClick={()=>simulate(0)}> working </div>
-                  <div onClick={()=>simulate(1)}> exploring </div>
-                  <div onClick={()=>simulate(2)}> coasting </div>
+                  <div onClick={()=>simulate(0)} className="action-working"></div>
+                  <div onClick={()=>simulate(1)} className="action-exploring"></div>
+                  <div onClick={()=>simulate(2)} className="action-coasting"></div>
+               </div>
+               <div className="charactor">
+               </div>
+               <div className="bag">
+               </div>
+               <div className="map">
+               </div>
+               <div className="items">
+                  <div className="item"></div>
+                  <div className="item"></div>
+                  <div className="item"></div>
+                  <div className="item"></div>
+                  <div className="item"></div>
+                  <div className="item"></div>
+               </div>
+               <div className="historys">
+                  <div className="history"></div>
+                  <div className="history"></div>
+                  <div className="history"></div>
+               </div>
+               <div className="stickers">
+                  <div className="sticker"></div>
+                  <div className="sticker"></div>
+                  <div className="sticker"></div>
+                  <div className="sticker"></div>
+                  <div className="sticker"></div>
                </div>
             </div>
           </Col>
