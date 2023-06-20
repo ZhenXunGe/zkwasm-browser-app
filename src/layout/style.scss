@@ -34,30 +34,16 @@ div.content {
   padding-left: 12px;
   padding-top: 15px;
   margin: auto;
-  width: 500px;
+  width: 900px;
   height: 900px;
-  position:relative;
-  background-size: 500px 900px;
+  position: relative;
+  background-size: cover;
   background-image: url("../images/layer2-bg.png");
+  background-repeat: no-repeat;
+
   --cell-size: 110px;
   --cell-margin: 12px;
 }
-
-div.board-cell {
-  display: inline-block;
-  height: var(--cell-size);
-  width: var(--cell-size);
-  margin-right: var(--cell-margin);
-}
-
-div.board-cell-out div {
-  display: inline-block;
-  height: var(--cell-size);
-  width: var(--cell-size);
-  border: 3px solid white;
-  border-radius: 5px;
-}
-
 
 .overflow-breakword {
   overflow-wrap: break-word;
@@ -101,101 +87,165 @@ div.board-cell-out div {
 }
 
 .actions {
-  position:absolute;
-  left:380px;
-  top: 140px;
+  position: absolute;
+  left: 82%;
+  top: 26%;
+  .current-action {
+    background-color: blue;
+  }
 }
 
 .action-exploring {
-  width:80px;
-  height:40px;
-  background-size: 80px 40px;
+  width: 105px;
+  height: 68px;
+  background-size: cover;
   background-image: url("../images/layer4_exploring_btn.png");
+  cursor: pointer;
 }
 
 .action-working {
-  width:80px;
-  height:40px;
-  background-size: 80px 40px;
+  width: 105px;
+  height: 68px;
+  background-size: cover;
   background-image: url("../images/layer4_working_btn.png");
+  cursor: pointer;
 }
 
 .action-coasting {
-  width:80px;
-  height:40px;
-  background-size: 80px 40px;
+  width: 105px;
+  height: 68px;
+  background-size: cover;
   background-image: url("../images/layer4_coasting_btn.png");
+  cursor: pointer;
 }
 
 .items {
   position: absolute;
-  left: 40px;
-  top: 440px;
+  left: 7%;
+  top: 80%;
   .item {
     display: inline-block;
-    width:50px;
-    height:50px;
-    margin:10px;
-    background-size: 50px 50px;
+    width: 103px;
+    height: 102px;
+    margin: 10px;
+    background-size: cover;
     background-image: url("../images/layer3_sticker3.png");
   }
 }
 
 .stickers {
   position: absolute;
-  left: 32px;
-  top: 86px;
+  left: 6.5%;
+  top: 15%;
   .sticker {
-    width:44px;
-    height:44px;
-    margin:5px;
-    background-size: 44px 44px;
+    width: 82px;
+    height: 79px;
+    margin: 5px;
+    background-size: cover;
     background-image: url("../images/layer3_sticker1.png");
   }
 }
 
 .bag {
   position: absolute;
-  left:20px;
-  top: 370px;
-  width: 110px;
-  height: 55px;
-  background-size: 110px 80px;
+  left: 5%;
+  top: 68%;
+  width: 180px;
+  height: 139px;
+  background-size: cover;
   background-image: url("../images/layer1_bag_btn.png");
+  cursor: pointer;
 }
 
 .map {
   position: absolute;
-  left:375px;
-  top: 370px;
-  width: 100px;
-  height: 60px;
-  background-size: 100px 80px;
+  left: 75%;
+  top: 65%;
+  width: 150px;
+  height: 148px;
+  background-size: cover;
   background-image: url("../images/layer1_instance_btn.png");
 }
 
-.charactor {
+.status {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  color: black;
+
+  .wisdom {
+    position: absolute;
+    left: 21%;
+    top: 13%;
+  }
+  .attack {
+    position: absolute;
+    left: 32%;
+    top: 13%;
+  }
+  .speed {
+    position: absolute;
+    left: 43%;
+    top: 13%;
+  }
+  .defence {
+    position: absolute;
+    left: 53%;
+    top: 13%;
+  }
+  .family {
+    position: absolute;
+    left: 64%;
+    top: 13%;
+  }
+  .charm {
+    position: absolute;
+    left: 75%;
+    top: 13%;
+  }
+  .luck {
+    position: absolute;
+    left: 86%;
+    top: 13%;
+  }
+  .age {
+    position: absolute;
+    left: 21%;
+    top: 25%;
+  }
+}
+
+.character {
   position: absolute;
-  left:200px;
-  top: 220px;
-  width: 80px;
-  height: 130px;
-  background-size: 80px 130px;
+  left: calc(50% - 75px);
+  top: calc(50% - 131.5px);
+  width: 150px;
+  height: 263px;
+  background-size: cover;
   background-image: url("../images/layer1_charactor.png");
+
+  .character-health {
+    position: absolute;
+    left: calc(-50%);
+    top: -50%;
+    width: 300px;
+    height: 59px;
+    background-size: cover;
+    background-image: url("../assets/main/healthbar.png");
+  }
 }
 
 .historys {
-  position: absolute;
+  //position: absolute;
   left: 30px;
   top: 580px;
   .history {
-    width:430px;
-    height:80px;
-    margin:10px;
+    width: 430px;
+    height: 80px;
+    margin: 10px;
     background-size: 430px 80px;
     background-image: url("../images/layer3_message.png");
   }
-
 }
 
 .sell-button {

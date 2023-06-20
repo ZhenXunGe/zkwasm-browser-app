@@ -1,3 +1,4 @@
+use character::Character;
 use wasm_bindgen::prelude::*;
 use zkwasm_rust_sdk::{
     wasm_input,
@@ -5,11 +6,16 @@ use zkwasm_rust_sdk::{
     require,
     wasm_dbg,
 };
+use once_cell::sync::Lazy;
+
 extern crate num;
 #[macro_use]
 extern crate num_derive;
 
 mod stdpack;
+mod items;
+mod skills;
+mod character;
 
 pub fn get_account(account: u32) -> [u64; 4] {
     Merkle::get(account as u64)
@@ -19,7 +25,7 @@ pub fn set_account(account: u32, data:&[u64; 4]) {
     Merkle::set(account as u64, data)
 }
 
-struct Status {
+pub struct Status {
     pub wisdom: u32,
     pub attack: u32,
     pub luck: u32,
@@ -72,18 +78,18 @@ impl Consequence {
 }
 
 #[derive(Clone)]
-struct Choice {
+pub struct Choice {
     consequence: Consequence,
     description_id: u32,
 }
 
 #[derive(Clone)]
-struct Event {
+pub struct Event {
     event_id: u32,
     choices: Vec<Choice>,
 }
 
-struct RuleEngine {
+pub struct RuleEngine {
     leads: Vec<Vec<Event>>,
 }
 
@@ -154,8 +160,10 @@ static mut STATUS: Status = Status {
     context: None,
 };
 
+static mut CHARACTER: Lazy<Character> = Lazy::new(|| Character::new());
+
 #[derive(Copy, Clone, FromPrimitive)]
-enum ActionType {
+pub enum ActionType {
     Working = 0,
     Exploring,
     Coasting,
@@ -175,70 +183,84 @@ pub fn init_rg() {
 #[wasm_bindgen]
 pub fn get_wisdom() -> u32{
     unsafe {
-        STATUS.wisdom
+        CHARACTER.get_status().wisdom
     }
 }
 
 #[wasm_bindgen]
 pub fn get_attack() -> u32 {
     unsafe {
-        STATUS.attack
+        CHARACTER.get_status().attack
     }
 }
 
 #[wasm_bindgen]
 pub fn get_luck() -> u32 {
     unsafe {
-        STATUS.luck
+        CHARACTER.get_status().luck
     }
 }
 
 #[wasm_bindgen]
 pub fn get_charm() -> u32 {
     unsafe {
-        STATUS.charm
+        CHARACTER.get_status().charm
     }
 }
 
 #[wasm_bindgen]
 pub fn get_family() -> u32 {
     unsafe {
-        STATUS.family
+        CHARACTER.get_status().family
     }
 }
 
 #[wasm_bindgen]
 pub fn get_speed() -> u32 {
     unsafe {
-        STATUS.speed
+        CHARACTER.get_status().speed
     }
 }
 
 #[wasm_bindgen]
 pub fn get_defence() -> u32 {
     unsafe {
-        STATUS.defence
+        CHARACTER.get_status().defence
     }
 }
 
 #[wasm_bindgen]
 pub fn get_age() -> u32 {
     unsafe {
-        STATUS.age
+        CHARACTER.get_status().age
     }
 }
 
 #[wasm_bindgen]
 pub fn get_currency() -> u32 {
     unsafe {
-        STATUS.currency
+        CHARACTER.get_status().currency
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_savings() -> u32 {
+    unsafe {
+        CHARACTER.get_savings()
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_life() -> u32 {
+    unsafe {
+        CHARACTER.get_life()
     }
 }
 
 #[wasm_bindgen]
 pub fn get_choice(index: usize) -> u32 {
     unsafe {
-        let event = STATUS.context.as_ref();
+        let event = CHARACTER.get_status().context.as_ref();
         event.unwrap().choices[index].description_id
     }
 }
@@ -246,8 +268,15 @@ pub fn get_choice(index: usize) -> u32 {
 #[wasm_bindgen]
 pub fn get_event() -> u32 {
     unsafe {
-        let event = STATUS.context.as_ref();
+        let event = CHARACTER.get_status().context.as_ref();
         event.unwrap().event_id
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_inventory() -> Vec<u32> {
+    unsafe {
+        CHARACTER.get_inventory().get_item_ids()
     }
 }
 
@@ -255,14 +284,14 @@ pub fn get_event() -> u32 {
 pub fn action(at: u32) {
     let action_type = num::FromPrimitive::from_u32(at).unwrap();
     unsafe {
-        STATUS.act(action_type, RG.as_ref().unwrap());
+        CHARACTER.mutate_status().act(action_type, RG.as_ref().unwrap());
     }
 }
 
 #[wasm_bindgen]
 pub fn choose(at: usize) {
     unsafe {
-        STATUS.choose(at);
+        CHARACTER.mutate_status().choose(at);
     }
 }
 
