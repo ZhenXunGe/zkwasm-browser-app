@@ -1,4 +1,5 @@
 import { Modal } from "react-bootstrap";
+import "./style.scss";
 import { eventsTable } from "../../data/gameplay";
 import { Fragment } from "react";
 interface EventsProps {
@@ -11,23 +12,29 @@ export default function Events(props: EventsProps) {
   let event = eventsTable[props.eventId || 0];
   return (
     <>
-      <Modal show={props.show}>
-        <Modal.Header>New Encounter!</Modal.Header>
-        <Modal.Body className="show-grid">
-          <div className="h5">Description</div>
-          <div>{event.description}</div>
-          <div className="mt-4 h5">Choices</div>
-          {event.choices.map((choice, index) => (
-            <Fragment key={index}>
-              <div className="my-1 d-flex align-items-center justify-content-between">
-                {choice}{" "}
-                <button onClick={() => props.handleSelect(index)}>
-                  Choose Choice {index + 1}
-                </button>
-              </div>
-            </Fragment>
-          ))}
-        </Modal.Body>
+      <Modal show={props.show} className="game-dialog">
+        <div className="event-body">
+          <div className="image"></div>
+          <div className="description">{event.description}</div>
+          <div
+            className="choice-a choice-box "
+            onClick={() => props.handleSelect(0)}
+          >
+            <div className="text">{event.choices[0]}</div>
+          </div>
+          <div
+            className="choice-b choice-box "
+            onClick={() => props.handleSelect(1)}
+          >
+            <div className="text">{event.choices[1]}</div>
+          </div>
+          <div
+            className="choice-c choice-box "
+            onClick={() => props.handleSelect(2)}
+          >
+            <div className="text">{event.choices[2]}</div>
+          </div>
+        </div>
       </Modal>
     </>
   );

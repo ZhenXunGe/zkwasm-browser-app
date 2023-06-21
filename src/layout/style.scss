@@ -40,7 +40,7 @@ div.content {
   background-size: cover;
   background-image: url("../images/layer2-bg.png");
   background-repeat: no-repeat;
-
+  overflow: hidden;
   --cell-size: 110px;
   --cell-margin: 12px;
 }
@@ -215,6 +215,42 @@ div.content {
   }
 }
 
+.scrolling-bg {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 97%;
+  height: 97%;
+  background-size: cover;
+  background-image: url("../assets/main/scrolling_bg.png");
+  background-repeat: repeat-x;
+  z-index: -1;
+}
+
+.savings {
+  position: absolute;
+  left: 37.5%;
+  top: 73.5%;
+  font-family: "Averia Serif Libre";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+
+  color: #000000;
+}
+
+.age {
+  position: absolute;
+  left: 59%;
+  top: 73.5%;
+  font-family: "Averia Serif Libre";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+
+  color: #000000;
+}
+
 .character {
   position: absolute;
   left: calc(50% - 75px);
@@ -232,6 +268,26 @@ div.content {
     height: 59px;
     background-size: cover;
     background-image: url("../assets/main/healthbar.png");
+    .character-name {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      font-family: "Averia Serif Libre";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 18px;
+      text-align: center;
+      color: #000000;
+    }
+    .health-bar {
+      position: relative;
+      width: 284px;
+      height: 8px;
+      left: 8px;
+      top: 18px;
+      background-image: url("../assets/main/blood.png");
+    }
   }
 }
 

@@ -24,7 +24,7 @@ import { MainNavBar } from "../components/Nav";
 import Events from "../components/Events";
 import Inventory from "../components/Inventory";
 import { eventsTable } from "../data/gameplay";
-import { State, ActionType } from "../types/game";
+import { State, ActionType, Character } from "../types/game";
 
 export function Main() {
   const dispatch = useAppDispatch();
@@ -33,6 +33,16 @@ export function Main() {
   const [currentAction, setCurrentAction] = useState<ActionType>(
     ActionType.Working
   ); // 0: working, 1: exploring, 2: coasting
+
+  const [character, setCharacter] = useState(
+    new Character(
+      "Useless Fish",
+      0,
+      100,
+      100,
+      new State(0, 0, 0, 0, 0, 0, 0, 0, 0)
+    )
+  );
 
   const [currentEventId, setCurrentEventId] = useState<number | null>(null);
   const [currentModal, setCurrentModal] = useState<string | null>(null);
@@ -62,16 +72,21 @@ export function Main() {
   }, []);
 
   const handleChangeAction = (newAction: ActionType) => {
+    if (isMoving) return;
+    toggleScrollBackground();
     setCurrentAction(newAction);
-    console.log("current state", state);
-    instance.action(newAction);
-    let event_id = instance.get_event();
-    setCurrentEventId(event_id);
-    let event = eventsTable[event_id];
-    setCurrentModal("event");
-    console.log("event description:", event.description);
-    console.log("event choices:", event.choices.length);
-    console.log("choose from", event.choices);
+    setIsMoving(true);
+    setTimeout(() => {
+      setIsMoving(false);
+      instance.action(newAction);
+      let event_id = instance.get_event();
+      setCurrentEventId(event_id);
+      let event = eventsTable[event_id];
+      setCurrentModal("event");
+      console.log("event description:", event.description);
+      console.log("event choices:", event.choices.length);
+      console.log("choose from", event.choices);
+    }, 3000);
   };
 
   const handleChoice = (choice: number) => {
@@ -90,6 +105,38 @@ export function Main() {
     window.location.reload();
   }
 
+  const [isMoving, setIsMoving] = useState(false);
+  const [movingSpeed, setMovingSpeed] = useState(0.5);
+
+  const offset = useRef(0); // Use ref instead of state to avoid unnecessary re-renders
+
+  // Function to start/stop the background scrolling
+  const toggleScrollBackground = () => {
+    setIsMoving((prevScroll) => !prevScroll);
+  };
+
+  // Start or stop scrolling the background when the 'scroll' state changes
+  useEffect(() => {
+    let intervalId: any;
+
+    if (isMoving) {
+      // Start scrolling
+      console.log("start scrolling");
+      intervalId = setInterval(() => {
+        offset.current = offset.current + 0.5; // Change '1' to control the speed of scrolling
+        const bg = document.querySelector(".scrolling-bg") as HTMLElement;
+        console.log("offset", offset.current);
+        bg.style.backgroundPositionX = `${offset.current}%`;
+      }, 10); // Change '100' to control the speed of scrolling
+    } else {
+      // Stop scrolling
+      console.log("stop scrolling");
+      clearInterval(intervalId);
+    }
+
+    // Clean up interval on unmount
+    return () => clearInterval(intervalId);
+  }, [isMoving]);
   return (
     <>
       <MainNavBar currency={0} handleRestart={restartGame}></MainNavBar>
@@ -97,6 +144,7 @@ export function Main() {
         <Row className="mt-3">
           <Col>
             <div className="content">
+              <div className="scrolling-bg"></div>
               <div className="status">
                 <div className="wisdom">Wisdom: {state.wisdom}</div>
                 <div className="attack">Attack: {state.attack}</div>
@@ -105,7 +153,6 @@ export function Main() {
                 <div className="family">Family: {state.family}</div>
                 <div className="charm">charm: {state.charm}</div>
                 <div className="luck">luck: {state.luck}</div>
-                <div className="age">Age: {state.age}</div>
               </div>
               <div className="actions">
                 <div
@@ -129,10 +176,14 @@ export function Main() {
               </div>
               <div className="character">
                 <div className="character-health">
-                  <div className="character-name">useless fish</div>
-                  <div className="health-bar"></div>
+                  <div className="character-name">{character.name}</div>
+                  <div className="health-bar">
+                    {/* <div className="health-amount"></div> */}
+                  </div>
                 </div>
               </div>
+              <div className="savings">{character.savings}</div>
+              <div className="age">{character.state.age}</div>
               <div
                 className="bag"
                 onClick={() => setCurrentModal("inventory")}

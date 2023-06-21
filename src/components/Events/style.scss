@@ -1,0 +1,91 @@
+.event-body {
+  width: 1111px;
+  height: 800px;
+  background-image: url("../../assets/event/choice.png");
+
+  position: relative;
+  .image {
+    background-image: url("../../assets/event/picture.png");
+    width: 437px;
+    height: 339px;
+    position: absolute;
+    left: 8%;
+    top: 20%;
+  }
+  .description {
+    font-family: "Averia Serif Libre";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+
+    color: #000000;
+    width: 357px;
+    word-wrap: break-word;
+
+    position: absolute;
+    left: 10%;
+    top: 65%;
+  }
+  .choice-box {
+    width: 409px;
+    height: 187px;
+    font-family: "Averia Serif Libre";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 18px;
+    color: #000000;
+
+    .text {
+      margin: auto;
+      margin-top: 60px;
+      width: 353px;
+      word-wrap: break-word;
+    }
+  }
+  .choice-a {
+    background-image: url("../../assets/event/A.png");
+    position: absolute;
+    left: 51%;
+    top: 20%;
+    &:hover {
+      cursor: pointer;
+      background-image: url("../../assets/event/A_hover.png");
+    }
+  }
+  .choice-b {
+    background-image: url("../../assets/event/B.png");
+    position: absolute;
+    left: 51%;
+    top: 45%;
+    &:hover {
+      cursor: pointer;
+      background-image: url("../../assets/event/B_hover.png");
+    }
+  }
+  .choice-c {
+    background-image: url("../../assets/event/C.png");
+    position: absolute;
+    left: 51%;
+    top: 70%;
+    &:hover {
+      cursor: pointer;
+      background-image: url("../../assets/event/C_hover.png");
+    }
+  }
+}
+
+.game-dialog {
+  .modal-dialog {
+    margin-top: 50px;
+    display: flex;
+    max-width: none;
+    justify-content: center;
+    align-items: center;
+    .modal-content {
+      background: none;
+      border: none;
+      width: auto;
+    }
+  }
+}

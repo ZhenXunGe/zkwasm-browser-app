@@ -36,3 +36,25 @@ export class State {
     this.currency = currency;
   }
 }
+
+export class Character {
+  name: string;
+  savings: number;
+  life: number;
+  max_life: number;
+  //skills: Skills
+  state: State;
+  constructor(
+    name: string,
+    savings: number,
+    life: number,
+    max_life: number,
+    state: State
+  ) {
+    this.name = name;
+    this.savings = savings;
+    this.life = life;
+    this.max_life = max_life;
+    this.state = state;
+  }
+}

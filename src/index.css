@@ -27,3 +27,15 @@ html {
   --table-border-color: #2e3c46;
   --icon-hover: #f1f0e1;
 }
+
+@font-face {
+  font-family: "Averia Serif Libre";
+  src: url("./assets/fonts/AveriaSerifLibre-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Averia Serif Libre";
+  src: url("./assets/fonts/AveriaSerifLibre-Bold.ttf");
+  font-weight: 700;
+}
