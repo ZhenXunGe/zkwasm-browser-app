@@ -4,10 +4,11 @@ use crate::{
     Event,
 };
 
-fn create_choice(dscp_id: &mut u32, consq: Consequence) -> Choice {
+fn create_choice(dscp_id: &mut u32, consq: Consequence, item_id: Option<usize>) -> Choice {
     let c = Choice {
         consequence: consq,
         description_id: *dscp_id,
+        item_id: item_id,
     };
     *dscp_id += 1;
     c
@@ -54,6 +55,7 @@ macro_rules! cost_consequence {
 const WISDOM_INC_BASIC: Consequence = consequence!(1,0,0,0,0,0,0,0,-1);
 const WISDOM_DEC_BASIC: Consequence = consequence!(-1,0,0,0,0,0,0,0,-1);
 const COST_BASIC: Consequence = cost_consequence!(-1);
+const INCOME_BASIC: Consequence = cost_consequence!(1);
 
 
 pub(crate) fn standard_pack() -> Vec<Event> {
@@ -63,13 +65,16 @@ pub(crate) fn standard_pack() -> Vec<Event> {
             event_id: 0,
             choices: vec![
                 create_choice(&mut dscp_id,
-                    WISDOM_INC_BASIC
+                    WISDOM_INC_BASIC,
+                    None
                 ),
                 create_choice(&mut dscp_id,
-                    COST_BASIC
+                    INCOME_BASIC,
+                    Some(0)
                 ),
                 create_choice(&mut dscp_id,
-                    WISDOM_DEC_BASIC
+                    WISDOM_DEC_BASIC,
+                    Some(1)
                 ),
             ]
         }

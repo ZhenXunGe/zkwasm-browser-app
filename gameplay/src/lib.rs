@@ -39,7 +39,7 @@ pub struct Status {
 }
 
 #[derive(Copy, Clone)]
-struct Consequence {
+pub struct Consequence {
     wisdom: i32,
     attack: i32,
     luck: i32,
@@ -81,6 +81,7 @@ impl Consequence {
 pub struct Choice {
     consequence: Consequence,
     description_id: u32,
+    item_id: Option<usize>,
 }
 
 #[derive(Clone)]
@@ -115,7 +116,7 @@ impl Status {
             family: 10,
             speed: 10,
             defence: 10,
-            age: 10,
+            age: 12, // 1 year old (1 mth increments)
             currency: 10,
             context: None,
         }
@@ -128,6 +129,7 @@ impl Status {
     pub fn choose(&mut self, choice_index: usize) -> Choice {
         let choice = self.context.as_ref().unwrap().choices[choice_index].clone();
         self.apply_consequence(choice.consequence);
+        self.age += 1;
         choice
     }
 
@@ -244,13 +246,6 @@ pub fn get_currency() -> u32 {
 }
 
 #[wasm_bindgen]
-pub fn get_savings() -> u32 {
-    unsafe {
-        CHARACTER.get_savings()
-    }
-}
-
-#[wasm_bindgen]
 pub fn get_life() -> u32 {
     unsafe {
         CHARACTER.get_life()
@@ -291,7 +286,38 @@ pub fn action(at: u32) {
 #[wasm_bindgen]
 pub fn choose(at: usize) {
     unsafe {
-        CHARACTER.mutate_status().choose(at);
+        let choice = CHARACTER.mutate_status().choose(at);
+        CHARACTER.set_item_context(choice.item_id);
+    }
+}
+
+#[wasm_bindgen]
+pub fn buy_item(at: usize) {
+    unsafe {
+        CHARACTER.buy_item(at);
+    }
+}
+
+#[wasm_bindgen]
+pub fn sell_item(at: usize) {
+    unsafe {
+        CHARACTER.sell_item(at);
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_item_context() -> u32 {
+    unsafe {
+        //Return the item_id of the item in context to be bought
+        // handle None case for option
+
+        let id = CHARACTER.get_item_context();
+        
+        if id.is_some() {
+            id.unwrap() as u32
+        } else {
+            0
+        }
     }
 }
 

@@ -1,10 +1,12 @@
-use crate::items::{Inventory};
-use crate::Status;
+use crate::items::{Inventory, Item};
+use crate::{Status, consequence, Consequence};
+use crate::{ActionType, RuleEngine};
 use crate::skills::{Skill, Skills};
 
 pub struct Character {
-    savings: u32,
     inventory: Inventory,
+    // Set potential items to purchase here, similar to setting potential event options in status
+    item_context: Option<usize>,
     life: u32,
     max_life: u32,
     status: Status,
@@ -14,8 +16,8 @@ pub struct Character {
 impl Character {
     pub fn new() -> Self {
         Character {
-            savings: 0,
             inventory: Inventory::new(),
+            item_context: None, 
             life: 100,
             max_life: 100,
             status: Status::new(),
@@ -23,12 +25,17 @@ impl Character {
         }
     }
 
-    pub fn get_life(&self) -> u32 {
-        self.life
+    pub fn act(&mut self, acttype: ActionType, rules: &RuleEngine) {
+        let event = rules.pick_event(&self.status, acttype);
+        self.status.act(acttype, &rules);
     }
 
-    pub fn get_savings(&self) -> u32 {
-        self.savings
+    pub fn choose(&mut self, choice: usize) {
+        self.status.choose(choice);
+    }
+
+    pub fn get_life(&self) -> u32 {
+        self.life
     }
 
     pub fn get_status(&self) -> &Status {
@@ -51,6 +58,34 @@ impl Character {
         &mut self.inventory
     }
 
+    pub fn buy_item (&mut self, item_id: usize) {
+
+        //check if character has enough money
+        if self.item_context.is_some() && self.item_context.unwrap() == item_id {
+            //TODO: Should get item from data somewhere, not create new one
+            let item = Item::new(item_id as u32, consequence!(1, 0, 0, 0, 0, 0, 0, 0, 0), 1, 1);
+
+            if self.status.currency >= item.price() {
+                //update currency
+                self.status.currency -= item.price();
+                //add item to inventory
+                self.inventory.add_item(item_id);
+            }
+            //reset context
+            self.item_context = None;
+        }
+    }
+
+    pub fn sell_item(&mut self, item_id: usize) {
+        //check if character has item
+        if self.inventory.get_item_ids().contains(&(item_id as u32)) {
+            //update currency
+            let cost = self.inventory.remove_item(item_id);
+            //Get the item data and add the sell value to the character's currency
+            self.status.apply_consequence(cost);
+        }
+    }
+
     pub fn add_skill(&mut self, new_skill: Skill) {
         self.skills.add_skill(new_skill);
     }
@@ -59,15 +94,20 @@ impl Character {
         self.life = life;
     }
 
-    pub fn set_savings(&mut self, savings: u32) {
-        self.savings = savings;
-    }
-
     pub fn set_status(&mut self, status: Status) {
         self.status = status;
     }
 
     pub fn set_inventory(&mut self, inventory: Inventory) {
         self.inventory = inventory;
+    }
+
+    // Get item to be potentially bought
+    pub fn get_item_context(&self) -> &Option<usize> {
+        &self.item_context
+    }
+
+    pub fn set_item_context(&mut self, context: Option<usize>) {
+        self.item_context = context;
     }
 }
