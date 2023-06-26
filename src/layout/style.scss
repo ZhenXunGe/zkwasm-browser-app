@@ -29,19 +29,21 @@ div.board-row {
 
   max-width: var(--game-width) !important;
 }
-
+#root {
+  --content-width: 867px;
+}
 div.content {
   padding-left: 12px;
   padding-top: 15px;
   margin: auto;
-  width: 900px;
-  height: 900px;
+  width: var(--content-width);
+  height: var(--content-width);
   position: relative;
   background-size: cover;
   background-image: url("../images/layer2-bg.png");
   background-repeat: no-repeat;
   overflow: hidden;
-  --cell-size: 110px;
+
   --cell-margin: 12px;
 }
 
@@ -292,15 +294,23 @@ div.content {
 }
 
 .historys {
-  //position: absolute;
-  left: 30px;
-  top: 580px;
+  margin: auto;
+  background-image: url("../assets/main/history.png");
+  background-repeat: no-repeat;
+
+  width: var(--content-width);
+  height: 600px;
+
+  padding: 7% 4%;
+
   .history {
-    width: 430px;
-    height: 80px;
+    width: 761px;
+    height: 135px;
     margin: 10px;
     background-size: 430px 80px;
     background-image: url("../images/layer3_message.png");
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 }
 

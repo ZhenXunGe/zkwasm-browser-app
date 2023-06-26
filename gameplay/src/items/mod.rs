@@ -39,6 +39,7 @@ impl Item {
     }
 }
 
+
 // Inventory is a collection of items that can be used by a character and are dynamic
 pub struct Inventory {
     items: Vec<Item>,
@@ -62,7 +63,7 @@ impl Inventory {
         //Should get item from data somewhere
         let item = Item {
             item_id: item_id as u32,
-            consequence: consequence!(1, 0, 0, 0, 0, 0, 0, 0, 0),
+            consequence: consequence!(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, None),
             buy_price: 1,
             sell_value: 1,
         };

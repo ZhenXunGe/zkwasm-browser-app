@@ -1,7 +1,8 @@
 build:
 	wasm-pack build --release --out-name gameplay.wasm --out-dir pkg
-	wasm-opt -Oz -o ../src/js/game.wasm pkg/gameplay.wasm
-	cp pkg/gameplay.wasm.d.ts ../src/js/gameplay.wasm.d.ts
+	wasm-opt -Oz -o ../src/js/gameplay.wasm pkg/gameplay.wasm
+	cp pkg/gameplay.d.ts ../src/js/gameplay.d.ts
+	cp pkg/gameplay.wasm_bg.js ../src/js/gameplay.wasm_bg.js
 
 trace:
 	wasm-interp pkg/output.wasm --run-all-exports  --trace > trace.log
@@ -9,4 +10,5 @@ trace:
 
 clean:
 	rm -rf pkg
-	rm -rf ../src/js/game.wasm
+	rm -rf ../src/js/gameplay.wasm
+	rm -rf ../src/js/gameplay.d.ts

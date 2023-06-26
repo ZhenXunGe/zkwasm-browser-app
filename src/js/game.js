@@ -1,4 +1,5 @@
-import makeWasm from "./game.wasm";
+import makeWasm from "./gameplay.wasm";
+import { __wbg_set_wasm } from "./gameplay.wasm_bg";
 const { Module, instantiate, Memory, Table } = WebAssembly;
 
 var instance = null;
@@ -35,6 +36,7 @@ export default async function () {
     );
     */
     instance = module.instance;
+    __wbg_set_wasm(instance.exports);
     return instance.exports;
   }
 }

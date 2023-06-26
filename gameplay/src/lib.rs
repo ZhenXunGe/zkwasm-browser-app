@@ -7,7 +7,6 @@ use zkwasm_rust_sdk::{
     wasm_dbg,
 };
 use once_cell::sync::Lazy;
-
 extern crate num;
 #[macro_use]
 extern crate num_derive;
@@ -35,10 +34,16 @@ pub struct Status {
     pub defence: u32,
     pub age: u32,
     pub currency: u32,
+    pub life: u32,
     pub context: Option<Event>
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
+pub struct ItemDrop {
+    item_id: u32,
+}
+
+#[derive(Clone)]
 pub struct Consequence {
     wisdom: i32,
     attack: i32,
@@ -49,6 +54,8 @@ pub struct Consequence {
     defence: i32,
     age: i32,
     currency: i32,
+    life: i32,
+    item_drop: Option<Vec<ItemDrop>>
 }
 
 impl Consequence {
@@ -62,6 +69,7 @@ impl Consequence {
         defence: i32,
         age: i32,
         currency: i32,
+        life: i32,
     ) -> Self {
         Consequence {
             wisdom,
@@ -73,6 +81,8 @@ impl Consequence {
             defence,
             age,
             currency,
+            life,
+            item_drop: None,
         }
     }
 }
@@ -81,7 +91,6 @@ impl Consequence {
 pub struct Choice {
     consequence: Consequence,
     description_id: u32,
-    item_id: Option<usize>,
 }
 
 #[derive(Clone)]
@@ -102,7 +111,8 @@ impl RuleEngine {
         0
     }
     pub fn pick_event(&self, s: &Status, acttype: ActionType) -> &Event {
-        &self.leads[self.select_leads()][self.select_event()]
+        let acttype = acttype as usize;
+        &self.leads[self.select_leads()][acttype]
     }
 }
 
@@ -118,6 +128,7 @@ impl Status {
             defence: 10,
             age: 12, // 1 year old (1 mth increments)
             currency: 10,
+            life: 100,
             context: None,
         }
     }
@@ -128,7 +139,7 @@ impl Status {
 
     pub fn choose(&mut self, choice_index: usize) -> Choice {
         let choice = self.context.as_ref().unwrap().choices[choice_index].clone();
-        self.apply_consequence(choice.consequence);
+        self.apply_consequence(choice.clone().consequence);
         self.age += 1;
         choice
     }
@@ -143,26 +154,14 @@ impl Status {
         self.defence = ((self.defence as i32) + consq.defence)as u32;
         self.age = ((self.age as i32) + consq.age)as u32;
         self.currency = ((self.currency as i32) + consq.currency)as u32;
+        self.life = ((self.life as i32) + consq.life)as u32;
     }
 }
 
 static mut RG: Option<RuleEngine> = None;
 
-//static STATUS: Status = Status::new();
-static mut STATUS: Status = Status {
-    wisdom: 10,
-    attack: 10,
-    luck: 10,
-    charm: 10,
-    family: 10,
-    speed: 10,
-    defence: 10,
-    age: 10,
-    currency: 10,
-    context: None,
-};
-
 static mut CHARACTER: Lazy<Character> = Lazy::new(|| Character::new());
+
 
 #[derive(Copy, Clone, FromPrimitive)]
 pub enum ActionType {
@@ -248,7 +247,7 @@ pub fn get_currency() -> u32 {
 #[wasm_bindgen]
 pub fn get_life() -> u32 {
     unsafe {
-        CHARACTER.get_life()
+        CHARACTER.get_status().life
     }
 }
 
@@ -279,47 +278,69 @@ pub fn get_inventory() -> Vec<u32> {
 pub fn action(at: u32) {
     let action_type = num::FromPrimitive::from_u32(at).unwrap();
     unsafe {
-        CHARACTER.mutate_status().act(action_type, RG.as_ref().unwrap());
+        CHARACTER.act(action_type, RG.as_ref().unwrap());
     }
 }
 
 #[wasm_bindgen]
 pub fn choose(at: usize) {
     unsafe {
-        let choice = CHARACTER.mutate_status().choose(at);
-        CHARACTER.set_item_context(choice.item_id);
+        CHARACTER.choose(at);
     }
 }
 
 #[wasm_bindgen]
-pub fn buy_item(at: usize) {
+pub fn choose_item(item_id: usize) {
     unsafe {
-        CHARACTER.buy_item(at);
+        CHARACTER.buy_item(item_id);
     }
 }
 
 #[wasm_bindgen]
-pub fn sell_item(at: usize) {
+pub fn sell_item(item_id: usize) {
     unsafe {
-        CHARACTER.sell_item(at);
+        CHARACTER.sell_item(item_id);
     }
 }
 
 #[wasm_bindgen]
-pub fn get_item_context() -> u32 {
+pub fn get_item_context_length() -> u32 {
     unsafe {
-        //Return the item_id of the item in context to be bought
-        // handle None case for option
-
-        let id = CHARACTER.get_item_context();
-        
-        if id.is_some() {
-            id.unwrap() as u32
+        let drops = CHARACTER.get_item_context();
+        if drops.is_some() {
+            drops.as_ref().unwrap().len() as u32
         } else {
             0
         }
     }
 }
+#[wasm_bindgen]
+pub fn get_item_context_at_index(index: u32) -> u32 {
+    unsafe {
+        let drops = CHARACTER.get_item_context();
+        if drops.is_some() {
+            drops.as_ref().unwrap()[index as usize].item_id
+        } else {
+            0
+        }
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_item_context() -> Vec<u32> {
+    unsafe {
+        //Return the item_id(s) of the items in context to be bought
+        
+        let drops = CHARACTER.get_item_context();
+        if drops.is_some() {
+            
+            drops.as_ref().unwrap().iter().map(|x| x.item_id).collect()
+        } else {
+            vec![]
+        }
+    }
+}
+
 
 #[wasm_bindgen]
 pub fn zkmain() {

@@ -1,7 +1,9 @@
 import { Modal } from "react-bootstrap";
+import { itemsTable } from "../../data/gameplay";
 import "./style.scss";
 interface InventoryProps {
   show: boolean;
+  ownedItems: number[];
   handleClose: () => void;
 }
 
@@ -35,19 +37,13 @@ export default function Inventory(props: InventoryProps) {
             <div className="accessory"></div>
           </div>
           <div className="inventory-items">
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
+            {props.ownedItems.map((item, index) => {
+              return (
+                <div className="item">
+                  {itemsTable[item].name} - Item Index {item}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

@@ -11,6 +11,8 @@ import Col from "react-bootstrap/Col";
 import { Form } from "react-bootstrap";
 import { QRCodeSVG } from "qrcode.react";
 import initGameInstance from "../js/game";
+import * as gameInstance from "../js/gameplay.wasm_bg";
+import { GameHistory, WasmInstance } from "../types/game";
 import History from "../components/History";
 import { NewProveTask } from "../modals/addNewProveTask";
 
@@ -22,13 +24,14 @@ import CurrencyDisplay from "../components/Currency";
 import { Container } from "react-bootstrap";
 import { MainNavBar } from "../components/Nav";
 import Events from "../components/Events";
+import ItemDropChoices from "../components/ItemDrop";
 import Inventory from "../components/Inventory";
 import { eventsTable } from "../data/gameplay";
 import { State, ActionType, Character } from "../types/game";
 
 export function Main() {
   const dispatch = useAppDispatch();
-  const [instance, setInstance] = useState<any>(null);
+  const [instance, setInstance] = useState<WasmInstance | null>(null);
   const [state, setState] = useState(new State(0, 0, 0, 0, 0, 0, 0, 0, 0));
   const [currentAction, setCurrentAction] = useState<ActionType>(
     ActionType.Working
@@ -37,37 +40,45 @@ export function Main() {
   const [character, setCharacter] = useState(
     new Character(
       "Useless Fish",
-      0,
       100,
       100,
       new State(0, 0, 0, 0, 0, 0, 0, 0, 0)
     )
   );
 
+  const [gameHistory, setGameHistory] = useState<GameHistory[]>([]);
+
   const [currentEventId, setCurrentEventId] = useState<number | null>(null);
   const [currentModal, setCurrentModal] = useState<string | null>(null);
 
-  let updateState = (ins: any) => {
-    setState(
-      new State(
-        ins.get_wisdom(),
-        ins.get_attack(),
-        ins.get_luck(),
-        ins.get_charm(),
-        ins.get_family(),
-        ins.get_speed(),
-        ins.get_defence(),
-        ins.get_age(),
-        ins.get_currency()
-      )
+  let updateState = (ins: WasmInstance) => {
+    let newState = new State(
+      ins.get_wisdom(),
+      ins.get_attack(),
+      ins.get_luck(),
+      ins.get_charm(),
+      ins.get_family(),
+      ins.get_speed(),
+      ins.get_defence(),
+      ins.get_age(),
+      ins.get_currency()
     );
+    let newCharacter = character.setState(newState);
+    console.log("new character", newCharacter);
+    setCharacter(newCharacter);
   };
 
   useEffect(() => {
-    initGameInstance().then((ins: any) => {
-      ins.init_rg();
-      updateState(ins);
-      setInstance(ins);
+    initGameInstance().then((ins: WasmInstance) => {
+      //ins.init_rg();
+      gameInstance.init_rg();
+      updateState(gameInstance);
+      setInstance(gameInstance);
+      //let test = ins.get_item_context();
+      //console.log(test, "item context"); // -> Returns undefined
+
+      //let inventory = ins!.get_inventory();
+      //console.log(inventory, "Inital inventory");
     });
   }, []);
 
@@ -78,8 +89,8 @@ export function Main() {
     setIsMoving(true);
     setTimeout(() => {
       setIsMoving(false);
-      instance.action(newAction);
-      let event_id = instance.get_event();
+      instance!.action(newAction);
+      let event_id = instance!.get_event();
       setCurrentEventId(event_id);
       let event = eventsTable[event_id];
       setCurrentModal("event");
@@ -90,9 +101,41 @@ export function Main() {
   };
 
   const handleChoice = (choice: number) => {
+    if (!instance) return;
+    console.log("choice", choice);
     instance.choose(choice);
-    updateState(instance);
+    updateState(instance!);
+    let item_context = instance.get_item_context();
+
+    setGameHistory((prev) => {
+      let latestAction: GameHistory = {
+        event_id: currentEventId!,
+        choice_id: choice,
+        character,
+      };
+      return [latestAction, ...prev];
+    });
+
     setCurrentEventId(null);
+
+    if (item_context.length > 0) {
+      setCurrentModal("itemdrop");
+    } else {
+      setCurrentModal(null);
+    }
+  };
+
+  const selectItemDrop = (choice_index: number) => {
+    instance!.choose_item(choice_index);
+    updateState(instance!);
+    console.log(
+      instance!.get_item_context(),
+      "after choose - item id with option to buy"
+    );
+
+    let inventory = instance!.get_inventory();
+    console.log(inventory, "inventory");
+
     setCurrentModal(null);
   };
 
@@ -121,16 +164,15 @@ export function Main() {
 
     if (isMoving) {
       // Start scrolling
-      console.log("start scrolling");
+
       intervalId = setInterval(() => {
         offset.current = offset.current + 0.5; // Change '1' to control the speed of scrolling
         const bg = document.querySelector(".scrolling-bg") as HTMLElement;
-        console.log("offset", offset.current);
         bg.style.backgroundPositionX = `${offset.current}%`;
       }, 10); // Change '100' to control the speed of scrolling
     } else {
       // Stop scrolling
-      console.log("stop scrolling");
+
       clearInterval(intervalId);
     }
 
@@ -146,13 +188,15 @@ export function Main() {
             <div className="content">
               <div className="scrolling-bg"></div>
               <div className="status">
-                <div className="wisdom">Wisdom: {state.wisdom}</div>
-                <div className="attack">Attack: {state.attack}</div>
-                <div className="speed">speed: {state.speed}</div>
-                <div className="defence">defence: {state.defence}</div>
-                <div className="family">Family: {state.family}</div>
-                <div className="charm">charm: {state.charm}</div>
-                <div className="luck">luck: {state.luck}</div>
+                <div className="wisdom">Wisdom: {character.state.wisdom}</div>
+                <div className="attack">Attack: {character.state.attack}</div>
+                <div className="speed">speed: {character.state.speed}</div>
+                <div className="defence">
+                  defence: {character.state.defence}
+                </div>
+                <div className="family">Family: {character.state.family}</div>
+                <div className="charm">charm: {character.state.charm}</div>
+                <div className="luck">luck: {character.state.luck}</div>
               </div>
               <div className="actions">
                 <div
@@ -182,7 +226,7 @@ export function Main() {
                   </div>
                 </div>
               </div>
-              <div className="savings">{character.savings}</div>
+              <div className="savings">{character.state.currency}</div>
               <div className="age">{character.state.age}</div>
               <div
                 className="bag"
@@ -221,8 +265,16 @@ export function Main() {
         eventId={currentEventId}
         handleSelect={handleChoice}
       ></Events>
+      <ItemDropChoices
+        show={currentModal === "itemdrop"}
+        itemsToShow={
+          Array.from(instance?.get_item_context() || []) || [0, 1, 2]
+        }
+        handleSelect={selectItemDrop}
+      ></ItemDropChoices>
       <Inventory
         show={currentModal === "inventory"}
+        ownedItems={Array.from(instance?.get_inventory() || [])}
         handleClose={handleCloseModal}
       ></Inventory>
       <History md5="77DA9B5A42FABD295FD67CCDBDF2E348"></History>
