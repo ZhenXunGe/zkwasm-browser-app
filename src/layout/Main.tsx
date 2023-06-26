@@ -186,6 +186,10 @@ export function Main() {
         <Row className="mt-3">
           <Col>
             <div className="content">
+              <div className="content-border"></div>
+              <div className="bottom-bar"></div>
+              <div className="skills-bar"></div>
+              <div className="status-bar"></div>
               <div className="scrolling-bg"></div>
               <div className="status">
                 <div className="wisdom">Wisdom: {character.state.wisdom}</div>
@@ -204,19 +208,25 @@ export function Main() {
                   className={`action-working ${
                     currentAction === 0 ? "current-action" : ""
                   }`}
-                ></div>
+                >
+                  <div className="hitbox"></div>
+                </div>
                 <div
                   onClick={() => handleChangeAction(ActionType.Exploring)}
                   className={`action-exploring ${
                     currentAction === 1 ? "current-action" : ""
                   }`}
-                ></div>
+                >
+                  <div className="hitbox"></div>
+                </div>
                 <div
                   onClick={() => handleChangeAction(ActionType.Coasting)}
                   className={`action-coasting ${
                     currentAction === 2 ? "current-action" : ""
                   }`}
-                ></div>
+                >
+                  <div className="hitbox"></div>
+                </div>
               </div>
               <div className="character">
                 <div className="character-health">

@@ -38,13 +38,51 @@ div.content {
   margin: auto;
   width: var(--content-width);
   height: var(--content-width);
-  position: relative;
-  background-size: cover;
-  background-image: url("../images/layer2-bg.png");
-  background-repeat: no-repeat;
   overflow: hidden;
+  position: relative;
+  .content-border {
+    position: relative;
+    pointer-events: none;
+    height: 100%;
+    z-index: 30;
+    background-size: cover;
+    background-image: url("../assets/main/border.png");
+    background-repeat: no-repeat;
+  }
+  .bottom-bar {
+    pointer-events: none;
+    position: absolute;
+    bottom: 15px;
+    left: 3%;
+    width: 96%;
+    height: 25%;
+    background-image: url("../assets/main/bottom_bar.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 5;
+  }
+  .skills-bar {
+    position: absolute;
+    top: 70px;
+    left: 3.5%;
+    width: 15%;
+    height: 60%;
+    z-index: 5;
+    background-size: cover;
+    background-image: url("../assets/main/skills_bar.png");
+    background-repeat: no-repeat;
+  }
+  .status-bar {
+    position: absolute;
+    top: 25px;
+    left: 2%;
+    width: 98%;
+    height: 14.5%;
 
-  --cell-margin: 12px;
+    background-size: contain;
+    background-image: url("../assets/main/status_bar.png");
+    background-repeat: no-repeat;
+  }
 }
 
 .overflow-breakword {
@@ -92,6 +130,7 @@ div.content {
   position: absolute;
   left: 82%;
   top: 26%;
+  z-index: 15;
   .current-action {
     background-color: blue;
   }
@@ -124,7 +163,8 @@ div.content {
 .items {
   position: absolute;
   left: 7%;
-  top: 80%;
+  top: 82%;
+  z-index: 15;
   .item {
     display: inline-block;
     width: 103px;
@@ -139,6 +179,7 @@ div.content {
   position: absolute;
   left: 6.5%;
   top: 15%;
+  z-index: 11;
   .sticker {
     width: 82px;
     height: 79px;
@@ -221,8 +262,8 @@ div.content {
   position: absolute;
   left: 3%;
   top: 3%;
-  width: 93%;
-  height: 93%;
+  width: 95%;
+  height: 95%;
   background-size: cover;
   background-image: url("../assets/main/scrolling_bg.png");
   background-repeat: repeat-x;
@@ -232,24 +273,24 @@ div.content {
 .savings {
   position: absolute;
   left: 37.5%;
-  top: 73.5%;
+  top: 74.5%;
   font-family: "Averia Serif Libre";
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
-
+  z-index: 15;
   color: #000000;
 }
 
 .age {
   position: absolute;
   left: 59%;
-  top: 73.5%;
+  top: 74.5%;
   font-family: "Averia Serif Libre";
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
-
+  z-index: 15;
   color: #000000;
 }
 
