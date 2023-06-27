@@ -174,6 +174,37 @@ export function sell_item(item_id) {
 }
 
 /**
+* @param {number} item_id
+*/
+export function use_item(item_id) {
+    wasm.use_item(item_id);
+}
+
+/**
+* @param {number} item_id
+*/
+export function stop_use_item(item_id) {
+    wasm.stop_use_item(item_id);
+}
+
+/**
+* @returns {Uint32Array}
+*/
+export function get_active_items() {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        wasm.get_active_items(retptr);
+        var r0 = getInt32Memory0()[retptr / 4 + 0];
+        var r1 = getInt32Memory0()[retptr / 4 + 1];
+        var v1 = getArrayU32FromWasm0(r0, r1).slice();
+        wasm.__wbindgen_free(r0, r1 * 4);
+        return v1;
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+    }
+}
+
+/**
 * @returns {number}
 */
 export function get_item_context_length() {

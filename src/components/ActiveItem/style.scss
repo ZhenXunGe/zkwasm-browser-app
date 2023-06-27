@@ -1,0 +1,65 @@
+.active-item-body {
+  background-image: url("../../assets/equipment/info_frame.png");
+  width: 465px;
+  height: 273px;
+  position: relative;
+  color: black;
+  .item-image {
+    background-image: url("../../assets/inventory/small_icon.png");
+    background-size: contain;
+    width: 140px;
+    height: 140px;
+    position: absolute;
+    left: 10%;
+    top: 10%;
+  }
+  .name {
+    position: absolute;
+    left: 45%;
+    top: 10%;
+    color: #000;
+    font-size: 32px;
+    font-family: Averia Serif Libre;
+    font-weight: 700;
+  }
+  .stats {
+    position: absolute;
+    left: 46%;
+    top: 30%;
+    color: #000;
+    font-size: 16px;
+    font-family: Averia Serif Libre;
+    font-weight: 700;
+    .text {
+      margin: auto;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      word-wrap: break-word;
+    }
+    .item-stats {
+      margin-bottom: 10px;
+    }
+  }
+  .remove {
+    background-image: url("../../assets/equipment/remove.png");
+    background-size: contain;
+    width: 137px;
+    height: 43px;
+    position: relative;
+    left: 60%;
+    top: 70%;
+    cursor: pointer;
+  }
+}
+.active-item-dialog {
+  overflow: hidden;
+  .modal-dialog {
+    height: 100vh;
+    .hitbox,
+    .close-bag {
+      position: absolute;
+      top: -25%;
+      left: 80%;
+    }
+  }
+}

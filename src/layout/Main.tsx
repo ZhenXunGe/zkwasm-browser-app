@@ -28,11 +28,12 @@ import ItemDropChoices from "../components/ItemDrop";
 import Inventory from "../components/Inventory";
 import { eventsTable } from "../data/gameplay";
 import { State, ActionType, Character } from "../types/game";
+import { ModalOptions } from "../types/layout";
+import ActiveItem from "../components/ActiveItem";
 
 export function Main() {
   const dispatch = useAppDispatch();
   const [instance, setInstance] = useState<WasmInstance | null>(null);
-  const [state, setState] = useState(new State(0, 0, 0, 0, 0, 0, 0, 0, 0));
   const [currentAction, setCurrentAction] = useState<ActionType>(
     ActionType.Working
   ); // 0: working, 1: exploring, 2: coasting
@@ -41,15 +42,21 @@ export function Main() {
     new Character(
       "Useless Fish",
       100,
-      100,
-      new State(0, 0, 0, 0, 0, 0, 0, 0, 0)
+      new State(0, 0, 0, 0, 0, 0, 0, 0, 0, 100),
+      {
+        items: [],
+      },
+      []
     )
   );
 
   const [gameHistory, setGameHistory] = useState<GameHistory[]>([]);
 
   const [currentEventId, setCurrentEventId] = useState<number | null>(null);
-  const [currentModal, setCurrentModal] = useState<string | null>(null);
+  const [currentModal, setCurrentModal] = useState<ModalOptions | null>(null);
+  const [activeItemIndexSelected, setActiveItemIndexSelected] = useState<
+    number | null
+  >(null);
 
   let updateState = (ins: WasmInstance) => {
     let newState = new State(
@@ -61,7 +68,8 @@ export function Main() {
       ins.get_speed(),
       ins.get_defence(),
       ins.get_age(),
-      ins.get_currency()
+      ins.get_currency(),
+      ins.get_life()
     );
     let newCharacter = character.setState(newState);
     console.log("new character", newCharacter);
@@ -134,8 +142,18 @@ export function Main() {
     );
 
     let inventory = instance!.get_inventory();
-    console.log(inventory, "inventory");
 
+    setCurrentModal(null);
+  };
+
+  const useItem = (item_id: number) => {
+    instance!.use_item(item_id);
+    updateState(instance!);
+  };
+
+  const removeActiveItem = (item_id: number) => {
+    instance!.stop_use_item(item_id);
+    updateState(instance!);
     setCurrentModal(null);
   };
 
@@ -192,15 +210,13 @@ export function Main() {
               <div className="status-bar"></div>
               <div className="scrolling-bg"></div>
               <div className="status">
-                <div className="wisdom">Wisdom: {character.state.wisdom}</div>
-                <div className="attack">Attack: {character.state.attack}</div>
-                <div className="speed">speed: {character.state.speed}</div>
-                <div className="defence">
-                  defence: {character.state.defence}
-                </div>
-                <div className="family">Family: {character.state.family}</div>
-                <div className="charm">charm: {character.state.charm}</div>
-                <div className="luck">luck: {character.state.luck}</div>
+                <div className="wisdom">{character.state.wisdom}</div>
+                <div className="attack">{character.state.attack}</div>
+                <div className="speed">{character.state.speed}</div>
+                <div className="defence">{character.state.defence}</div>
+                <div className="family">{character.state.family}</div>
+                <div className="charm">{character.state.charm}</div>
+                <div className="luck">{character.state.luck}</div>
               </div>
               <div className="actions">
                 <div
@@ -231,7 +247,14 @@ export function Main() {
               <div className="character">
                 <div className="character-health">
                   <div className="character-name">{character.name}</div>
-                  <div className="health-bar">
+                  <div
+                    className="health-bar"
+                    style={{
+                      width: `${
+                        (character.state.life * 100) / character.max_life
+                      }%`,
+                    }}
+                  >
                     {/* <div className="health-amount"></div> */}
                   </div>
                 </div>
@@ -244,12 +267,108 @@ export function Main() {
               ></div>
               <div className="map"></div>
               <div className="items">
-                <div className="item"></div>
-                <div className="item"></div>
-                <div className="item"></div>
-                <div className="item"></div>
-                <div className="item"></div>
-                <div className="item"></div>
+                <div className="item">
+                  <div
+                    className="active-item"
+                    onClick={() => {
+                      if (!instance?.get_active_items()[0]) return;
+                      setCurrentModal("active-item");
+                      setActiveItemIndexSelected(
+                        instance.get_active_items()[0]
+                      );
+                    }}
+                  >
+                    Active Item -{" "}
+                    {instance?.get_active_items()[0] !== undefined
+                      ? "item index - " + instance.get_active_items()[0]
+                      : "None"}
+                  </div>
+                </div>
+                <div className="item">
+                  <div
+                    className="active-item"
+                    onClick={() => {
+                      if (!instance?.get_active_items()[1]) return;
+                      setCurrentModal("active-item");
+                      setActiveItemIndexSelected(
+                        instance.get_active_items()[1]
+                      );
+                    }}
+                  >
+                    Active Item -{" "}
+                    {instance?.get_active_items()[1] !== undefined
+                      ? "item index - " + instance.get_active_items()[1]
+                      : "None"}
+                  </div>
+                </div>
+                <div className="item">
+                  <div
+                    className="active-item"
+                    onClick={() => {
+                      if (!instance?.get_active_items()[2]) return;
+                      setCurrentModal("active-item");
+                      setActiveItemIndexSelected(
+                        instance.get_active_items()[2]
+                      );
+                    }}
+                  >
+                    Active Item -{" "}
+                    {instance?.get_active_items()[2] !== undefined
+                      ? "item index - " + instance.get_active_items()[2]
+                      : "None"}
+                  </div>
+                </div>
+                <div className="item">
+                  <div
+                    className="active-item"
+                    onClick={() => {
+                      if (!instance?.get_active_items()[3]) return;
+                      setCurrentModal("active-item");
+                      setActiveItemIndexSelected(
+                        instance.get_active_items()[3]
+                      );
+                    }}
+                  >
+                    Active Item -{" "}
+                    {instance?.get_active_items()[3] !== undefined
+                      ? "item index - " + instance.get_active_items()[3]
+                      : "None"}
+                  </div>
+                </div>
+                <div className="item">
+                  <div
+                    className="active-item"
+                    onClick={() => {
+                      if (!instance?.get_active_items()[4]) return;
+                      setCurrentModal("active-item");
+                      setActiveItemIndexSelected(
+                        instance.get_active_items()[4]
+                      );
+                    }}
+                  >
+                    Active Item -{" "}
+                    {instance?.get_active_items()[4] !== undefined
+                      ? "item index - " + instance.get_active_items()[4]
+                      : "None"}
+                  </div>
+                </div>
+                <div className="item">
+                  <div
+                    className="active-item"
+                    onClick={() => {
+                      if (!instance?.get_active_items()[5]) return;
+                      setCurrentModal("active-item");
+                      setActiveItemIndexSelected(
+                        instance.get_active_items()[5]
+                      );
+                    }}
+                  >
+                    Active Item -{" "}
+                    {instance?.get_active_items()[5] !== undefined
+                      ? "item index - " + instance.get_active_items()[5]
+                      : "None"}
+                  </div>
+                </div>
               </div>
 
               <div className="stickers">
@@ -270,6 +389,12 @@ export function Main() {
           <div className="history"></div>
         </div>
       </Container>
+      <ActiveItem
+        show={currentModal === "active-item"}
+        item_id={activeItemIndexSelected!}
+        handleClose={handleCloseModal}
+        handleRemove={removeActiveItem}
+      ></ActiveItem>
       <Events
         show={currentModal === "event"}
         eventId={currentEventId}
@@ -286,6 +411,7 @@ export function Main() {
         show={currentModal === "inventory"}
         ownedItems={Array.from(instance?.get_inventory() || [])}
         handleClose={handleCloseModal}
+        handleUse={useItem}
       ></Inventory>
       <History md5="77DA9B5A42FABD295FD67CCDBDF2E348"></History>
     </>

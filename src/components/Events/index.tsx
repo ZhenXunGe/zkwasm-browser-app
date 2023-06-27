@@ -9,7 +9,7 @@ interface EventsProps {
 }
 
 export default function Events(props: EventsProps) {
-  let event = eventsTable[props.eventId || 0];
+  let event = eventsTable[props.eventId || 0]; //TODO: fix the 0 and handle null case
   return (
     <>
       <Modal show={props.show} className="game-dialog">

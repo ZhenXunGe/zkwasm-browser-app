@@ -1,15 +1,15 @@
 export const eventsTable = [
   {
     description: "Event 1",
-    choices: ["YYYYYY", "ZZZZZZ", "Item drop example"],
+    choices: ["Increase Wisdom", "Increase Money", "Item drop example"],
   },
   {
     description: "Event 2",
-    choices: ["YYYYYY", "ZZZZZZ", "Item drop example"],
+    choices: ["Lower Wisdom", "Lower Money (Cost)", "Item drop example"],
   },
   {
     description: "Event 3",
-    choices: ["YYYYYY", "ZZZZZZ", "Item drop example"],
+    choices: ["Decrease HP", "Decrease HP", "Item drop example"],
   },
 ];
 

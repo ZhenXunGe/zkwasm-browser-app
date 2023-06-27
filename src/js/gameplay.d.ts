@@ -73,6 +73,18 @@ export function choose_item(item_id: number): void;
 */
 export function sell_item(item_id: number): void;
 /**
+* @param {number} item_id
+*/
+export function use_item(item_id: number): void;
+/**
+* @param {number} item_id
+*/
+export function stop_use_item(item_id: number): void;
+/**
+* @returns {Uint32Array}
+*/
+export function get_active_items(): Uint32Array;
+/**
 * @returns {number}
 */
 export function get_item_context_length(): number;

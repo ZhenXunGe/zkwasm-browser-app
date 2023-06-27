@@ -7,8 +7,8 @@
 
   .bag-items {
     width: 43%;
-    position: relative;
-    top: -40%;
+    position: absolute;
+    top: 22%;
     left: 52%;
     .categories {
       // Grid of 2 high 3 wide item categories
@@ -130,7 +130,7 @@
   }
 
   .current-item {
-    position: relative;
+    position: absolute;
     left: 4%;
     top: 25%;
     display: flex;
@@ -138,6 +138,7 @@
     justify-content: center;
     align-items: center;
     width: 50%;
+
     .item-image {
       background-image: url("../../assets/inventory/big_icon.png");
       width: 139px;

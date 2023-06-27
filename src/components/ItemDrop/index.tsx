@@ -1,6 +1,7 @@
 import { Modal } from "react-bootstrap";
 import "./style.scss";
 import { itemsTable } from "../../data/gameplay";
+import ItemPlaceholder from "../../assets/inventory/small_icon.png";
 interface ItemDropChoices {
   show: boolean;
   itemsToShow: number[];
@@ -15,37 +16,53 @@ export default function ItemDropChoices(props: ItemDropChoices) {
         <div className="item-body">
           {/* <div className="description">{event.description}</div> */}
           <div className="choice-1 choice-box ">
+            <img src={ItemPlaceholder} alt="" className="item-image" />
             <div className="text">Item index - {props.itemsToShow[0]}</div>
-            <button onClick={() => props.handleSelect(props.itemsToShow[0])}>
-              Choose This Item
-            </button>
+            <div className="item-stats d-flex align-items-center flex-column">
+              <div>Wisdom +12</div>
+              <div>Speed +20</div>
+              <div>Luck +1</div>
+            </div>
+            <button
+              onClick={() => props.handleSelect(props.itemsToShow[0])}
+            ></button>
           </div>
-          <div
-            className="choice-2 choice-box "
-            onClick={() => props.handleSelect(1)}
-          >
+          <div className="choice-2 choice-box ">
+            <img src={ItemPlaceholder} alt="" className="item-image" />
             <div className="text">Item index -{props.itemsToShow[1]}</div>
-            <button onClick={() => props.handleSelect(props.itemsToShow[1])}>
-              Choose This Item
-            </button>
+            <div className="item-stats d-flex align-items-center flex-column">
+              <div>Wisdom +12</div>
+              <div>Speed +20</div>
+              <div>Luck +1</div>
+            </div>
+            <button
+              onClick={() => props.handleSelect(props.itemsToShow[1])}
+            ></button>
           </div>
-          <div
-            className="choice-3 choice-box "
-            onClick={() => props.handleSelect(2)}
-          >
+          <div className="choice-3 choice-box ">
+            <img src={ItemPlaceholder} alt="" className="item-image" />
             <div className="text">Item index -{props.itemsToShow[2]}</div>
-            <button onClick={() => props.handleSelect(props.itemsToShow[2])}>
-              Choose This Item
-            </button>
+            <div className="item-stats d-flex align-items-center flex-column">
+              <div>Wisdom +12</div>
+              <div>Speed +20</div>
+              <div>Luck +1</div>
+            </div>
+            <button
+              onClick={() => props.handleSelect(props.itemsToShow[2])}
+            ></button>
           </div>
-          <div
-            className="choice-4 choice-box "
-            onClick={() => props.handleSelect(2)}
-          >
+          <div className="choice-4 choice-box ">
+            <img src={ItemPlaceholder} alt="" className="item-image" />
+
             <div className="text">Item index -{props.itemsToShow[2]}</div>
-            <button onClick={() => props.handleSelect(props.itemsToShow[2])}>
-              Choose This Item
-            </button>
+            <div className="item-stats d-flex align-items-center flex-column">
+              <div>Wisdom +12</div>
+              <div>Speed +20</div>
+              <div>Luck +1</div>
+            </div>
+            <button
+              onClick={() => props.handleSelect(props.itemsToShow[2])}
+            ></button>
           </div>
         </div>
       </Modal>

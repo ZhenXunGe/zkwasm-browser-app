@@ -5,6 +5,7 @@ use crate::skills::{Skill, Skills};
 
 pub struct Character {
     inventory: Inventory,
+    active_items: Vec<Item>,
     // Set potential items to purchase here, similar to setting potential event options in status
     item_context: Option<Vec<ItemDrop>>,
     max_life: u32,
@@ -16,6 +17,7 @@ impl Character {
     pub fn new() -> Self {
         Character {
             inventory: Inventory::new(),
+            active_items: Vec::new(),
             item_context: None, 
             max_life: 100,
             status: Status::new(),
@@ -24,6 +26,9 @@ impl Character {
     }
 
     pub fn act(&mut self, acttype: ActionType, rules: &RuleEngine) {
+        if !self.alive() {
+            return;
+        }
         let event = rules.pick_event(&self.status, acttype);
         self.status.act(acttype, &rules);
     }
@@ -46,6 +51,10 @@ impl Character {
         &self.inventory
     }
 
+    pub fn get_active_item_ids(&self) -> Vec<u32> {
+        self.active_items.iter().map(|item| item.id()).collect()
+    }
+
     pub fn get_skills(&self) -> &Skills {
         &self.skills
     }
@@ -56,6 +65,10 @@ impl Character {
 
     fn mutate_inventory(&mut self) -> &mut Inventory {
         &mut self.inventory
+    }
+
+    fn alive(&self) -> bool {
+        self.status.life > 0
     }
 
     pub fn buy_item (&mut self, item_id: usize) {
@@ -85,6 +98,43 @@ impl Character {
             let cost = self.inventory.remove_item(item_id);
             //Get the item data and add the sell value to the character's currency
             self.status.apply_consequence(cost);
+        }
+    }
+
+    pub fn use_item(&mut self, item_id: usize) {
+
+        //if active_items is 6, do not allow use
+        if self.active_items.len() == 6 {
+            return;
+        }
+        //check if character has item
+        if self.inventory.get_item_ids().contains(&(item_id as u32)) {
+            //update currency
+            let item = self.inventory.get_item_from_id(item_id as u32);
+
+            match item {
+                Some(item) => {
+                    self.status.apply_consequence(item.consequence().clone());
+                    self.active_items.push(item.clone());
+                    self.inventory.remove_item(item_id);
+                },
+                _ => {
+                    //Item is not in inventory
+                }
+            }
+        }
+    }
+
+    pub fn stop_use_item(&mut self, item_id: usize) {
+        //check if character has item
+        if self.active_items.iter().any(|item| item.id() == item_id as u32) {
+            let item = self.active_items.iter().find(|item| item.id() == item_id as u32).unwrap();
+
+            self.status.apply_consequence(item.consequence().clone().invert());
+            self.active_items.retain(|item| item.id() != item_id as u32);
+            
+            //add back into inventory
+            self.inventory.add_item(item_id);
         }
     }
 

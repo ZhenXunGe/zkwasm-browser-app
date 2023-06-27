@@ -26,6 +26,10 @@ impl Item {
         }
     }
 
+    pub fn id(&self) -> u32 {
+        self.item_id
+    }
+
     pub fn price(&self) -> u32 {
         self.buy_price
     }
@@ -57,6 +61,10 @@ impl Inventory {
         self.items.iter().map(|item| item.item_id).collect()
     }
 
+    pub fn get_item_from_id(&self, item_id: u32) -> Option<&Item> {
+        self.items.iter().find(|item| item.item_id == item_id)
+    }
+
     pub fn add_item(&mut self, item_id: usize) {
         //find item with matching id
         
@@ -70,10 +78,6 @@ impl Inventory {
 
         //add item to inventory
         self.items.push(item);
-    }
-
-    pub fn use_item(&mut self, item_id: u32) {
-        
     }
 
     pub fn remove_item(&mut self, item_id: usize) -> Consequence {

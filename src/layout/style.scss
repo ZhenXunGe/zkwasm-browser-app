@@ -166,12 +166,20 @@ div.content {
   top: 82%;
   z-index: 15;
   .item {
+    position: relative;
     display: inline-block;
     width: 103px;
     height: 102px;
     margin: 10px;
     background-size: cover;
     background-image: url("../images/layer3_sticker3.png");
+    cursor: pointer;
+    .active-item {
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      color: black;
+    }
   }
 }
 
@@ -284,7 +292,7 @@ div.content {
 
 .age {
   position: absolute;
-  left: 59%;
+  left: 61%;
   top: 74.5%;
   font-family: "Averia Serif Libre";
   font-style: normal;
@@ -330,6 +338,7 @@ div.content {
       left: 8px;
       top: 18px;
       background-image: url("../assets/main/blood.png");
+      background-repeat: no-repeat;
     }
   }
 }

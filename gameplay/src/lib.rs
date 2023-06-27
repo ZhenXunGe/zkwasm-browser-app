@@ -85,6 +85,23 @@ impl Consequence {
             item_drop: None,
         }
     }
+    
+    pub fn invert(&self) -> Self {
+        Consequence {
+            wisdom: -self.wisdom,
+            attack: -self.attack,
+            luck: -self.luck,
+            charm: -self.charm,
+            family: -self.family,
+            speed: -self.speed,
+            defence: -self.defence,
+            age: -self.age,
+            currency: -self.currency,
+            life: -self.life,
+            item_drop: None,
+        }
+    }
+
 }
 
 #[derive(Clone)]
@@ -300,6 +317,27 @@ pub fn choose_item(item_id: usize) {
 pub fn sell_item(item_id: usize) {
     unsafe {
         CHARACTER.sell_item(item_id);
+    }
+}
+
+#[wasm_bindgen]
+pub fn use_item(item_id: usize) {
+    unsafe {
+        CHARACTER.use_item(item_id);
+    }
+}
+
+#[wasm_bindgen]
+pub fn stop_use_item(item_id: usize) {
+    unsafe {
+        CHARACTER.stop_use_item(item_id);
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_active_items() -> Vec<u32> {
+    unsafe {
+        CHARACTER.get_active_item_ids()
     }
 }
 
