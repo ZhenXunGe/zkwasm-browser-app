@@ -31,6 +31,14 @@ import { State, ActionType, Character } from "../types/game";
 import { ModalOptions } from "../types/layout";
 import ActiveItem from "../components/ActiveItem";
 
+const initializeGame = async () => {
+  await initGameInstance();
+  gameInstance.init_rg();
+  return gameInstance;
+};
+
+const initialInstance = initializeGame();
+
 export function Main() {
   const dispatch = useAppDispatch();
   const [instance, setInstance] = useState<WasmInstance | null>(null);
@@ -58,35 +66,18 @@ export function Main() {
     number | null
   >(null);
 
+  const [item_context, setItemContext] = useState<number[]>([]);
+
   let updateState = (ins: WasmInstance) => {
-    let newState = new State(
-      ins.get_wisdom(),
-      ins.get_attack(),
-      ins.get_luck(),
-      ins.get_charm(),
-      ins.get_family(),
-      ins.get_speed(),
-      ins.get_defence(),
-      ins.get_age(),
-      ins.get_currency(),
-      ins.get_life()
-    );
-    let newCharacter = character.setState(newState);
-    console.log("new character", newCharacter);
-    setCharacter(newCharacter);
+    let char = character.syncWASM(ins);
+    setCharacter(char);
   };
 
   useEffect(() => {
-    initGameInstance().then((ins: WasmInstance) => {
-      //ins.init_rg();
-      gameInstance.init_rg();
-      updateState(gameInstance);
-      setInstance(gameInstance);
-      //let test = ins.get_item_context();
-      //console.log(test, "item context"); // -> Returns undefined
-
-      //let inventory = ins!.get_inventory();
-      //console.log(inventory, "Inital inventory");
+    initialInstance.then((ins: WasmInstance) => {
+      console.log("setting instance");
+      updateState(ins);
+      setInstance(ins);
     });
   }, []);
 
@@ -95,12 +86,12 @@ export function Main() {
     toggleScrollBackground();
     setCurrentAction(newAction);
     setIsMoving(true);
+    instance!.action(newAction);
+    let event_id = instance!.get_event();
+    let event = eventsTable[event_id];
     setTimeout(() => {
       setIsMoving(false);
-      instance!.action(newAction);
-      let event_id = instance!.get_event();
       setCurrentEventId(event_id);
-      let event = eventsTable[event_id];
       setCurrentModal("event");
       console.log("event description:", event.description);
       console.log("event choices:", event.choices.length);
@@ -112,9 +103,9 @@ export function Main() {
     if (!instance) return;
     console.log("choice", choice);
     instance.choose(choice);
-    updateState(instance!);
-    let item_context = instance.get_item_context();
 
+    let item_context = instance.get_item_context();
+    console.log(item_context, "item context after choose");
     setGameHistory((prev) => {
       let latestAction: GameHistory = {
         event_id: currentEventId!,
@@ -130,6 +121,7 @@ export function Main() {
       setCurrentModal("itemdrop");
     } else {
       setCurrentModal(null);
+      updateState(instance!);
     }
   };
 
@@ -140,8 +132,6 @@ export function Main() {
       instance!.get_item_context(),
       "after choose - item id with option to buy"
     );
-
-    let inventory = instance!.get_inventory();
 
     setCurrentModal(null);
   };
@@ -197,6 +187,7 @@ export function Main() {
     // Clean up interval on unmount
     return () => clearInterval(intervalId);
   }, [isMoving]);
+  console.log(instance?.get_item_context(), "item context - main");
   return (
     <>
       <MainNavBar currency={0} handleRestart={restartGame}></MainNavBar>
@@ -271,10 +262,11 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[0]) return;
+                      if (instance!.get_active_items()[0] === undefined) return;
+                      console.log("active item clicked");
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
-                        instance.get_active_items()[0]
+                        instance!.get_active_items()[0]
                       );
                     }}
                   >
@@ -288,10 +280,11 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[1]) return;
+                      if (!instance?.get_active_items()[1] === undefined)
+                        return;
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
-                        instance.get_active_items()[1]
+                        instance!.get_active_items()[1]
                       );
                     }}
                   >
@@ -305,10 +298,11 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[2]) return;
+                      if (!instance?.get_active_items()[2] === undefined)
+                        return;
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
-                        instance.get_active_items()[2]
+                        instance!.get_active_items()[2]
                       );
                     }}
                   >
@@ -322,10 +316,11 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[3]) return;
+                      if (!instance?.get_active_items()[3] === undefined)
+                        return;
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
-                        instance.get_active_items()[3]
+                        instance!.get_active_items()[3]
                       );
                     }}
                   >
@@ -339,10 +334,11 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[4]) return;
+                      if (!instance?.get_active_items()[4] === undefined)
+                        return;
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
-                        instance.get_active_items()[4]
+                        instance!.get_active_items()[4]
                       );
                     }}
                   >
@@ -356,10 +352,11 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[5]) return;
+                      if (!instance?.get_active_items()[5] === undefined)
+                        return;
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
-                        instance.get_active_items()[5]
+                        instance!.get_active_items()[5]
                       );
                     }}
                   >

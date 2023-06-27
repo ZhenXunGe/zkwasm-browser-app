@@ -83,11 +83,14 @@ export class Character {
       wasm.get_currency(),
       wasm.get_life()
     );
+    console.log("syncing wasm", newState);
     this.setState(newState);
     let inventory = wasm.get_inventory();
+    //console.log(wasm.get_item_context(), "item context");
     let active_items = wasm.get_active_items();
     this.inventory = { items: Array.from(inventory) };
     this.active_items = Array.from(active_items);
+    return this;
   }
 }
 

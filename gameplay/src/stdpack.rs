@@ -94,8 +94,8 @@ macro_rules! drop_example {
 }
 
 
-const WISDOM_INC_BASIC: Consequence = consequence!(1,0,0,0,0,0,0,0,-1,0, None);
-const WISDOM_DEC_BASIC: Consequence = consequence!(-1,0,0,0,0,0,0,0,-1,0, None);
+const WISDOM_INC_BASIC: Consequence = consequence!(1,0,0,0,0,0,0,0,0,0, None);
+const WISDOM_DEC_BASIC: Consequence = consequence!(-1,0,0,0,0,0,0,0,0,0, None);
 const HEALTH_DEC_BASIC: Consequence = consequence!(0,0,0,0,0,0,0,0,0,-10, None);
 const COST_BASIC: Consequence = cost_consequence!(-1);
 const INCOME_BASIC: Consequence = cost_consequence!(1);
