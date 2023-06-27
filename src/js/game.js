@@ -66,7 +66,7 @@ var sha256Context = new Sha256Context(undefined, new Generator(0, []), 0);
 function sha256New(context, size) {
   try {
     if(context.hash) {
-      console.log("The hsher already exist.");
+      console.log("The hasher already exist.");
       return;
     } else {
       sha256Context.hasher = CryptoJS.algo.SHA256.create();
@@ -99,9 +99,24 @@ function sha256Push(context, message) {
       context.size = 0;
     }
 
-    // Convert big endian to little endian
-    let uint8Message = new Uint8Array(message).reverse().slice(0, sz);
-    let uint8WordArray = convertUint8ArrayToWordArray(uint8Message);
+    const buffer = new ArrayBuffer(8);
+    const view = new DataView(buffer);
+    let offset = 0;
+    const littleEndian = true;
+    // Split message to 2 unsigned 32-bit integer
+    // BigInt is not supported in ES6
+    let binMessage = message.toString(2).padStart(64, 0);
+    let lowU32Message = parseInt(binMessage.slice(32), 2);
+    let highU32Message = parseInt(binMessage.slice(0, 32), 2);
+
+    // set uint32 every 4 bytes
+    view.setUint32(offset, lowU32Message, littleEndian);
+    view.setUint32(offset + 4, highU32Message ,littleEndian);
+    let uint8Message = new Array();
+    for(let i = 0; i < view.byteLength; i++) {
+      uint8Message.push(view.getUint8(i));
+    }
+    let uint8WordArray = convertUint8ArrayToWordArray(uint8Message.slice(0, sz));
     context.hasher.update(uint8WordArray);
   } catch(e) {
     console.log(e);
@@ -118,18 +133,29 @@ function sha256Finalize(context) {
       throw new Error("HasherNotExist");
     }
 
-    let hash = context.hasher.finalize();
-    // Convert big endian to little endian
-    let uint8Hash = new Uint8Array(hash).reverse();
-    const chunkSize = 8;
-    let uint64Array;
-    for (let i = 0; i < uint8Hash.length; i += chunkSize) {
-      // split hash into chunks
-      const chunk = uint8Hash.slice(i, i + chunkSize);
-      const uint64Value = new DataView(chunk).getBigUint64();
-      uint64Array.push(uint64Value);
+    let hash = context.hasher.finalize().toString();
+    const buffer = new ArrayBuffer(32);
+    const view = new DataView(buffer);
+    const littleEndian = true;
+    let sliceEnd = hash.length;
+    let offset = 0;
+    while(offset < buffer.byteLength) {
+      // Split hash to 8 unsigned 32-bit integer
+      let hashSlice = parseInt(hash.slice(sliceEnd - 8, sliceEnd), 16);
+      view.setUint32(offset, hashSlice, littleEndian);
+      // every 8 character is 32 bits
+      sliceEnd -= 8;
+      // set uint32 every 4 bytes
+      offset +=4;
     }
 
+    let uint64Array;
+    let i = 0;
+    while(i < buffer.byteLength) {
+      uint64Array.push(view.getBigUint64(i));
+      // read every 8 bytes of buffer
+      i += 8;
+    }
     context.generator.values = uint64Array;
     context.hasher = undefined;
     this.finalized = true; 
