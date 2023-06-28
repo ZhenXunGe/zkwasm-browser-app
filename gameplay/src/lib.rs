@@ -184,6 +184,14 @@ impl Status {
     }
 }
 
+pub enum Command {
+    Action = 0,
+    Choice = 1,
+    ItemDrop = 2,
+    UseItem = 3,
+    RemoveItem = 4,
+}
+
 static mut RG: Option<RuleEngine> = None;
 
 static mut CHARACTER: Lazy<Character> = Lazy::new(|| Character::new());
