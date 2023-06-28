@@ -171,6 +171,15 @@ impl Status {
         self.defence = ((self.defence as i32) + consq.defence)as u32;
         self.age = ((self.age as i32) + consq.age)as u32;
         self.currency = ((self.currency as i32) + consq.currency)as u32;
+
+        //Check for life overflow over 100 or under 0
+        if (((self.life as i32) + consq.life ) as u32) > 100 {
+            self.life = 100;
+            return;
+        } else if (((self.life as i32) + consq.life ) as i32) < 0 {
+            self.life = 0;
+            return;
+        } 
         self.life = ((self.life as i32) + consq.life)as u32;
     }
 }
@@ -195,6 +204,13 @@ pub fn init_rg() {
                 stdpack::standard_pack()
             ]
         })
+    }
+}
+
+#[wasm_bindgen]
+pub fn reset_character() {
+    unsafe {
+        CHARACTER = Lazy::new(|| Character::new());
     }
 }
 

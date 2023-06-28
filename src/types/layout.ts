@@ -1,1 +1,6 @@
-export type ModalOptions = "event" | "itemdrop" | "inventory" | "active-item";
+export type ModalOptions =
+  | "event"
+  | "itemdrop"
+  | "inventory"
+  | "active-item"
+  | "gameover";

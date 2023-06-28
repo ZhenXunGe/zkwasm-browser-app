@@ -12,10 +12,10 @@ import { Form } from "react-bootstrap";
 import { QRCodeSVG } from "qrcode.react";
 import initGameInstance from "../js/game";
 import * as gameInstance from "../js/gameplay.wasm_bg";
-import { GameHistory, WasmInstance } from "../types/game";
+import { GameHistory, InputType, WasmInstance } from "../types/game";
 import History from "../components/History";
 import { NewProveTask } from "../modals/addNewProveTask";
-
+import { formatAge } from "../utils/game";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 import "./style.scss";
@@ -26,6 +26,7 @@ import { MainNavBar } from "../components/Nav";
 import Events from "../components/Events";
 import ItemDropChoices from "../components/ItemDrop";
 import Inventory from "../components/Inventory";
+import GameOver from "../components/GameOver";
 import { eventsTable } from "../data/gameplay";
 import { State, ActionType, Character } from "../types/game";
 import { ModalOptions } from "../types/layout";
@@ -66,11 +67,14 @@ export function Main() {
     number | null
   >(null);
 
-  const [item_context, setItemContext] = useState<number[]>([]);
-
   let updateState = (ins: WasmInstance) => {
     let char = character.syncWASM(ins);
     setCharacter(char);
+
+    if (char.state.life <= 0) {
+      console.log("game over");
+      setCurrentModal("gameover");
+    }
   };
 
   useEffect(() => {
@@ -82,7 +86,15 @@ export function Main() {
   }, []);
 
   const handleChangeAction = (newAction: ActionType) => {
+    if (!character.isAlive()) return;
     if (isMoving) return;
+    setGameHistory((prev) => {
+      let latestAction: GameHistory = {
+        player_input: InputType.Action,
+        value: newAction,
+      };
+      return [latestAction, ...prev];
+    });
     toggleScrollBackground();
     setCurrentAction(newAction);
     setIsMoving(true);
@@ -100,6 +112,7 @@ export function Main() {
   };
 
   const handleChoice = (choice: number) => {
+    if (!character.isAlive()) return;
     if (!instance) return;
     console.log("choice", choice);
     instance.choose(choice);
@@ -108,9 +121,8 @@ export function Main() {
     console.log(item_context, "item context after choose");
     setGameHistory((prev) => {
       let latestAction: GameHistory = {
-        event_id: currentEventId!,
-        choice_id: choice,
-        character,
+        player_input: InputType.Choice,
+        value: choice,
       };
       return [latestAction, ...prev];
     });
@@ -126,24 +138,48 @@ export function Main() {
   };
 
   const selectItemDrop = (choice_index: number) => {
+    if (!character.isAlive()) return;
     instance!.choose_item(choice_index);
     updateState(instance!);
     console.log(
       instance!.get_item_context(),
       "after choose - item id with option to buy"
     );
+    setGameHistory((prev) => {
+      let latestAction: GameHistory = {
+        player_input: InputType.ItemDrop,
+        value: choice_index,
+      };
+      return [latestAction, ...prev];
+    });
 
     setCurrentModal(null);
   };
 
   const useItem = (item_id: number) => {
+    if (!character.isAlive()) return;
     instance!.use_item(item_id);
     updateState(instance!);
+    setGameHistory((prev) => {
+      let latestAction: GameHistory = {
+        player_input: InputType.ItemUse,
+        value: item_id,
+      };
+      return [latestAction, ...prev];
+    });
   };
 
   const removeActiveItem = (item_id: number) => {
+    if (!character.isAlive()) return;
     instance!.stop_use_item(item_id);
     updateState(instance!);
+    setGameHistory((prev) => {
+      let latestAction: GameHistory = {
+        player_input: InputType.ItemRemove,
+        value: item_id,
+      };
+      return [latestAction, ...prev];
+    });
     setCurrentModal(null);
   };
 
@@ -152,8 +188,9 @@ export function Main() {
   };
 
   function restartGame() {
-    //reload the window for now
-    window.location.reload();
+    instance!.reset_character();
+    updateState(instance!);
+    setGameHistory([]);
   }
 
   const [isMoving, setIsMoving] = useState(false);
@@ -187,7 +224,6 @@ export function Main() {
     // Clean up interval on unmount
     return () => clearInterval(intervalId);
   }, [isMoving]);
-  console.log(instance?.get_item_context(), "item context - main");
   return (
     <>
       <MainNavBar currency={0} handleRestart={restartGame}></MainNavBar>
@@ -200,6 +236,7 @@ export function Main() {
               <div className="skills-bar"></div>
               <div className="status-bar"></div>
               <div className="scrolling-bg"></div>
+              <div className="action-pipe"></div>
               <div className="status">
                 <div className="wisdom">{character.state.wisdom}</div>
                 <div className="attack">{character.state.attack}</div>
@@ -251,7 +288,7 @@ export function Main() {
                 </div>
               </div>
               <div className="savings">{character.state.currency}</div>
-              <div className="age">{character.state.age}</div>
+              <div className="age">{formatAge(character.state.age)}</div>
               <div
                 className="bag"
                 onClick={() => setCurrentModal("inventory")}
@@ -280,8 +317,7 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[1] === undefined)
-                        return;
+                      if (instance?.get_active_items()[1] === undefined) return;
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
                         instance!.get_active_items()[1]
@@ -298,8 +334,7 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[2] === undefined)
-                        return;
+                      if (instance?.get_active_items()[2] === undefined) return;
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
                         instance!.get_active_items()[2]
@@ -316,8 +351,7 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[3] === undefined)
-                        return;
+                      if (instance?.get_active_items()[3] === undefined) return;
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
                         instance!.get_active_items()[3]
@@ -334,8 +368,7 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[4] === undefined)
-                        return;
+                      if (instance?.get_active_items()[4] === undefined) return;
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
                         instance!.get_active_items()[4]
@@ -352,8 +385,7 @@ export function Main() {
                   <div
                     className="active-item"
                     onClick={() => {
-                      if (!instance?.get_active_items()[5] === undefined)
-                        return;
+                      if (instance?.get_active_items()[5] === undefined) return;
                       setCurrentModal("active-item");
                       setActiveItemIndexSelected(
                         instance!.get_active_items()[5]
@@ -381,9 +413,17 @@ export function Main() {
       </Container>
       <Container>
         <div className="historys">
+          <div className="suicide" onClick={() => restartGame()}></div>
           <div className="history"></div>
           <div className="history"></div>
           <div className="history"></div>
+        </div>
+        <div>
+          {gameHistory.map((a, index) => (
+            <div key={index}>
+              ACTION: {a.player_input} - VALUE: {a.value}
+            </div>
+          ))}
         </div>
       </Container>
       <ActiveItem
@@ -404,6 +444,11 @@ export function Main() {
         }
         handleSelect={selectItemDrop}
       ></ItemDropChoices>
+      <GameOver
+        show={currentModal === "gameover"}
+        character={character}
+        handleClose={handleCloseModal}
+      ></GameOver>
       <Inventory
         show={currentModal === "inventory"}
         ownedItems={Array.from(instance?.get_inventory() || [])}

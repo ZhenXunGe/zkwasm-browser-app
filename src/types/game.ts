@@ -92,6 +92,10 @@ export class Character {
     this.active_items = Array.from(active_items);
     return this;
   }
+
+  public isAlive() {
+    return this.state.life > 0;
+  }
 }
 
 export interface Item {
@@ -105,7 +109,14 @@ export interface Inventory {
 }
 
 export interface GameHistory {
-  character: Character;
-  event_id: number; // Event_id chosen by the player
-  choice_id: number; // Choice_id chosen by the player
+  player_input: InputType;
+  value: number;
+}
+
+export enum InputType {
+  Action = "action",
+  Choice = "choice",
+  ItemDrop = "itemdrop",
+  ItemUse = "itemuse",
+  ItemRemove = "itemremove",
 }

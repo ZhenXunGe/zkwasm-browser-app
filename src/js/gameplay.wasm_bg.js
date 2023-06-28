@@ -10,6 +10,12 @@ export function init_rg() {
 }
 
 /**
+*/
+export function reset_character() {
+    wasm.reset_character();
+}
+
+/**
 * @returns {number}
 */
 export function get_wisdom() {

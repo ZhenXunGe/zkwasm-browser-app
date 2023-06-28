@@ -4,6 +4,9 @@
 */
 export function init_rg(): void;
 /**
+*/
+export function reset_character(): void;
+/**
 * @returns {number}
 */
 export function get_wisdom(): number;

@@ -83,6 +83,17 @@ div.content {
     background-image: url("../assets/main/status_bar.png");
     background-repeat: no-repeat;
   }
+  .action-pipe {
+    position: absolute;
+    top: 22%;
+    left: 89%;
+    width: 10%;
+    height: 44.5%;
+
+    background-size: contain;
+    background-image: url("../assets/main/action_pipe.png");
+    background-repeat: no-repeat;
+  }
 }
 
 .overflow-breakword {
@@ -128,7 +139,7 @@ div.content {
 
 .actions {
   position: absolute;
-  left: 82%;
+  left: 83%;
   top: 26%;
   z-index: 15;
   .current-action {
@@ -137,6 +148,7 @@ div.content {
 }
 
 .action-exploring {
+  margin: 10px 0;
   width: 105px;
   height: 68px;
   background-size: cover;
@@ -293,11 +305,11 @@ div.content {
 .age {
   position: absolute;
   left: 61%;
-  top: 74.5%;
+  top: 75.5%;
   font-family: "Averia Serif Libre";
   font-style: normal;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 16px;
   z-index: 15;
   color: #000000;
 }
@@ -352,7 +364,18 @@ div.content {
   height: 600px;
 
   padding: 7% 4%;
-
+  position: relative;
+  .inner-container {
+  }
+  .suicide {
+    position: absolute;
+    background-image: url("../assets/main/suicide.png");
+    width: 199px;
+    height: 117px;
+    left: 80%;
+    top: 5%;
+    cursor: pointer;
+  }
   .history {
     width: 761px;
     height: 135px;

@@ -1,5 +1,5 @@
 use crate::items::{Inventory, Item};
-use crate::{Status, consequence, Consequence, ItemDrop, drop};
+use crate::{Status,ItemDrop};
 use crate::{ActionType, RuleEngine};
 use crate::skills::{Skill, Skills};
 
