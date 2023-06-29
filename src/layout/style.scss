@@ -53,7 +53,7 @@ div.content {
     bottom: 1.5%;
     left: 2%;
     width: 96%;
-    height: 22%;
+    height: 25%;
     background-image: url("../assets/main/bottom_bar.png");
     background-size: cover;
     background-repeat: no-repeat;
@@ -73,7 +73,7 @@ div.content {
 
     .age {
       position: absolute;
-      left: 59%;
+      left: 60%;
       top: 5%;
       font-family: "Averia Serif Libre";
       font-style: normal;
@@ -100,7 +100,7 @@ div.content {
         align-items: center;
         justify-content: center;
         position: relative;
-        width: 10%;
+        width: 12%;
         min-height: 50%;
         margin: 10px;
         background-size: contain;
@@ -118,8 +118,8 @@ div.content {
   }
   .skills-bar {
     position: absolute;
-    top: 70px;
-    left: 2%;
+    top: 7%;
+    left: 1%;
     width: 15%;
     height: 60%;
     z-index: 5;
@@ -308,7 +308,7 @@ div.content {
 .bag {
   position: absolute;
   left: 5%;
-  top: 72%;
+  top: 70%;
   width: 20%;
   height: 15%;
   background-size: contain;
@@ -320,7 +320,7 @@ div.content {
 .map {
   position: absolute;
   left: 78%;
-  top: 70%;
+  top: 67%;
   width: 17%;
   height: 17%;
   background-size: contain;
