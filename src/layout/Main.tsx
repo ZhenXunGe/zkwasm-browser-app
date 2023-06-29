@@ -232,46 +232,165 @@ export function Main() {
           <Col>
             <div className="content">
               <div className="content-border"></div>
-              <div className="bottom-bar"></div>
-              <div className="skills-bar"></div>
-              <div className="status-bar"></div>
+              <div className="bottom-bar">
+                <div className="savings">{character.state.currency}</div>
+                <div className="age">{formatAge(character.state.age)}</div>
+                <div className="items">
+                  <div className="item">
+                    <div
+                      className="active-item"
+                      onClick={() => {
+                        if (instance!.get_active_items()[0] === undefined)
+                          return;
+                        console.log("active item clicked");
+                        setCurrentModal("active-item");
+                        setActiveItemIndexSelected(
+                          instance!.get_active_items()[0]
+                        );
+                      }}
+                    >
+                      Active Item -{" "}
+                      {instance?.get_active_items()[0] !== undefined
+                        ? "item index - " + instance.get_active_items()[0]
+                        : "None"}
+                    </div>
+                  </div>
+                  <div className="item">
+                    <div
+                      className="active-item"
+                      onClick={() => {
+                        if (instance?.get_active_items()[1] === undefined)
+                          return;
+                        setCurrentModal("active-item");
+                        setActiveItemIndexSelected(
+                          instance!.get_active_items()[1]
+                        );
+                      }}
+                    >
+                      Active Item -{" "}
+                      {instance?.get_active_items()[1] !== undefined
+                        ? "item index - " + instance.get_active_items()[1]
+                        : "None"}
+                    </div>
+                  </div>
+                  <div className="item">
+                    <div
+                      className="active-item"
+                      onClick={() => {
+                        if (instance?.get_active_items()[2] === undefined)
+                          return;
+                        setCurrentModal("active-item");
+                        setActiveItemIndexSelected(
+                          instance!.get_active_items()[2]
+                        );
+                      }}
+                    >
+                      Active Item -{" "}
+                      {instance?.get_active_items()[2] !== undefined
+                        ? "item index - " + instance.get_active_items()[2]
+                        : "None"}
+                    </div>
+                  </div>
+                  <div className="item">
+                    <div
+                      className="active-item"
+                      onClick={() => {
+                        if (instance?.get_active_items()[3] === undefined)
+                          return;
+                        setCurrentModal("active-item");
+                        setActiveItemIndexSelected(
+                          instance!.get_active_items()[3]
+                        );
+                      }}
+                    >
+                      Active Item -{" "}
+                      {instance?.get_active_items()[3] !== undefined
+                        ? "item index - " + instance.get_active_items()[3]
+                        : "None"}
+                    </div>
+                  </div>
+                  <div className="item">
+                    <div
+                      className="active-item"
+                      onClick={() => {
+                        if (instance?.get_active_items()[4] === undefined)
+                          return;
+                        setCurrentModal("active-item");
+                        setActiveItemIndexSelected(
+                          instance!.get_active_items()[4]
+                        );
+                      }}
+                    >
+                      Active Item -{" "}
+                      {instance?.get_active_items()[4] !== undefined
+                        ? "item index - " + instance.get_active_items()[4]
+                        : "None"}
+                    </div>
+                  </div>
+                  <div className="item">
+                    <div
+                      className="active-item"
+                      onClick={() => {
+                        if (instance?.get_active_items()[5] === undefined)
+                          return;
+                        setCurrentModal("active-item");
+                        setActiveItemIndexSelected(
+                          instance!.get_active_items()[5]
+                        );
+                      }}
+                    >
+                      Active Item -{" "}
+                      {instance?.get_active_items()[5] !== undefined
+                        ? "item index - " + instance.get_active_items()[5]
+                        : "None"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="skills-bar">
+                <div className="stickers">
+                  <div className="sticker"></div>
+                  <div className="sticker"></div>
+                  <div className="sticker"></div>
+                  <div className="sticker"></div>
+                  <div className="sticker"></div>
+                </div>
+              </div>
+              <div className="status-bar">
+                <div className="status">
+                  <div className="wisdom">{character.state.wisdom}</div>
+                  <div className="attack">{character.state.attack}</div>
+                  <div className="speed">{character.state.speed}</div>
+                  <div className="defence">{character.state.defence}</div>
+                  <div className="family">{character.state.family}</div>
+                  <div className="charm">{character.state.charm}</div>
+                  <div className="luck">{character.state.luck}</div>
+                </div>
+              </div>
               <div className="scrolling-bg"></div>
-              <div className="action-pipe"></div>
-              <div className="status">
-                <div className="wisdom">{character.state.wisdom}</div>
-                <div className="attack">{character.state.attack}</div>
-                <div className="speed">{character.state.speed}</div>
-                <div className="defence">{character.state.defence}</div>
-                <div className="family">{character.state.family}</div>
-                <div className="charm">{character.state.charm}</div>
-                <div className="luck">{character.state.luck}</div>
-              </div>
-              <div className="actions">
-                <div
-                  onClick={() => handleChangeAction(ActionType.Working)}
-                  className={`action-working ${
-                    currentAction === 0 ? "current-action" : ""
-                  }`}
-                >
-                  <div className="hitbox"></div>
-                </div>
-                <div
-                  onClick={() => handleChangeAction(ActionType.Exploring)}
-                  className={`action-exploring ${
-                    currentAction === 1 ? "current-action" : ""
-                  }`}
-                >
-                  <div className="hitbox"></div>
-                </div>
-                <div
-                  onClick={() => handleChangeAction(ActionType.Coasting)}
-                  className={`action-coasting ${
-                    currentAction === 2 ? "current-action" : ""
-                  }`}
-                >
-                  <div className="hitbox"></div>
+              <div className="action-pipe">
+                <div className="actions">
+                  <div
+                    onClick={() => handleChangeAction(ActionType.Working)}
+                    className={`action-working ${
+                      currentAction === 0 ? "current-action" : ""
+                    }`}
+                  ></div>
+                  <div
+                    onClick={() => handleChangeAction(ActionType.Exploring)}
+                    className={`action-exploring ${
+                      currentAction === 1 ? "current-action" : ""
+                    }`}
+                  ></div>
+                  <div
+                    onClick={() => handleChangeAction(ActionType.Coasting)}
+                    className={`action-coasting ${
+                      currentAction === 2 ? "current-action" : ""
+                    }`}
+                  ></div>
                 </div>
               </div>
+
               <div className="character">
                 <div className="character-health">
                   <div className="character-name">{character.name}</div>
@@ -286,127 +405,14 @@ export function Main() {
                     {/* <div className="health-amount"></div> */}
                   </div>
                 </div>
+                <div className="character-art"></div>
               </div>
-              <div className="savings">{character.state.currency}</div>
-              <div className="age">{formatAge(character.state.age)}</div>
+
               <div
                 className="bag"
                 onClick={() => setCurrentModal("inventory")}
               ></div>
               <div className="map"></div>
-              <div className="items">
-                <div className="item">
-                  <div
-                    className="active-item"
-                    onClick={() => {
-                      if (instance!.get_active_items()[0] === undefined) return;
-                      console.log("active item clicked");
-                      setCurrentModal("active-item");
-                      setActiveItemIndexSelected(
-                        instance!.get_active_items()[0]
-                      );
-                    }}
-                  >
-                    Active Item -{" "}
-                    {instance?.get_active_items()[0] !== undefined
-                      ? "item index - " + instance.get_active_items()[0]
-                      : "None"}
-                  </div>
-                </div>
-                <div className="item">
-                  <div
-                    className="active-item"
-                    onClick={() => {
-                      if (instance?.get_active_items()[1] === undefined) return;
-                      setCurrentModal("active-item");
-                      setActiveItemIndexSelected(
-                        instance!.get_active_items()[1]
-                      );
-                    }}
-                  >
-                    Active Item -{" "}
-                    {instance?.get_active_items()[1] !== undefined
-                      ? "item index - " + instance.get_active_items()[1]
-                      : "None"}
-                  </div>
-                </div>
-                <div className="item">
-                  <div
-                    className="active-item"
-                    onClick={() => {
-                      if (instance?.get_active_items()[2] === undefined) return;
-                      setCurrentModal("active-item");
-                      setActiveItemIndexSelected(
-                        instance!.get_active_items()[2]
-                      );
-                    }}
-                  >
-                    Active Item -{" "}
-                    {instance?.get_active_items()[2] !== undefined
-                      ? "item index - " + instance.get_active_items()[2]
-                      : "None"}
-                  </div>
-                </div>
-                <div className="item">
-                  <div
-                    className="active-item"
-                    onClick={() => {
-                      if (instance?.get_active_items()[3] === undefined) return;
-                      setCurrentModal("active-item");
-                      setActiveItemIndexSelected(
-                        instance!.get_active_items()[3]
-                      );
-                    }}
-                  >
-                    Active Item -{" "}
-                    {instance?.get_active_items()[3] !== undefined
-                      ? "item index - " + instance.get_active_items()[3]
-                      : "None"}
-                  </div>
-                </div>
-                <div className="item">
-                  <div
-                    className="active-item"
-                    onClick={() => {
-                      if (instance?.get_active_items()[4] === undefined) return;
-                      setCurrentModal("active-item");
-                      setActiveItemIndexSelected(
-                        instance!.get_active_items()[4]
-                      );
-                    }}
-                  >
-                    Active Item -{" "}
-                    {instance?.get_active_items()[4] !== undefined
-                      ? "item index - " + instance.get_active_items()[4]
-                      : "None"}
-                  </div>
-                </div>
-                <div className="item">
-                  <div
-                    className="active-item"
-                    onClick={() => {
-                      if (instance?.get_active_items()[5] === undefined) return;
-                      setCurrentModal("active-item");
-                      setActiveItemIndexSelected(
-                        instance!.get_active_items()[5]
-                      );
-                    }}
-                  >
-                    Active Item -{" "}
-                    {instance?.get_active_items()[5] !== undefined
-                      ? "item index - " + instance.get_active_items()[5]
-                      : "None"}
-                  </div>
-                </div>
-              </div>
-
-              <div className="stickers">
-                <div className="sticker"></div>
-                <div className="sticker"></div>
-                <div className="sticker"></div>
-                <div className="sticker"></div>
-                <div className="sticker"></div>
-              </div>
             </div>
           </Col>
         </Row>

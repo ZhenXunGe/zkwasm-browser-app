@@ -30,11 +30,9 @@ div.board-row {
   max-width: var(--game-width) !important;
 }
 #root {
-  --content-width: 867px;
+  --content-width: 600px;
 }
 div.content {
-  padding-left: 12px;
-  padding-top: 15px;
   margin: auto;
   width: var(--content-width);
   height: var(--content-width);
@@ -52,36 +50,159 @@ div.content {
   .bottom-bar {
     pointer-events: none;
     position: absolute;
-    bottom: 15px;
-    left: 3%;
+    bottom: 1.5%;
+    left: 2%;
     width: 96%;
-    height: 25%;
+    height: 22%;
     background-image: url("../assets/main/bottom_bar.png");
     background-size: cover;
     background-repeat: no-repeat;
     z-index: 5;
+
+    .savings {
+      position: absolute;
+      left: 36.5%;
+      top: 5%;
+      font-family: "Averia Serif Libre";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 1rem;
+      z-index: 15;
+      color: #000000;
+    }
+
+    .age {
+      position: absolute;
+      left: 59%;
+      top: 5%;
+      font-family: "Averia Serif Libre";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 1rem;
+      z-index: 15;
+      color: #000000;
+    }
+
+    .items {
+      pointer-events: all;
+      position: relative;
+      top: 25%;
+      width: 100%;
+      height: 80%;
+      z-index: 15;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      .item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 10%;
+        min-height: 50%;
+        margin: 10px;
+        background-size: contain;
+        background-image: url("../images/layer3_sticker3.png");
+        background-repeat: no-repeat;
+        cursor: pointer;
+        .active-item {
+          position: absolute;
+          top: 20%;
+          left: 10%;
+          color: black;
+        }
+      }
+    }
   }
   .skills-bar {
     position: absolute;
     top: 70px;
-    left: 3.5%;
+    left: 2%;
     width: 15%;
     height: 60%;
     z-index: 5;
     background-size: cover;
     background-image: url("../assets/main/skills_bar.png");
     background-repeat: no-repeat;
+    .stickers {
+      width: 80%;
+      height: 100%;
+      position: absolute;
+      left: 20%;
+      top: 10%;
+      z-index: 11;
+      .sticker {
+        //width: 82px;
+        //height: 79px;
+        height: 15%;
+        margin: 5px;
+        background-size: contain;
+        background-image: url("../images/layer3_sticker1.png");
+        background-repeat: no-repeat;
+      }
+    }
   }
   .status-bar {
     position: absolute;
-    top: 25px;
+    top: 2%;
     left: 2%;
-    width: 98%;
+    width: 100%;
     height: 14.5%;
 
     background-size: contain;
     background-image: url("../assets/main/status_bar.png");
     background-repeat: no-repeat;
+
+    .status {
+      font-style: normal;
+      font-weight: 700;
+      font-size: 12px;
+      color: black;
+      width: 100%;
+      height: 100%;
+      .wisdom {
+        position: absolute;
+        left: 21%;
+        top: 70%;
+      }
+      .attack {
+        position: absolute;
+        left: 32%;
+        top: 70%;
+      }
+      .speed {
+        position: absolute;
+        left: 43%;
+        top: 70%;
+      }
+      .defence {
+        position: absolute;
+        left: 53%;
+        top: 70%;
+      }
+      .family {
+        position: absolute;
+        left: 64%;
+        top: 70%;
+      }
+      .charm {
+        position: absolute;
+        left: 75%;
+        top: 70%;
+      }
+      .luck {
+        position: absolute;
+        left: 86%;
+        top: 70%;
+      }
+      .age {
+        position: absolute;
+        left: 21%;
+        top: 70%;
+      }
+    }
   }
   .action-pipe {
     position: absolute;
@@ -93,6 +214,53 @@ div.content {
     background-size: contain;
     background-image: url("../assets/main/action_pipe.png");
     background-repeat: no-repeat;
+    .actions {
+      position: relative;
+      top: 4%;
+      width: 100%;
+      height: 65%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 15;
+      .current-action {
+        background-color: blue;
+      }
+    }
+
+    .action-exploring {
+      position: relative;
+      width: 120%;
+      height: 25%;
+      left: -25%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../images/layer4_exploring_btn.png");
+      cursor: pointer;
+    }
+
+    .action-working {
+      position: relative;
+      width: 120%;
+      height: 25%;
+      left: -25%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../images/layer4_working_btn.png");
+      cursor: pointer;
+    }
+
+    .action-coasting {
+      position: relative;
+      width: 120%;
+      height: 25%;
+      left: -25%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../images/layer4_coasting_btn.png");
+      cursor: pointer;
+    }
   }
 }
 
@@ -137,218 +305,85 @@ div.content {
   width: 500px !important;
 }
 
-.actions {
-  position: absolute;
-  left: 83%;
-  top: 26%;
-  z-index: 15;
-  .current-action {
-    background-color: blue;
-  }
-}
-
-.action-exploring {
-  margin: 10px 0;
-  width: 105px;
-  height: 68px;
-  background-size: cover;
-  background-image: url("../images/layer4_exploring_btn.png");
-  cursor: pointer;
-}
-
-.action-working {
-  width: 105px;
-  height: 68px;
-  background-size: cover;
-  background-image: url("../images/layer4_working_btn.png");
-  cursor: pointer;
-}
-
-.action-coasting {
-  width: 105px;
-  height: 68px;
-  background-size: cover;
-  background-image: url("../images/layer4_coasting_btn.png");
-  cursor: pointer;
-}
-
-.items {
-  position: absolute;
-  left: 7%;
-  top: 82%;
-  z-index: 15;
-  .item {
-    position: relative;
-    display: inline-block;
-    width: 103px;
-    height: 102px;
-    margin: 10px;
-    background-size: cover;
-    background-image: url("../images/layer3_sticker3.png");
-    cursor: pointer;
-    .active-item {
-      position: absolute;
-      top: 20%;
-      left: 10%;
-      color: black;
-    }
-  }
-}
-
-.stickers {
-  position: absolute;
-  left: 6.5%;
-  top: 15%;
-  z-index: 11;
-  .sticker {
-    width: 82px;
-    height: 79px;
-    margin: 5px;
-    background-size: cover;
-    background-image: url("../images/layer3_sticker1.png");
-  }
-}
-
 .bag {
   position: absolute;
   left: 5%;
-  top: 68%;
-  width: 180px;
-  height: 139px;
-  background-size: cover;
+  top: 72%;
+  width: 20%;
+  height: 15%;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-image: url("../images/layer1_bag_btn.png");
   cursor: pointer;
 }
 
 .map {
   position: absolute;
-  left: 75%;
-  top: 65%;
-  width: 150px;
-  height: 148px;
-  background-size: cover;
+  left: 78%;
+  top: 70%;
+  width: 17%;
+  height: 17%;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-image: url("../images/layer1_instance_btn.png");
-}
-
-.status {
-  font-style: normal;
-  font-weight: 700;
-  font-size: 12px;
-  color: black;
-
-  .wisdom {
-    position: absolute;
-    left: 21%;
-    top: 13%;
-  }
-  .attack {
-    position: absolute;
-    left: 32%;
-    top: 13%;
-  }
-  .speed {
-    position: absolute;
-    left: 43%;
-    top: 13%;
-  }
-  .defence {
-    position: absolute;
-    left: 53%;
-    top: 13%;
-  }
-  .family {
-    position: absolute;
-    left: 64%;
-    top: 13%;
-  }
-  .charm {
-    position: absolute;
-    left: 75%;
-    top: 13%;
-  }
-  .luck {
-    position: absolute;
-    left: 86%;
-    top: 13%;
-  }
-  .age {
-    position: absolute;
-    left: 21%;
-    top: 25%;
-  }
 }
 
 .scrolling-bg {
   position: absolute;
-  left: 3%;
-  top: 3%;
-  width: 95%;
-  height: 95%;
+  left: 2%;
+  top: 2%;
+  width: 96%;
+  height: 96%;
   background-size: cover;
   background-image: url("../assets/main/scrolling_bg.png");
   background-repeat: repeat-x;
   z-index: -1;
 }
 
-.savings {
-  position: absolute;
-  left: 37.5%;
-  top: 74.5%;
-  font-family: "Averia Serif Libre";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  z-index: 15;
-  color: #000000;
-}
-
-.age {
-  position: absolute;
-  left: 61%;
-  top: 75.5%;
-  font-family: "Averia Serif Libre";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  z-index: 15;
-  color: #000000;
-}
-
 .character {
   position: absolute;
-  left: calc(50% - 75px);
-  top: calc(50% - 131.5px);
-  width: 150px;
-  height: 263px;
-  background-size: cover;
-  background-image: url("../images/layer1_charactor.png");
+  left: calc(50%);
+  top: calc(50%);
+  width: 40%;
+  height: 40%;
+  transform: translate(-50%, -70%);
 
+  .character-art {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    height: 80%;
+    width: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("../images/layer1_charactor.png");
+    transform: translate(-50%, -50%);
+  }
   .character-health {
-    position: absolute;
-    left: calc(-50%);
-    top: -50%;
-    width: 300px;
-    height: 59px;
-    background-size: cover;
+    position: relative;
+
+    width: 100%;
+    height: 25%;
+    background-size: contain;
     background-image: url("../assets/main/healthbar.png");
+    background-repeat: no-repeat;
     .character-name {
       display: flex;
       justify-content: center;
       align-items: center;
-
       font-family: "Averia Serif Libre";
       font-style: normal;
       font-weight: 700;
-      font-size: 18px;
+      font-size: 1rem;
       text-align: center;
       color: #000000;
     }
     .health-bar {
-      position: relative;
-      width: 284px;
-      height: 8px;
-      left: 8px;
-      top: 18px;
+      position: absolute;
+      bottom: 31%;
+      width: 100%;
+      height: 10%;
+
       background-image: url("../assets/main/blood.png");
       background-repeat: no-repeat;
     }
@@ -357,33 +392,36 @@ div.content {
 
 .historys {
   margin: auto;
+  background-size: contain;
   background-image: url("../assets/main/history.png");
   background-repeat: no-repeat;
 
   width: var(--content-width);
   height: 600px;
 
-  padding: 7% 4%;
+  padding: 5% 4%;
   position: relative;
   .inner-container {
   }
   .suicide {
     position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
     background-image: url("../assets/main/suicide.png");
-    width: 199px;
-    height: 117px;
+    width: 30%;
+    height: 15%;
     left: 80%;
     top: 5%;
     cursor: pointer;
   }
   .history {
-    width: 761px;
-    height: 135px;
+    width: 95%;
+    height: 20%;
     margin: 10px;
     background-size: 430px 80px;
     background-image: url("../images/layer3_message.png");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
   }
 }
 
