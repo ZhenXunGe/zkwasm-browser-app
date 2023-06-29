@@ -1,7 +1,4 @@
-use crate::{
-    Consequence,
-};
-
+use crate::character::status::Consequence;
 // Skills are immutable to a character once learned and cannot be forgotten
 pub struct Skill {
     skill_id: u32,

@@ -1,7 +1,9 @@
 use crate::items::{Inventory, Item};
-use crate::{Status,ItemDrop};
-use crate::{ActionType, RuleEngine};
+use crate::{ActionType};
 use crate::skills::{Skill, Skills};
+use crate::rule_engine::{RuleEngine};
+pub mod status;
+use status::{Status, ItemDrop};
 
 pub struct Character {
     inventory: Inventory,

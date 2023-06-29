@@ -1,9 +1,4 @@
-use crate::{
-    Consequence,
-    Choice,
-    Event,
-    ItemDrop,
-};
+use crate::character::status::{Choice, Consequence, Event, ItemDrop};
 
 fn create_choice(dscp_id: &mut u32, consq: Consequence) -> Choice {
     let c = Choice {

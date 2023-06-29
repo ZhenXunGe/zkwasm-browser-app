@@ -1,7 +1,5 @@
-use crate::{
-    Consequence,
-    Event, consequence, cost_consequence, character::Character
-};
+use crate::character::status::Consequence;
+use crate::{cost_consequence, consequence};
 
 #[derive(Clone)]
 pub struct Item {
