@@ -1,0 +1,227 @@
+.bag-body {
+  background-image: url("../../assets/inventory/bag_frame.png");
+  width: 1026px;
+  height: 667px;
+  z-index: 0;
+  position: relative;
+
+  .bag-items {
+    width: 43%;
+    position: absolute;
+    top: 22%;
+    left: 52%;
+    .categories {
+      // Grid of 2 high 3 wide item categories
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      .clothes {
+        width: 128px;
+        height: 46px;
+        background-image: url("../../assets/inventory/clothes.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+        &:hover {
+          cursor: pointer;
+          //background-image: url("../../assets/inventory/clothes_hover.png");
+        }
+      }
+      .hat {
+        width: 128px;
+        height: 46px;
+        background-image: url("../../assets/inventory/hat.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+        &:hover {
+          cursor: pointer;
+          //background-image: url("../../assets/inventory/hat_hover.png");
+        }
+      }
+      .shoes {
+        width: 128px;
+        height: 46px;
+        background-image: url("../../assets/inventory/shoes.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        grid-column: 3 / 4;
+        grid-row: 1 / 2;
+        &:hover {
+          cursor: pointer;
+          //background-image: url("../../assets/inventory/shoes_hover.png");
+        }
+      }
+      .weapon {
+        width: 128px;
+        height: 46px;
+        background-image: url("../../assets/inventory/weapon.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+        &:hover {
+          cursor: pointer;
+          //background-image: url("../../assets/inventory/weapon_hover.png");
+        }
+      }
+      .shield {
+        width: 128px;
+        height: 46px;
+        background-image: url("../../assets/inventory/shield.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+        &:hover {
+          cursor: pointer;
+          //background-image: url("../../assets/inventory/shield_hover.png");
+        }
+      }
+      .accessory {
+        width: 128px;
+        height: 46px;
+        background-image: url("../../assets/inventory/accessory.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        grid-column: 3 / 4;
+        grid-row: 2 / 3;
+        &:hover {
+          cursor: pointer;
+          //background-image: url("../../assets/inventory/accessory_hover.png");
+        }
+      }
+    }
+
+    .inventory-items {
+      margin-top: 20px;
+      max-height: 350px;
+      overflow-y: scroll;
+      // Grid of 3 wide items. Rows are dynamic
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-auto-rows: 1fr;
+      grid-gap: 10px 5px;
+      .item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 102px;
+        height: 102px;
+        background-image: url("../../assets/inventory/small_icon.png");
+        color: red;
+        padding: 5px;
+        &:hover {
+          cursor: pointer;
+
+          //background-image: url("../../assets/inventory/small_icon_hover.png");
+        }
+      }
+    }
+  }
+
+  .current-item {
+    position: absolute;
+    left: 4%;
+    top: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+
+    .item-image {
+      background-image: url("../../assets/inventory/big_icon.png");
+      width: 139px;
+      height: 139px;
+    }
+    .details {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .name {
+        margin-top: 20px;
+        font-family: "Averia Serif Libre";
+        font-style: normal;
+        font-weight: 700;
+        font-size: 32px;
+        line-height: 39px;
+
+        color: #000000;
+      }
+      .stats {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: "Averia Serif Libre";
+        font-style: normal;
+        font-weight: 700;
+        font-size: 16px;
+
+        text-align: center;
+
+        color: #000000;
+      }
+    }
+    .sell {
+      margin-top: 20px;
+      width: 200px;
+      height: 50px;
+      background-image: url("../../assets/inventory/sell.png");
+      cursor: pointer;
+
+      .value {
+        position: relative;
+        left: 60%;
+        top: 20%;
+        font-family: "Averia Serif Libre";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        text-align: center;
+
+        color: #000000;
+      }
+    }
+    .use {
+      margin-top: 20px;
+      width: 137px;
+      height: 43px;
+      background-image: url("../../assets/inventory/use.png");
+      cursor: pointer;
+    }
+  }
+}
+
+.close-bag {
+  position: absolute;
+  z-index: -1;
+  left: 87%;
+  top: -2%;
+  width: 91px;
+  height: 114px;
+  background-image: url("../../assets/inventory/close_bag.png");
+}
+.hitbox {
+  position: absolute;
+  left: 87%;
+  top: -2%;
+  width: 91px;
+  height: 114px;
+  //background-color: blue;
+  z-index: 20;
+  cursor: pointer;
+}

@@ -29,35 +29,240 @@ div.board-row {
 
   max-width: var(--game-width) !important;
 }
-
+#root {
+  --content-width: 600px;
+}
 div.content {
-  padding-left: 12px;
-  padding-top: 15px;
   margin: auto;
-  width: 500px;
-  height: 900px;
-  position:relative;
-  background-size: 500px 900px;
-  background-image: url("../images/layer2-bg.png");
-  --cell-size: 110px;
-  --cell-margin: 12px;
-}
+  width: var(--content-width);
+  height: var(--content-width);
+  overflow: hidden;
+  position: relative;
+  .content-border {
+    position: relative;
+    pointer-events: none;
+    height: 100%;
+    z-index: 30;
+    background-size: cover;
+    background-image: url("../assets/main/border.png");
+    background-repeat: no-repeat;
+  }
+  .bottom-bar {
+    pointer-events: none;
+    position: absolute;
+    bottom: 1.5%;
+    left: 2%;
+    width: 96%;
+    height: 25%;
+    background-image: url("../assets/main/bottom_bar.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 5;
 
-div.board-cell {
-  display: inline-block;
-  height: var(--cell-size);
-  width: var(--cell-size);
-  margin-right: var(--cell-margin);
-}
+    .savings {
+      position: absolute;
+      left: 36.5%;
+      top: 5%;
+      font-family: "Averia Serif Libre";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 1rem;
+      z-index: 15;
+      color: #000000;
+    }
 
-div.board-cell-out div {
-  display: inline-block;
-  height: var(--cell-size);
-  width: var(--cell-size);
-  border: 3px solid white;
-  border-radius: 5px;
-}
+    .age {
+      position: absolute;
+      left: 60%;
+      top: 5%;
+      font-family: "Averia Serif Libre";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 1rem;
+      z-index: 15;
+      color: #000000;
+    }
 
+    .items {
+      pointer-events: all;
+      position: relative;
+      top: 25%;
+      width: 100%;
+      height: 80%;
+      z-index: 15;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      .item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 12%;
+        min-height: 50%;
+        margin: 10px;
+        background-size: contain;
+        background-image: url("../images/layer3_sticker3.png");
+        background-repeat: no-repeat;
+        cursor: pointer;
+        .active-item {
+          position: absolute;
+          top: 20%;
+          left: 10%;
+          color: black;
+        }
+      }
+    }
+  }
+  .skills-bar {
+    position: absolute;
+    top: 7%;
+    left: 1%;
+    width: 15%;
+    height: 60%;
+    z-index: 5;
+    background-size: cover;
+    background-image: url("../assets/main/skills_bar.png");
+    background-repeat: no-repeat;
+    .stickers {
+      width: 80%;
+      height: 100%;
+      position: absolute;
+      left: 20%;
+      top: 10%;
+      z-index: 11;
+      .sticker {
+        //width: 82px;
+        //height: 79px;
+        height: 15%;
+        margin: 5px;
+        background-size: contain;
+        background-image: url("../images/layer3_sticker1.png");
+        background-repeat: no-repeat;
+      }
+    }
+  }
+  .status-bar {
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    width: 100%;
+    height: 14.5%;
+
+    background-size: contain;
+    background-image: url("../assets/main/status_bar.png");
+    background-repeat: no-repeat;
+
+    .status {
+      font-style: normal;
+      font-weight: 700;
+      font-size: 12px;
+      color: black;
+      width: 100%;
+      height: 100%;
+      .wisdom {
+        position: absolute;
+        left: 21%;
+        top: 70%;
+      }
+      .attack {
+        position: absolute;
+        left: 32%;
+        top: 70%;
+      }
+      .speed {
+        position: absolute;
+        left: 43%;
+        top: 70%;
+      }
+      .defence {
+        position: absolute;
+        left: 53%;
+        top: 70%;
+      }
+      .family {
+        position: absolute;
+        left: 64%;
+        top: 70%;
+      }
+      .charm {
+        position: absolute;
+        left: 75%;
+        top: 70%;
+      }
+      .luck {
+        position: absolute;
+        left: 86%;
+        top: 70%;
+      }
+      .age {
+        position: absolute;
+        left: 21%;
+        top: 70%;
+      }
+    }
+  }
+  .action-pipe {
+    position: absolute;
+    top: 22%;
+    left: 89%;
+    width: 10%;
+    height: 44.5%;
+
+    background-size: contain;
+    background-image: url("../assets/main/action_pipe.png");
+    background-repeat: no-repeat;
+    .actions {
+      position: relative;
+      top: 4%;
+      width: 100%;
+      height: 65%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 15;
+      .current-action {
+        background-color: blue;
+      }
+    }
+
+    .action-exploring {
+      position: relative;
+      width: 120%;
+      height: 25%;
+      left: -25%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../images/layer4_exploring_btn.png");
+      cursor: pointer;
+    }
+
+    .action-working {
+      position: relative;
+      width: 120%;
+      height: 25%;
+      left: -25%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../images/layer4_working_btn.png");
+      cursor: pointer;
+    }
+
+    .action-coasting {
+      position: relative;
+      width: 120%;
+      height: 25%;
+      left: -25%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url("../images/layer4_coasting_btn.png");
+      cursor: pointer;
+    }
+  }
+}
 
 .overflow-breakword {
   overflow-wrap: break-word;
@@ -100,102 +305,124 @@ div.board-cell-out div {
   width: 500px !important;
 }
 
-.actions {
-  position:absolute;
-  left:380px;
-  top: 140px;
-}
-
-.action-exploring {
-  width:80px;
-  height:40px;
-  background-size: 80px 40px;
-  background-image: url("../images/layer4_exploring_btn.png");
-}
-
-.action-working {
-  width:80px;
-  height:40px;
-  background-size: 80px 40px;
-  background-image: url("../images/layer4_working_btn.png");
-}
-
-.action-coasting {
-  width:80px;
-  height:40px;
-  background-size: 80px 40px;
-  background-image: url("../images/layer4_coasting_btn.png");
-}
-
-.items {
-  position: absolute;
-  left: 40px;
-  top: 440px;
-  .item {
-    display: inline-block;
-    width:50px;
-    height:50px;
-    margin:10px;
-    background-size: 50px 50px;
-    background-image: url("../images/layer3_sticker3.png");
-  }
-}
-
-.stickers {
-  position: absolute;
-  left: 32px;
-  top: 86px;
-  .sticker {
-    width:44px;
-    height:44px;
-    margin:5px;
-    background-size: 44px 44px;
-    background-image: url("../images/layer3_sticker1.png");
-  }
-}
-
 .bag {
   position: absolute;
-  left:20px;
-  top: 370px;
-  width: 110px;
-  height: 55px;
-  background-size: 110px 80px;
+  left: 5%;
+  top: 70%;
+  width: 20%;
+  height: 15%;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-image: url("../images/layer1_bag_btn.png");
+  cursor: pointer;
 }
 
 .map {
   position: absolute;
-  left:375px;
-  top: 370px;
-  width: 100px;
-  height: 60px;
-  background-size: 100px 80px;
+  left: 78%;
+  top: 67%;
+  width: 17%;
+  height: 17%;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-image: url("../images/layer1_instance_btn.png");
 }
 
-.charactor {
+.scrolling-bg {
   position: absolute;
-  left:200px;
-  top: 220px;
-  width: 80px;
-  height: 130px;
-  background-size: 80px 130px;
-  background-image: url("../images/layer1_charactor.png");
+  left: 2%;
+  top: 2%;
+  width: 96%;
+  height: 96%;
+  background-size: cover;
+  background-image: url("../assets/main/scrolling_bg.png");
+  background-repeat: repeat-x;
+  z-index: -1;
+}
+
+.character {
+  position: absolute;
+  left: calc(50%);
+  top: calc(50%);
+  width: 40%;
+  height: 40%;
+  transform: translate(-50%, -70%);
+
+  .character-art {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    height: 80%;
+    width: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("../images/layer1_charactor.png");
+    transform: translate(-50%, -50%);
+  }
+  .character-health {
+    position: relative;
+
+    width: 100%;
+    height: 25%;
+    background-size: contain;
+    background-image: url("../assets/main/healthbar.png");
+    background-repeat: no-repeat;
+    .character-name {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Averia Serif Libre";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+      color: #000000;
+    }
+    .health-bar {
+      position: absolute;
+      bottom: 31%;
+      width: 100%;
+      height: 10%;
+
+      background-image: url("../assets/main/blood.png");
+      background-repeat: no-repeat;
+    }
+  }
 }
 
 .historys {
-  position: absolute;
-  left: 30px;
-  top: 580px;
+  margin: auto;
+  background-size: contain;
+  background-image: url("../assets/main/history.png");
+  background-repeat: no-repeat;
+
+  width: var(--content-width);
+  height: 600px;
+
+  padding: 5% 4%;
+  position: relative;
+  .inner-container {
+  }
+  .suicide {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("../assets/main/suicide.png");
+    width: 30%;
+    height: 15%;
+    left: 80%;
+    top: 5%;
+    cursor: pointer;
+  }
   .history {
-    width:430px;
-    height:80px;
-    margin:10px;
+    width: 95%;
+    height: 20%;
+    margin: 10px;
     background-size: 430px 80px;
     background-image: url("../images/layer3_message.png");
+    background-repeat: no-repeat;
+    background-size: contain;
   }
-
 }
 
 .sell-button {

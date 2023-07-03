@@ -1,0 +1,80 @@
+.item-body {
+  width: 1068px;
+  height: 747px;
+  background-image: url("../../assets/equipment/equipment_frame.png");
+  position: relative;
+  .choice-box {
+    font-family: "Averia Serif Libre";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 18px;
+    color: #000000;
+    height: 40%;
+    width: 15%;
+    //background-color: rgba(0, 162, 255, 0.301);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 25px;
+    .item-image {
+      //background-image: url("../../assets/inventory/small_icon.png");
+      width: 75px;
+      height: 75px;
+    }
+    .text {
+      margin: auto;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      word-wrap: break-word;
+    }
+    .item-stats {
+      margin-bottom: 10px;
+    }
+    button {
+      margin-top: 20px;
+      background: none;
+      background-image: url("../../assets/equipment/buy_button.png");
+      width: 128px;
+      height: 40px;
+      outline: none;
+      border: none;
+    }
+  }
+  .choice-1 {
+    position: absolute;
+    left: 12%;
+    top: 25%;
+  }
+  .choice-2 {
+    position: absolute;
+    left: 33%;
+    top: 25%;
+  }
+  .choice-3 {
+    position: absolute;
+    left: 53%;
+    top: 25%;
+  }
+  .choice-4 {
+    position: absolute;
+    left: 73%;
+    top: 25%;
+  }
+}
+
+.game-dialog {
+  .modal-dialog {
+    margin-top: 50px;
+    display: flex;
+    max-width: none;
+    justify-content: center;
+    align-items: center;
+    .modal-content {
+      background: none;
+      border: none;
+      width: auto;
+    }
+  }
+}
