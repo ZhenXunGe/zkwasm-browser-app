@@ -18,6 +18,21 @@ export function reset_character() {
 /**
 * @returns {number}
 */
+export function get_current_instance() {
+    const ret = wasm.get_current_instance();
+    return ret >>> 0;
+}
+
+/**
+* @param {number} instance
+*/
+export function update_instance(instance) {
+    wasm.update_instance(instance);
+}
+
+/**
+* @returns {number}
+*/
 export function get_wisdom() {
     const ret = wasm.get_wisdom();
     return ret >>> 0;

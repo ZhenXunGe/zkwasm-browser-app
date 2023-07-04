@@ -124,6 +124,20 @@ impl Inventory {
         cost_consequence!(0)
     }
 
+    pub fn upgrade_item(&mut self, item_id: usize) -> Consequence {
+        //check if item is in inventory
+        if self.items.iter().any(|item| item.item_id == item_id as u32) {
+            //upgrade item
+            let item = self.items.iter_mut().find(|item| item.item_id == item_id as u32).unwrap();
+            item.upgrade();
+
+            //update currency
+            return cost_consequence!(-(item.sell_value as i32));
+        }
+
+        cost_consequence!(0)
+    }
+
 }
 
 pub struct ActiveItems {
@@ -131,6 +145,7 @@ pub struct ActiveItems {
     items: [Option<Item>; 6]
 }
 
+//TODO: Perhaps add some item related operations as traits to be implemented by Inventory and ActiveItems
 impl ActiveItems {
     pub fn new() -> Self {
         ActiveItems {

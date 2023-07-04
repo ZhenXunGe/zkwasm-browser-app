@@ -180,8 +180,9 @@ impl Character {
         match item {
             Some(item) => {
                 //Upgrade the item
+                //TODO: Handle consequence (maybe reverse old item level and apply new one)
                 self.status.apply_consequence(item.consequence().clone());
-                self.inventory.remove_item(item_id);
+                self.inventory.upgrade_item(item_id);
             },
             _ => {
                 //Item is not in inventory
@@ -196,8 +197,9 @@ impl Character {
         match item {
             Some(item) => {
                 //Upgrade the item
+                //TODO: Handle consequence (maybe reverse old item level and apply new one)
                 self.status.apply_consequence(item.consequence().clone());
-                self.active_items.remove_item(item_id);
+                self.active_items.upgrade_item(item_id);
             },
             _ => {
                 //Item is not in inventory

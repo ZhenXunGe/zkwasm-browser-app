@@ -9,6 +9,14 @@ export function reset_character(): void;
 /**
 * @returns {number}
 */
+export function get_current_instance(): number;
+/**
+* @param {number} instance
+*/
+export function update_instance(instance: number): void;
+/**
+* @returns {number}
+*/
 export function get_wisdom(): number;
 /**
 * @returns {number}
