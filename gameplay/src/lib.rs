@@ -50,7 +50,7 @@ pub enum ActionType {
 #[wasm_bindgen]
 pub fn init_rg() {
     unsafe {
-        RG = Some (RuleEngine::new(vec![stdpack::standard_pack()]))
+        RG = Some (RuleEngine::new(vec![stdpack::standard_pack()], 0))
     }
 }
 
@@ -60,6 +60,27 @@ pub fn reset_character() {
         CHARACTER = Lazy::new(|| Character::new());
     }
 }
+
+#[wasm_bindgen]
+pub fn get_current_instance() -> u32 {
+    unsafe {
+        match RG {
+            Some(ref rg) => rg.get_current_instance() as u32,
+            None => 0,
+        }
+    }
+}
+
+#[wasm_bindgen]
+pub fn update_instance(instance: u32) {
+    unsafe {
+        match RG {
+            Some(ref mut rg) => rg.set_current_instance(instance as usize),
+            None => (),
+        }
+    }
+}
+
 
 #[wasm_bindgen]
 pub fn get_wisdom() -> u32{

@@ -1,12 +1,24 @@
 use crate::character::status::Consequence;
 use crate::{cost_consequence, consequence};
 
+
+#[derive(Clone)]
+pub enum ItemClass {
+    Weapon,
+    Armor,
+    Consumable,
+    Accessory,
+}
+
+
 #[derive(Clone)]
 pub struct Item {
     item_id: u32,
     consequence: Consequence, // Status effect of an item
     buy_price: u32,
     sell_value: u32,
+    level: u32,
+    class: ItemClass,
 }
 
 impl Item {
@@ -15,12 +27,16 @@ impl Item {
         consequence: Consequence,
         buy_price: u32,
         sell_value: u32,
+        level: u32,
+        class: ItemClass,
     ) -> Self {
         Item {
             item_id,
             consequence,
             buy_price,
             sell_value,
+            level,
+            class,
         }
     }
 
@@ -38,6 +54,16 @@ impl Item {
 
     pub fn consequence(&self) -> &Consequence {
         &self.consequence
+    }
+
+    pub fn level(&self) -> u32 {
+        self.level
+    }
+
+    pub fn upgrade(&mut self) {
+        if self.level < 5 {
+            self.level += 1;
+        }
     }
 }
 
@@ -72,6 +98,8 @@ impl Inventory {
             consequence: consequence!(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, None),
             buy_price: 1,
             sell_value: 1,
+            level: 1,
+            class: ItemClass::Weapon,
         };
 
         //add item to inventory
@@ -98,3 +126,78 @@ impl Inventory {
 
 }
 
+pub struct ActiveItems {
+    //TODO: If items require a class and limitation of 1 per class active, add in individual item slots
+    items: [Option<Item>; 6]
+}
+
+impl ActiveItems {
+    pub fn new() -> Self {
+        ActiveItems {
+            items: Default::default(),
+        }
+    }
+
+    pub fn get_item_ids(&self) -> Vec<u32> {
+        self.items.iter().filter_map(|item| item.as_ref()).map(|item| item.item_id).collect()
+    }
+
+    pub fn get_item_from_id(&self, item_id: u32) -> Option<&Item> {
+        self.items.iter().filter_map(|item| item.as_ref()).find(|item| item.item_id == item_id)
+    }
+
+    pub fn is_all_full(&self) -> bool {
+        self.items.iter().all(|item| item.is_some())
+    }
+
+    pub fn add_item(&mut self, item_id: usize) {
+        //find item with matching id
+        
+        //Should get item from data somewhere
+        let item = Item {
+            item_id: item_id as u32,
+            consequence: consequence!(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, None),
+            buy_price: 1,
+            sell_value: 1,
+            level: 1,
+            class: ItemClass::Weapon,
+        };
+
+        //add item to inventory
+        self.items[0] = Some(item);
+    }
+
+    pub fn remove_item(&mut self, item_id: usize) -> Consequence {
+        //if character inventory contains item with id == item_id
+        //remove item from inventory
+        let mut consequence = cost_consequence!(0);
+        //check if item is in inventory
+        for item_option in self.items.iter_mut() {
+            if let Some(item) = item_option {
+                if item.item_id == item_id as u32 {
+                    consequence = cost_consequence!(-(item.sell_value as i32));
+                    *item_option = None;
+                    break;
+                }
+            }
+        }
+
+        consequence
+    }
+
+    pub fn upgrade_item(&mut self, item_id: usize) -> Consequence {
+        let mut consequence = cost_consequence!(0);
+        //check if item is in inventory
+        for item_option in self.items.iter_mut() {
+            if let Some(item) = item_option {
+                if item.item_id == item_id as u32 {
+                    consequence = cost_consequence!(-(item.sell_value as i32));
+                    item.upgrade();
+                    break;
+                }
+            }
+        }
+
+        consequence
+    }
+}

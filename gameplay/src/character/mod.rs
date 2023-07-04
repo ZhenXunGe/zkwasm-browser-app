@@ -1,4 +1,4 @@
-use crate::items::{Inventory, Item};
+use crate::items::{Inventory, ActiveItems};
 use crate::{ActionType};
 use crate::skills::{Skill, Skills};
 use crate::rule_engine::{RuleEngine};
@@ -7,7 +7,7 @@ use status::{Status, ItemDrop};
 
 pub struct Character {
     inventory: Inventory,
-    active_items: Vec<Item>,
+    active_items: ActiveItems,
     // Set potential items to purchase here, similar to setting potential event options in status
     item_context: Option<Vec<ItemDrop>>,
     max_life: u32,
@@ -19,7 +19,7 @@ impl Character {
     pub fn new() -> Self {
         Character {
             inventory: Inventory::new(),
-            active_items: Vec::new(),
+            active_items: ActiveItems::new(),
             item_context: None, 
             max_life: 100,
             status: Status::new(),
@@ -54,7 +54,7 @@ impl Character {
     }
 
     pub fn get_active_item_ids(&self) -> Vec<u32> {
-        self.active_items.iter().map(|item| item.id()).collect()
+        self.active_items.get_item_ids()
     }
 
     pub fn get_skills(&self) -> &Skills {
@@ -84,7 +84,19 @@ impl Character {
 
              // check if any element satisfies the condition
             if drops.iter().any(|drop| drop.item_id == item_id as u32) {
-                self.mutate_inventory().add_item(item_id);
+
+                //Check if the item is in the inventory already, if it is then we upgrade it
+                if self.inventory.get_item_ids().contains(&(item_id as u32)) {
+                    //Upgrade the item
+                    self.upgrade_item_inventory(item_id);
+                } else if self.active_items.get_item_ids().contains(&(item_id as u32))  {
+                    //Check if the item is in active items, if it is then we upgrade it
+                    self.upgrade_item_active(item_id);
+
+                } else {
+                    //If the item is not in the inventory, add it
+                    self.mutate_inventory().add_item(item_id);
+                }
             }
 
             // Remove the item context so the player cannot buy the same item/other items from the same context
@@ -106,7 +118,7 @@ impl Character {
     pub fn use_item(&mut self, item_id: usize) {
 
         //if active_items is 6, do not allow use
-        if self.active_items.len() == 6 {
+        if self.active_items.is_all_full() {
             return;
         }
         //check if character has item
@@ -117,7 +129,7 @@ impl Character {
             match item {
                 Some(item) => {
                     self.status.apply_consequence(item.consequence().clone());
-                    self.active_items.push(item.clone());
+                    self.active_items.add_item(item_id.clone());
                     self.inventory.remove_item(item_id);
                 },
                 _ => {
@@ -129,11 +141,11 @@ impl Character {
 
     pub fn stop_use_item(&mut self, item_id: usize) {
         //check if character has item
-        if self.active_items.iter().any(|item| item.id() == item_id as u32) {
-            let item = self.active_items.iter().find(|item| item.id() == item_id as u32).unwrap();
+        if self.active_items.get_item_ids().contains(&(item_id as u32)) {
+            let item = self.active_items.get_item_from_id(item_id as u32).unwrap();
 
             self.status.apply_consequence(item.consequence().clone().invert());
-            self.active_items.retain(|item| item.id() != item_id as u32);
+            self.active_items.remove_item(item_id);
             
             //add back into inventory
             self.inventory.add_item(item_id);
@@ -159,5 +171,37 @@ impl Character {
 
     pub fn set_item_context(&mut self, context: Option<Vec<ItemDrop>>) {
         self.item_context = context;
+    }
+
+    fn upgrade_item_inventory(&mut self, item_id: usize) {
+        //Get the item from the inventory
+        let item = self.inventory.get_item_from_id(item_id as u32);
+
+        match item {
+            Some(item) => {
+                //Upgrade the item
+                self.status.apply_consequence(item.consequence().clone());
+                self.inventory.remove_item(item_id);
+            },
+            _ => {
+                //Item is not in inventory
+            }
+        }
+    }
+
+    fn upgrade_item_active(&mut self, item_id: usize) {
+        //Get the item from the inventory
+        let item = self.active_items.get_item_from_id(item_id as u32);
+
+        match item {
+            Some(item) => {
+                //Upgrade the item
+                self.status.apply_consequence(item.consequence().clone());
+                self.active_items.remove_item(item_id);
+            },
+            _ => {
+                //Item is not in inventory
+            }
+        }
     }
 }
