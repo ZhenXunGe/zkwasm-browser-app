@@ -26,6 +26,7 @@ import { MainNavBar } from "../components/Nav";
 import Events from "../components/Events";
 import ItemDropChoices from "../components/ItemDrop";
 import Inventory from "../components/Inventory";
+import ChangeInstance from "../components/ChangeInstance";
 import GameOver from "../components/GameOver";
 import { eventsTable } from "../data/gameplay";
 import { State, ActionType, Character } from "../types/game";
@@ -180,6 +181,7 @@ export function Main() {
       };
       return [latestAction, ...prev];
     });
+    setActiveItemIndexSelected(null);
     setCurrentModal(null);
   };
 
@@ -243,6 +245,7 @@ export function Main() {
                         if (instance!.get_active_items()[0] === undefined)
                           return;
                         console.log("active item clicked");
+                        console.log(instance!.get_active_items());
                         setCurrentModal("active-item");
                         setActiveItemIndexSelected(
                           instance!.get_active_items()[0]
@@ -412,7 +415,10 @@ export function Main() {
                 className="bag"
                 onClick={() => setCurrentModal("inventory")}
               ></div>
-              <div className="map"></div>
+              <div
+                className="map"
+                onClick={() => setCurrentModal("instance")}
+              ></div>
             </div>
           </Col>
         </Row>
@@ -432,35 +438,48 @@ export function Main() {
           ))}
         </div>
       </Container>
-      <ActiveItem
-        show={currentModal === "active-item"}
-        item_id={activeItemIndexSelected!}
-        handleClose={handleCloseModal}
-        handleRemove={removeActiveItem}
-      ></ActiveItem>
-      <Events
-        show={currentModal === "event"}
-        eventId={currentEventId}
-        handleSelect={handleChoice}
-      ></Events>
-      <ItemDropChoices
-        show={currentModal === "itemdrop"}
-        itemsToShow={
-          Array.from(instance?.get_item_context() || []) || [0, 1, 2]
-        }
-        handleSelect={selectItemDrop}
-      ></ItemDropChoices>
-      <GameOver
-        show={currentModal === "gameover"}
-        character={character}
-        handleClose={handleCloseModal}
-      ></GameOver>
-      <Inventory
-        show={currentModal === "inventory"}
-        ownedItems={Array.from(instance?.get_inventory() || [])}
-        handleClose={handleCloseModal}
-        handleUse={useItem}
-      ></Inventory>
+      {instance && (
+        <>
+          {activeItemIndexSelected !== null && (
+            <ActiveItem
+              show={currentModal === "active-item"}
+              item_id={activeItemIndexSelected}
+              instance={instance}
+              handleClose={handleCloseModal}
+              handleRemove={removeActiveItem}
+            ></ActiveItem>
+          )}
+          <Events
+            show={currentModal === "event"}
+            eventId={currentEventId}
+            handleSelect={handleChoice}
+          ></Events>
+          <ItemDropChoices
+            show={currentModal === "itemdrop"}
+            itemsToShow={
+              Array.from(instance?.get_item_context() || []) || [0, 1, 2]
+            }
+            handleSelect={selectItemDrop}
+          ></ItemDropChoices>
+          <GameOver
+            show={currentModal === "gameover"}
+            character={character}
+            handleClose={handleCloseModal}
+          ></GameOver>
+          <Inventory
+            show={currentModal === "inventory"}
+            instance={instance!}
+            ownedItems={Array.from(instance?.get_inventory() || [])}
+            handleClose={handleCloseModal}
+            handleUse={useItem}
+          ></Inventory>
+          <ChangeInstance
+            show={currentModal === "instance"}
+            handleClose={handleCloseModal}
+          ></ChangeInstance>
+        </>
+      )}
+
       <History md5="77DA9B5A42FABD295FD67CCDBDF2E348"></History>
     </>
   );

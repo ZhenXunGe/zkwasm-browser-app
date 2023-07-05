@@ -1,8 +1,10 @@
 import { Modal } from "react-bootstrap";
 import "./style.scss";
+import { WasmInstance } from "../../types/game";
 interface ActiveItemProps {
   show: boolean;
   item_id: number;
+  instance: WasmInstance;
   handleRemove: (item_id: number) => void;
   handleClose: () => void;
 }
@@ -14,7 +16,10 @@ export default function ActiveItem(props: ActiveItemProps) {
         <div className="close-bag"></div>
         <div className="active-item-body">
           <div className="item-image"></div>
-          <div className="name">Item Index - {props.item_id}</div>
+          <div className="name">
+            Item Index - {props.item_id} - Level:{" "}
+            {props.instance.get_active_item_level(props.item_id)}
+          </div>
           <div className="stats">
             <div>Wisdom +12</div>
             <div>Speed +20</div>

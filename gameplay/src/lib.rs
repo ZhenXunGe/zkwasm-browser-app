@@ -219,6 +219,20 @@ pub fn stop_use_item(item_id: usize) {
 }
 
 #[wasm_bindgen]
+pub fn get_active_item_level(item_id: u32) -> u32 {
+    unsafe {
+        CHARACTER.get_active_item_level(item_id)
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_inventory_item_level(item_id: u32) -> u32 {
+    unsafe {
+        CHARACTER.get_inventory_item_level(item_id)
+    }
+}
+
+#[wasm_bindgen]
 pub fn get_active_items() -> Vec<u32> {
     unsafe {
         CHARACTER.get_active_item_ids()

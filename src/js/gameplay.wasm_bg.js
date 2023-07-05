@@ -209,6 +209,24 @@ export function stop_use_item(item_id) {
 }
 
 /**
+* @param {number} item_id
+* @returns {number}
+*/
+export function get_active_item_level(item_id) {
+    const ret = wasm.get_active_item_level(item_id);
+    return ret >>> 0;
+}
+
+/**
+* @param {number} item_id
+* @returns {number}
+*/
+export function get_inventory_item_level(item_id) {
+    const ret = wasm.get_inventory_item_level(item_id);
+    return ret >>> 0;
+}
+
+/**
 * @returns {Uint32Array}
 */
 export function get_active_items() {

@@ -1,9 +1,9 @@
-use crate::items::{Inventory, ActiveItems};
-use crate::{ActionType};
+use crate::items::{Inventory, ActiveItems, ItemClass, Item};
+use crate::{ActionType, consequence};
 use crate::skills::{Skill, Skills};
 use crate::rule_engine::{RuleEngine};
 pub mod status;
-use status::{Status, ItemDrop};
+use status::{Status, ItemDrop, Consequence};
 
 pub struct Character {
     inventory: Inventory,
@@ -57,6 +57,14 @@ impl Character {
         self.active_items.get_item_ids()
     }
 
+    pub fn get_active_item_level(&self, item_id: u32) -> u32 {
+        self.active_items.get_item_from_id(item_id).unwrap().level()
+    }
+
+    pub fn get_inventory_item_level(&self, item_id: u32) -> u32 {
+        self.inventory.get_item_from_id(item_id).unwrap().level()
+    }
+
     pub fn get_skills(&self) -> &Skills {
         &self.skills
     }
@@ -67,6 +75,10 @@ impl Character {
 
     fn mutate_inventory(&mut self) -> &mut Inventory {
         &mut self.inventory
+    }
+
+    fn mutate_active_items(&mut self) -> &mut ActiveItems {
+        &mut self.active_items
     }
 
     fn alive(&self) -> bool {
@@ -94,8 +106,10 @@ impl Character {
                     self.upgrade_item_active(item_id);
 
                 } else {
+                    //TODO: Get item info from item_id and add it to the inventory
+                    let item = Item::new( item_id as u32, consequence!(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, None),1,1,1,ItemClass::Weapon);
                     //If the item is not in the inventory, add it
-                    self.mutate_inventory().add_item(item_id);
+                    self.mutate_inventory().add_item(item);
                 }
             }
 
@@ -129,7 +143,7 @@ impl Character {
             match item {
                 Some(item) => {
                     self.status.apply_consequence(item.consequence().clone());
-                    self.active_items.add_item(item_id.clone());
+                    self.active_items.add_item(item.clone());
                     self.inventory.remove_item(item_id);
                 },
                 _ => {
@@ -142,13 +156,13 @@ impl Character {
     pub fn stop_use_item(&mut self, item_id: usize) {
         //check if character has item
         if self.active_items.get_item_ids().contains(&(item_id as u32)) {
-            let item = self.active_items.get_item_from_id(item_id as u32).unwrap();
+            let item = self.active_items.get_item_from_id(item_id as u32).unwrap().clone();
 
             self.status.apply_consequence(item.consequence().clone().invert());
             self.active_items.remove_item(item_id);
             
             //add back into inventory
-            self.inventory.add_item(item_id);
+            self.inventory.add_item(item);
         }
     }
 

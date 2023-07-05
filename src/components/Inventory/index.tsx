@@ -2,9 +2,11 @@ import { Modal } from "react-bootstrap";
 import { itemsTable } from "../../data/gameplay";
 import { useState } from "react";
 import "./style.scss";
+import { WasmInstance } from "../../types/game";
 interface InventoryProps {
   show: boolean;
   ownedItems: number[];
+  instance: WasmInstance;
   handleClose: () => void;
   handleUse: (item: number) => void;
 }
@@ -13,6 +15,7 @@ export default function Inventory(props: InventoryProps) {
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
     null
   );
+  //console.log(props.instance.get_active_item_level(0));
   return (
     <Modal show={props.show} className="game-dialog">
       <div className="close-bag"></div>
@@ -22,7 +25,10 @@ export default function Inventory(props: InventoryProps) {
             <>
               <div className="item-image"></div>
               <div className="details">
-                <div className="name">Item index - {selectedItemIndex}</div>
+                <div className="name">
+                  Item index - {selectedItemIndex} - Level:{" "}
+                  {props.instance.get_inventory_item_level(selectedItemIndex)}
+                </div>
                 <div className="stats">
                   <div>Wisdom +12</div>
                   <div>Speed +20</div>
@@ -34,7 +40,10 @@ export default function Inventory(props: InventoryProps) {
               </div>
               <div
                 className="use"
-                onClick={() => props.handleUse(selectedItemIndex)}
+                onClick={() => {
+                  setSelectedItemIndex(null);
+                  props.handleUse(selectedItemIndex);
+                }}
               ></div>
             </>
           )}

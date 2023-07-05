@@ -89,19 +89,8 @@ impl Inventory {
         self.items.iter().find(|item| item.item_id == item_id)
     }
 
-    pub fn add_item(&mut self, item_id: usize) {
+    pub fn add_item(&mut self, item: Item) {
         //find item with matching id
-        
-        //Should get item from data somewhere
-        let item = Item {
-            item_id: item_id as u32,
-            consequence: consequence!(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, None),
-            buy_price: 1,
-            sell_value: 1,
-            level: 1,
-            class: ItemClass::Weapon,
-        };
-
         //add item to inventory
         self.items.push(item);
     }
@@ -165,21 +154,11 @@ impl ActiveItems {
         self.items.iter().all(|item| item.is_some())
     }
 
-    pub fn add_item(&mut self, item_id: usize) {
-        //find item with matching id
-        
-        //Should get item from data somewhere
-        let item = Item {
-            item_id: item_id as u32,
-            consequence: consequence!(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, None),
-            buy_price: 1,
-            sell_value: 1,
-            level: 1,
-            class: ItemClass::Weapon,
-        };
+    pub fn add_item(&mut self, item: Item) {
 
-        //add item to inventory
-        self.items[0] = Some(item);
+        if let Some(slot) = self.items.iter_mut().find(|slot| slot.is_none()) {
+            *slot = Some(item);
+        }
     }
 
     pub fn remove_item(&mut self, item_id: usize) -> Consequence {

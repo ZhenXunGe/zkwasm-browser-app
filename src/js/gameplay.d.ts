@@ -92,6 +92,16 @@ export function use_item(item_id: number): void;
 */
 export function stop_use_item(item_id: number): void;
 /**
+* @param {number} item_id
+* @returns {number}
+*/
+export function get_active_item_level(item_id: number): number;
+/**
+* @param {number} item_id
+* @returns {number}
+*/
+export function get_inventory_item_level(item_id: number): number;
+/**
 * @returns {Uint32Array}
 */
 export function get_active_items(): Uint32Array;

@@ -3,4 +3,5 @@ export type ModalOptions =
   | "itemdrop"
   | "inventory"
   | "active-item"
+  | "instance"
   | "gameover";
