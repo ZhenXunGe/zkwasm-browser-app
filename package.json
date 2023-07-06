@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@esotericsoftware/spine-canvas": "^4.2.15",
+    "@esotericsoftware/spine-player": "^4.2.15",
+    "@esotericsoftware/spine-ts": "^4.2.13",
     "@reduxjs/toolkit": "^1.5.1",
     "axios": "^1.2.1",
     "bootstrap": "^5.1.3",
@@ -24,8 +27,8 @@
     "servicehelper": "git+https://github.com/DelphinusLab/service-helper.git",
     "wait-on": "^6.0.1",
     "wasm-pack": "^0.10.3",
-    "zkwasm-service-helper": "git+https://github.com/DelphinusLab/zkWasm-service-helper.git",
-    "web3subscriber": "git+https://github.com/DelphinusLab/delphinus-web3subscriber.git"
+    "web3subscriber": "git+https://github.com/DelphinusLab/delphinus-web3subscriber.git",
+    "zkwasm-service-helper": "git+https://github.com/DelphinusLab/zkWasm-service-helper.git"
   },
   "scripts": {
     "start": "react-app-rewired start",
