@@ -6,6 +6,7 @@ import "./style.scss";
 export interface GameOverProps {
   show: boolean;
   handleClose: () => void;
+  //handleRestart: () => void;
   character: Character;
 }
 
@@ -25,7 +26,13 @@ export default function GameOver(props: GameOverProps) {
             <p>Currency: {props.character.state.currency}</p>
           </div>
         </div>
-        <button className="restart-game"></button>
+        <button
+          className="restart-game"
+          onClick={() => {
+            //TODO: Do not restart yet, as maybe want to do proof submission
+            props.handleClose();
+          }}
+        ></button>
       </div>
     </Modal>
   );

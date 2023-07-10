@@ -64,9 +64,7 @@ export function Main() {
   const [gameHistory, setGameHistory] = useState<GameHistory[]>([]);
 
   const [currentEventId, setCurrentEventId] = useState<number | null>(null);
-  const [currentModal, setCurrentModal] = useState<ModalOptions | null>(
-    "gameover"
-  );
+  const [currentModal, setCurrentModal] = useState<ModalOptions | null>(null);
   const [activeItemIndexSelected, setActiveItemIndexSelected] = useState<
     number | null
   >(null);
@@ -225,12 +223,14 @@ export function Main() {
   useEffect(() => {
     let intervalId: any;
 
-    if (isMoving) {
+    const bg = document.querySelector("." + currentBgClass) as HTMLElement;
+
+    if (isMoving && bg) {
       // Start scrolling
 
       intervalId = setInterval(() => {
         offset.current = offset.current + 0.5; // Change '1' to control the speed of scrolling
-        const bg = document.querySelector("." + currentBgClass) as HTMLElement;
+        // const bg = document.querySelector(currentBgClass) as HTMLElement;
         bg.style.backgroundPositionX = `${offset.current}%`;
       }, 10); // Change '100' to control the speed of scrolling
     } else {
