@@ -19,8 +19,12 @@ export default function ItemMain({
   return (
     <div className={`${className || "item"}`} onClick={onClick} {...rest}>
       <>
-        <StarIndicator level={2}></StarIndicator>
-        <img src={itemsTable[item_id].imageSource} alt="" />
+        <StarIndicator level={level}></StarIndicator>
+        <img
+          src={itemsTable[item_id].imageSource}
+          alt=""
+          className="item-img"
+        />
       </>
     </div>
   );

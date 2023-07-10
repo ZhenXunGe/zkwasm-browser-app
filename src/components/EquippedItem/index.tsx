@@ -17,7 +17,11 @@ export default function EquippedItem({
   if (itemIndex === undefined) return <div className="item"></div>;
   return (
     <>
-      <ItemMain level={2} item_id={itemIndex} onClick={onSelect}></ItemMain>
+      <ItemMain
+        level={instance!.get_active_item_level(itemIndex)}
+        item_id={itemIndex}
+        onClick={onSelect}
+      ></ItemMain>
     </>
     // <div
     //   className="item"

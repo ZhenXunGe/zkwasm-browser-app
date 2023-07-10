@@ -17,7 +17,7 @@
 
     //background-image: url("../../assets/inventory/small_icon_hover.png");
   }
-  img {
+  .item-img {
     margin-top: 10%;
     max-width: 65%;
     max-height: 65%;
@@ -27,12 +27,13 @@
     position: absolute;
     left: 8%;
     top: 8%;
-
+    width: 80%;
     display: flex;
+
     img {
       //position them from left to right
-      margin: 0 5%;
-      max-width: 35%;
+      margin: 0 2%;
+      max-width: 25%;
     }
   }
 }
