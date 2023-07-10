@@ -95,22 +95,18 @@ div.content {
       align-items: center;
       justify-content: center;
       .item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        position: relative;
+        //   display: flex;
+        //   flex-direction: column;
+        //   align-items: center;
+        //   justify-content: center;
+        //   position: relative;
         width: 12%;
-        min-height: 60%;
+        //min-height: 60%;
         margin: 10px;
-        background-size: contain;
-        background-image: url("../images/layer3_sticker3.png");
-        background-repeat: no-repeat;
-        cursor: pointer;
-        img {
-          max-width: 60%;
-          max-height: 60%;
-        }
+        //   background-size: contain;
+        //   background-image: url("../images/layer3_sticker3.png");
+        //   background-repeat: no-repeat;
+        //   cursor: pointer;
       }
     }
   }

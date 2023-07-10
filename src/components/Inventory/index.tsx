@@ -3,6 +3,7 @@ import { itemsTable } from "../../data/gameplay";
 import { useState } from "react";
 import "./style.scss";
 import { WasmInstance } from "../../types/game";
+import ItemMain from "../ItemMain";
 interface InventoryProps {
   show: boolean;
   ownedItems: number[];
@@ -23,9 +24,7 @@ export default function Inventory(props: InventoryProps) {
         <div className="current-item">
           {selectedItemIndex !== null && (
             <>
-              <div className="item-image">
-                <img src={itemsTable[selectedItemIndex].imageSource} alt="" />
-              </div>
+              <ItemMain level={2} item_id={selectedItemIndex}></ItemMain>
               <div className="details">
                 <div className="name">
                   {itemsTable[selectedItemIndex].name} - Level:{" "}
@@ -63,16 +62,15 @@ export default function Inventory(props: InventoryProps) {
           <div className="inventory-items">
             {props.ownedItems.map((item, index) => {
               return (
-                <div
+                <ItemMain
                   key={index}
                   className={
                     (selectedItemIndex === item ? "selected" : "") + " item"
                   }
+                  level={2}
+                  item_id={item}
                   onClick={() => setSelectedItemIndex(item)}
-                >
-                  <img src={itemsTable[item].imageSource} alt="" />
-                  {/* {itemsTable[item].name} - Item Index {item} */}
-                </div>
+                ></ItemMain>
               );
             })}
           </div>

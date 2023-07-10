@@ -1,0 +1,38 @@
+.item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1;
+
+  background-image: url("../../assets/inventory/small_icon.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  &.selected {
+    background-image: url("../../assets/inventory/small_icon_selected.png");
+  }
+  &:hover {
+    cursor: pointer;
+
+    //background-image: url("../../assets/inventory/small_icon_hover.png");
+  }
+  img {
+    margin-top: 10%;
+    max-width: 65%;
+    max-height: 65%;
+    align-self: center;
+  }
+  .star-level {
+    position: absolute;
+    left: 8%;
+    top: 8%;
+
+    display: flex;
+    img {
+      //position them from left to right
+      margin: 0 5%;
+      max-width: 35%;
+    }
+  }
+}

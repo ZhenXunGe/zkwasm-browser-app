@@ -1,5 +1,7 @@
 import { itemsTable } from "../../data/gameplay";
 import { WasmInstance } from "../../types/game";
+import ItemMain from "../ItemMain";
+import { StarIndicator } from "../ItemMain";
 interface EquippedItemProps {
   slotIndex: number;
   instance: WasmInstance | null;
@@ -14,13 +16,17 @@ export default function EquippedItem({
   const itemIndex = instance?.get_active_items()[slotIndex];
   if (itemIndex === undefined) return <div className="item"></div>;
   return (
-    <div
-      className="item"
-      onClick={() => {
-        onSelect(slotIndex!);
-      }}
-    >
-      <img src={itemsTable[itemIndex!].imageSource} alt="" />
-    </div>
+    <>
+      <ItemMain level={2} item_id={itemIndex} onClick={onSelect}></ItemMain>
+    </>
+    // <div
+    //   className="item"
+    //   onClick={() => {
+    //     onSelect(slotIndex!);
+    //   }}
+    // >
+    //   <StarIndicator level={2}></StarIndicator>
+    //   <img src={itemsTable[itemIndex!].imageSource} alt="" />
+    // </div>
   );
 }

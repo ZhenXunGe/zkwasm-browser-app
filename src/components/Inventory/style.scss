@@ -111,26 +111,8 @@
       grid-auto-rows: 1fr;
       grid-gap: 10px 5px;
       .item {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
         width: 102px;
         height: 102px;
-        background-image: url("../../assets/inventory/small_icon.png");
-        color: red;
-        padding: 5px;
-        &.selected {
-          background-image: url("../../assets/inventory/small_icon_selected.png");
-        }
-        &:hover {
-          cursor: pointer;
-
-          //background-image: url("../../assets/inventory/small_icon_hover.png");
-        }
-        img {
-          align-self: center;
-        }
       }
     }
   }
