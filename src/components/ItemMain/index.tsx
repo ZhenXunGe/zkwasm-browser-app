@@ -1,7 +1,7 @@
 import StarIcon from "../../assets/main/star.png";
 import { itemsTable } from "../../data/gameplay";
 import "./style.scss";
-interface ItemProps {
+interface ItemProps extends React.HTMLAttributes<HTMLDivElement> {
   item_id: number;
   level: number;
   onClick?: (inputs: any) => void;
@@ -14,9 +14,10 @@ export default function ItemMain({
   level,
   onClick,
   className,
+  ...rest
 }: ItemProps) {
   return (
-    <div className={`${className || "item"}`} onClick={onClick}>
+    <div className={`${className || "item"}`} onClick={onClick} {...rest}>
       <>
         <StarIndicator level={2}></StarIndicator>
         <img src={itemsTable[item_id].imageSource} alt="" />

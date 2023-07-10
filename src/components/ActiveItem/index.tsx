@@ -18,7 +18,10 @@ export default function ActiveItem(props: ActiveItemProps) {
       <Modal show={props.show} className="game-dialog active-item-dialog">
         <div className="close-bag"></div>
         <div className="active-item-body">
-          <ItemMain level={2} item_id={props.item_id}></ItemMain>
+          <ItemMain
+            level={props.instance.get_active_item_level(props.item_id)}
+            item_id={props.item_id}
+          ></ItemMain>
 
           <div className="name">
             {itemsTable[props.item_id].name} - Level{" "}

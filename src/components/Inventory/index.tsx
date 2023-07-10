@@ -24,7 +24,13 @@ export default function Inventory(props: InventoryProps) {
         <div className="current-item">
           {selectedItemIndex !== null && (
             <>
-              <ItemMain level={2} item_id={selectedItemIndex}></ItemMain>
+              <ItemMain
+                level={props.instance.get_inventory_item_level(
+                  selectedItemIndex
+                )}
+                item_id={selectedItemIndex}
+                style={{ width: "120px", height: "120px" }}
+              ></ItemMain>
               <div className="details">
                 <div className="name">
                   {itemsTable[selectedItemIndex].name} - Level:{" "}
@@ -67,7 +73,7 @@ export default function Inventory(props: InventoryProps) {
                   className={
                     (selectedItemIndex === item ? "selected" : "") + " item"
                   }
-                  level={2}
+                  level={props.instance.get_inventory_item_level(item)}
                   item_id={item}
                   onClick={() => setSelectedItemIndex(item)}
                 ></ItemMain>
