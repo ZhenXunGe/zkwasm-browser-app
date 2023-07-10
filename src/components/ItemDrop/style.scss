@@ -19,9 +19,15 @@
     align-items: center;
     padding-top: 25px;
     .item-image {
-      //background-image: url("../../assets/inventory/small_icon.png");
+      background-image: url("../../assets/inventory/small_icon.png");
       width: 75px;
       height: 75px;
+      background-size: contain;
+      display: flex;
+      justify-content: center;
+      img {
+        align-self: center;
+      }
     }
     .text {
       margin: auto;

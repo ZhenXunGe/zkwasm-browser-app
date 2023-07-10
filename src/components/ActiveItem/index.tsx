@@ -1,4 +1,5 @@
 import { Modal } from "react-bootstrap";
+import { itemsTable } from "../../data/gameplay";
 import "./style.scss";
 import { WasmInstance } from "../../types/game";
 interface ActiveItemProps {
@@ -15,9 +16,11 @@ export default function ActiveItem(props: ActiveItemProps) {
       <Modal show={props.show} className="game-dialog active-item-dialog">
         <div className="close-bag"></div>
         <div className="active-item-body">
-          <div className="item-image"></div>
+          <div className="item-image">
+            <img src={itemsTable[props.item_id].imageSource} alt="" />
+          </div>
           <div className="name">
-            Item Index - {props.item_id} - Level:{" "}
+            {itemsTable[props.item_id].name} - Level{" "}
             {props.instance.get_active_item_level(props.item_id)}
           </div>
           <div className="stats">

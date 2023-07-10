@@ -96,22 +96,20 @@ div.content {
       justify-content: center;
       .item {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         position: relative;
         width: 12%;
-        min-height: 50%;
+        min-height: 60%;
         margin: 10px;
         background-size: contain;
         background-image: url("../images/layer3_sticker3.png");
         background-repeat: no-repeat;
         cursor: pointer;
-        .active-item {
-          position: absolute;
-          top: 20%;
-          left: 10%;
-          color: black;
+        img {
+          max-width: 60%;
+          max-height: 60%;
         }
       }
     }
@@ -329,7 +327,7 @@ div.content {
   cursor: pointer;
 }
 
-.scrolling-bg {
+.scrolling-bg-1 {
   position: absolute;
   left: 2%;
   top: 2%;
@@ -337,6 +335,18 @@ div.content {
   height: 96%;
   background-size: cover;
   background-image: url("../assets/main/scrolling_bg.png");
+  background-repeat: repeat-x;
+  z-index: -1;
+}
+
+.scrolling-bg-2 {
+  position: absolute;
+  left: 2%;
+  top: 2%;
+  width: 96%;
+  height: 96%;
+  background-size: cover;
+  background-image: url("../assets/main/bg2.png");
   background-repeat: repeat-x;
   z-index: -1;
 }

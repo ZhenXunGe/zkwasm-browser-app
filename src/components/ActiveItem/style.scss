@@ -12,6 +12,12 @@
     position: absolute;
     left: 10%;
     top: 10%;
+    display: flex;
+    justify-content: center;
+    img {
+      align-self: center;
+      scale: 1.5;
+    }
   }
   .name {
     position: absolute;

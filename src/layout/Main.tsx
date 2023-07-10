@@ -25,10 +25,11 @@ import { Container } from "react-bootstrap";
 import { MainNavBar } from "../components/Nav";
 import Events from "../components/Events";
 import ItemDropChoices from "../components/ItemDrop";
+import EquippedItem from "../components/EquippedItem";
 import Inventory from "../components/Inventory";
 import ChangeInstance from "../components/ChangeInstance";
 import GameOver from "../components/GameOver";
-import { eventsTable } from "../data/gameplay";
+import { eventsTable, itemsTable } from "../data/gameplay";
 import { State, ActionType, Character } from "../types/game";
 import { ModalOptions } from "../types/layout";
 import ActiveItem from "../components/ActiveItem";
@@ -63,10 +64,16 @@ export function Main() {
   const [gameHistory, setGameHistory] = useState<GameHistory[]>([]);
 
   const [currentEventId, setCurrentEventId] = useState<number | null>(null);
-  const [currentModal, setCurrentModal] = useState<ModalOptions | null>(null);
+  const [currentModal, setCurrentModal] = useState<ModalOptions | null>(
+    "gameover"
+  );
   const [activeItemIndexSelected, setActiveItemIndexSelected] = useState<
     number | null
   >(null);
+
+  const [currentMap, setCurrentMap] = useState<number>(0);
+  const [currentBgClass, setCurrentBgClass] =
+    useState<string>("scrolling-bg-1");
 
   let updateState = (ins: WasmInstance) => {
     let char = character.syncWASM(ins);
@@ -110,6 +117,15 @@ export function Main() {
       console.log("event choices:", event.choices.length);
       console.log("choose from", event.choices);
     }, 3000);
+  };
+
+  const handleChangeMap = (newMapIndex: number) => {
+    setCurrentMap(newMapIndex);
+    if (currentBgClass === `scrolling-bg-${1}`) {
+      setCurrentBgClass(`scrolling-bg-${2}`);
+    } else {
+      setCurrentBgClass(`scrolling-bg-${1}`);
+    }
   };
 
   const handleChoice = (choice: number) => {
@@ -214,7 +230,7 @@ export function Main() {
 
       intervalId = setInterval(() => {
         offset.current = offset.current + 0.5; // Change '1' to control the speed of scrolling
-        const bg = document.querySelector(".scrolling-bg") as HTMLElement;
+        const bg = document.querySelector("." + currentBgClass) as HTMLElement;
         bg.style.backgroundPositionX = `${offset.current}%`;
       }, 10); // Change '100' to control the speed of scrolling
     } else {
@@ -238,116 +254,72 @@ export function Main() {
                 <div className="savings">{character.state.currency}</div>
                 <div className="age">{formatAge(character.state.age)}</div>
                 <div className="items">
-                  <div className="item">
-                    <div
-                      className="active-item"
-                      onClick={() => {
-                        if (instance!.get_active_items()[0] === undefined)
-                          return;
-                        console.log("active item clicked");
-                        console.log(instance!.get_active_items());
-                        setCurrentModal("active-item");
-                        setActiveItemIndexSelected(
-                          instance!.get_active_items()[0]
-                        );
-                      }}
-                    >
-                      Active Item -{" "}
-                      {instance?.get_active_items()[0] !== undefined
-                        ? "item index - " + instance.get_active_items()[0]
-                        : "None"}
-                    </div>
-                  </div>
-                  <div className="item">
-                    <div
-                      className="active-item"
-                      onClick={() => {
-                        if (instance?.get_active_items()[1] === undefined)
-                          return;
-                        setCurrentModal("active-item");
-                        setActiveItemIndexSelected(
-                          instance!.get_active_items()[1]
-                        );
-                      }}
-                    >
-                      Active Item -{" "}
-                      {instance?.get_active_items()[1] !== undefined
-                        ? "item index - " + instance.get_active_items()[1]
-                        : "None"}
-                    </div>
-                  </div>
-                  <div className="item">
-                    <div
-                      className="active-item"
-                      onClick={() => {
-                        if (instance?.get_active_items()[2] === undefined)
-                          return;
-                        setCurrentModal("active-item");
-                        setActiveItemIndexSelected(
-                          instance!.get_active_items()[2]
-                        );
-                      }}
-                    >
-                      Active Item -{" "}
-                      {instance?.get_active_items()[2] !== undefined
-                        ? "item index - " + instance.get_active_items()[2]
-                        : "None"}
-                    </div>
-                  </div>
-                  <div className="item">
-                    <div
-                      className="active-item"
-                      onClick={() => {
-                        if (instance?.get_active_items()[3] === undefined)
-                          return;
-                        setCurrentModal("active-item");
-                        setActiveItemIndexSelected(
-                          instance!.get_active_items()[3]
-                        );
-                      }}
-                    >
-                      Active Item -{" "}
-                      {instance?.get_active_items()[3] !== undefined
-                        ? "item index - " + instance.get_active_items()[3]
-                        : "None"}
-                    </div>
-                  </div>
-                  <div className="item">
-                    <div
-                      className="active-item"
-                      onClick={() => {
-                        if (instance?.get_active_items()[4] === undefined)
-                          return;
-                        setCurrentModal("active-item");
-                        setActiveItemIndexSelected(
-                          instance!.get_active_items()[4]
-                        );
-                      }}
-                    >
-                      Active Item -{" "}
-                      {instance?.get_active_items()[4] !== undefined
-                        ? "item index - " + instance.get_active_items()[4]
-                        : "None"}
-                    </div>
-                  </div>
-                  <div className="item">
-                    <div
-                      className="active-item"
-                      onClick={() => {
-                        if (instance?.get_active_items()[5] === undefined)
-                          return;
-                        setCurrentModal("active-item");
-                        setActiveItemIndexSelected(
-                          instance!.get_active_items()[5]
-                        );
-                      }}
-                    >
-                      Active Item -{" "}
-                      {instance?.get_active_items()[5] !== undefined
-                        ? "item index - " + instance.get_active_items()[5]
-                        : "None"}
-                    </div>
-                  </div>
+                  <EquippedItem
+                    slotIndex={0}
+                    instance={instance}
+                    onSelect={() => {
+                      if (instance!.get_active_items()[0] === undefined) return;
+                      setActiveItemIndexSelected(
+                        instance!.get_active_items()[0]
+                      );
+                      setCurrentModal("active-item");
+                    }}
+                  ></EquippedItem>
+                  <EquippedItem
+                    slotIndex={1}
+                    instance={instance}
+                    onSelect={() => {
+                      if (instance!.get_active_items()[1] === undefined) return;
+                      setActiveItemIndexSelected(
+                        instance!.get_active_items()[1]
+                      );
+                      setCurrentModal("active-item");
+                    }}
+                  ></EquippedItem>
+                  <EquippedItem
+                    slotIndex={2}
+                    instance={instance}
+                    onSelect={() => {
+                      if (instance!.get_active_items()[2] === undefined) return;
+                      setActiveItemIndexSelected(
+                        instance!.get_active_items()[2]
+                      );
+                      setCurrentModal("active-item");
+                    }}
+                  ></EquippedItem>
+                  <EquippedItem
+                    slotIndex={3}
+                    instance={instance}
+                    onSelect={() => {
+                      if (instance!.get_active_items()[3] === undefined) return;
+                      setActiveItemIndexSelected(
+                        instance!.get_active_items()[3]
+                      );
+                      setCurrentModal("active-item");
+                    }}
+                  ></EquippedItem>
+                  <EquippedItem
+                    slotIndex={4}
+                    instance={instance}
+                    onSelect={() => {
+                      if (instance!.get_active_items()[4] === undefined) return;
+                      setActiveItemIndexSelected(
+                        instance!.get_active_items()[4]
+                      );
+                      setCurrentModal("active-item");
+                    }}
+                  ></EquippedItem>
+                  <EquippedItem
+                    slotIndex={5}
+                    instance={instance}
+                    onSelect={() => {
+                      if (instance!.get_active_items()[5] === undefined) return;
+                      setActiveItemIndexSelected(
+                        instance!.get_active_items()[5]
+                      );
+                      setCurrentModal("active-item");
+                    }}
+                  ></EquippedItem>
                 </div>
               </div>
               <div className="skills-bar">
@@ -370,7 +342,7 @@ export function Main() {
                   <div className="luck">{character.state.luck}</div>
                 </div>
               </div>
-              <div className="scrolling-bg"></div>
+              <div className={`${currentBgClass}`}></div>
               <div className="action-pipe">
                 <div className="actions">
                   <div
@@ -475,7 +447,9 @@ export function Main() {
           ></Inventory>
           <ChangeInstance
             show={currentModal === "instance"}
+            currentMap={currentMap}
             handleClose={handleCloseModal}
+            handleSelect={handleChangeMap}
           ></ChangeInstance>
         </>
       )}

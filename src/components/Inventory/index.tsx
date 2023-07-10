@@ -23,10 +23,12 @@ export default function Inventory(props: InventoryProps) {
         <div className="current-item">
           {selectedItemIndex !== null && (
             <>
-              <div className="item-image"></div>
+              <div className="item-image">
+                <img src={itemsTable[selectedItemIndex].imageSource} alt="" />
+              </div>
               <div className="details">
                 <div className="name">
-                  Item index - {selectedItemIndex} - Level:{" "}
+                  {itemsTable[selectedItemIndex].name} - Level:{" "}
                   {props.instance.get_inventory_item_level(selectedItemIndex)}
                 </div>
                 <div className="stats">
@@ -63,10 +65,13 @@ export default function Inventory(props: InventoryProps) {
               return (
                 <div
                   key={index}
-                  className="item"
+                  className={
+                    (selectedItemIndex === item ? "selected" : "") + " item"
+                  }
                   onClick={() => setSelectedItemIndex(item)}
                 >
-                  {itemsTable[item].name} - Item Index {item}
+                  <img src={itemsTable[item].imageSource} alt="" />
+                  {/* {itemsTable[item].name} - Item Index {item} */}
                 </div>
               );
             })}
