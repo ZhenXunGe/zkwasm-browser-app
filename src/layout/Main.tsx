@@ -13,11 +13,10 @@ import { QRCodeSVG } from "qrcode.react";
 import initGameInstance from "../js/game";
 import * as gameInstance from "../js/gameplay.wasm_bg";
 import { GameHistory, InputType, WasmInstance } from "../types/game";
-import History from "../components/History";
 import { NewProveTask } from "../modals/addNewProveTask";
 import { formatAge } from "../utils/game";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
+import History from "../components/History";
 import "./style.scss";
 import "bootswatch/dist/slate/bootstrap.min.css";
 import CurrencyDisplay from "../components/Currency";
@@ -29,6 +28,7 @@ import EquippedItem from "../components/EquippedItem";
 import Inventory from "../components/Inventory";
 import ChangeInstance from "../components/ChangeInstance";
 import GameOver from "../components/GameOver";
+import HistorySummary from "../components/HistorySummary";
 import { eventsTable, itemsTable } from "../data/gameplay";
 import { State, ActionType, Character } from "../types/game";
 import { ModalOptions } from "../types/layout";
@@ -99,7 +99,7 @@ export function Main() {
         player_input: InputType.Action,
         value: newAction,
       };
-      return [latestAction, ...prev];
+      return [...prev, latestAction];
     });
     toggleScrollBackground();
     setCurrentAction(newAction);
@@ -114,16 +114,18 @@ export function Main() {
       console.log("event description:", event.description);
       console.log("event choices:", event.choices.length);
       console.log("choose from", event.choices);
-    }, 3000);
+    }, 500);
   };
 
   const handleChangeMap = (newMapIndex: number) => {
-    setCurrentMap(newMapIndex);
     if (currentBgClass === `scrolling-bg-${1}`) {
       setCurrentBgClass(`scrolling-bg-${2}`);
+      instance?.update_instance(2);
     } else {
       setCurrentBgClass(`scrolling-bg-${1}`);
+      instance?.update_instance(1);
     }
+    setCurrentMap(newMapIndex);
   };
 
   const handleChoice = (choice: number) => {
@@ -139,7 +141,7 @@ export function Main() {
         player_input: InputType.Choice,
         value: choice,
       };
-      return [latestAction, ...prev];
+      return [...prev, latestAction];
     });
 
     setCurrentEventId(null);
@@ -165,7 +167,7 @@ export function Main() {
         player_input: InputType.ItemDrop,
         value: choice_index,
       };
-      return [latestAction, ...prev];
+      return [...prev, latestAction];
     });
 
     setCurrentModal(null);
@@ -180,7 +182,7 @@ export function Main() {
         player_input: InputType.ItemUse,
         value: item_id,
       };
-      return [latestAction, ...prev];
+      return [...prev, latestAction];
     });
   };
 
@@ -193,7 +195,7 @@ export function Main() {
         player_input: InputType.ItemRemove,
         value: item_id,
       };
-      return [latestAction, ...prev];
+      return [...prev, latestAction];
     });
     setActiveItemIndexSelected(null);
     setCurrentModal(null);
@@ -395,23 +397,23 @@ export function Main() {
           </Col>
         </Row>
       </Container>
-      <Container>
-        <div className="historys">
-          <div className="suicide" onClick={() => restartGame()}></div>
-          <div className="history"></div>
-          <div className="history"></div>
-          <div className="history"></div>
-        </div>
-        <div>
-          {gameHistory.map((a, index) => (
-            <div key={index}>
-              ACTION: {a.player_input} - VALUE: {a.value}
-            </div>
-          ))}
-        </div>
-      </Container>
+
       {instance && (
         <>
+          <Container>
+            <HistorySummary
+              instance={instance!}
+              restartGame={restartGame}
+              stack={gameHistory}
+            ></HistorySummary>
+            <div>
+              {gameHistory.map((a, index) => (
+                <div key={index}>
+                  ACTION: {a.player_input} - VALUE: {a.value}
+                </div>
+              ))}
+            </div>
+          </Container>
           {activeItemIndexSelected !== null && (
             <ActiveItem
               show={currentModal === "active-item"}
