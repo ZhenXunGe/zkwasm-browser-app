@@ -11,18 +11,51 @@ import shoes2 from "../assets/equipment/items/shoes2.png";
 import weapon1 from "../assets/equipment/items/weapon1.png";
 import weapon2 from "../assets/equipment/items/weapon2.png";
 
+import { EvilEventImage, GodEventImage, AttackEventImage } from "./images";
+
+const choiceMapping = [
+  {
+    name: "Increase Wisdom",
+    image: GodEventImage,
+  },
+  {
+    name: "Increase Money",
+    image: GodEventImage,
+  },
+  {
+    name: "Item drop example",
+    image: AttackEventImage,
+  },
+  {
+    name: "Lower Wisdom",
+    image: EvilEventImage,
+  },
+  {
+    name: "Lower Money (Cost)",
+    image: EvilEventImage,
+  },
+  {
+    name: "Decrease HP",
+    image: AttackEventImage,
+  },
+  {
+    name: "Increase HP",
+    image: GodEventImage,
+  },
+];
+
 export const eventsTable = [
   {
     description: "Event 1",
-    choices: ["Increase Wisdom", "Increase Money", "Item drop example"],
+    choices: [choiceMapping[0], choiceMapping[1], choiceMapping[2]],
   },
   {
     description: "Event 2",
-    choices: ["Lower Wisdom", "Lower Money (Cost)", "Item drop example"],
+    choices: [choiceMapping[3], choiceMapping[4], choiceMapping[2]],
   },
   {
     description: "Event 3",
-    choices: ["Decrease HP", "Decrease HP", "Item drop example"],
+    choices: [choiceMapping[5], choiceMapping[5], choiceMapping[2]],
   },
 ];
 
