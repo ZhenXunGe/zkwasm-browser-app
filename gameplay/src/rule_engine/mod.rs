@@ -30,8 +30,8 @@ impl RuleEngine {
         self.current_instance = instance;
     }
 
-    fn status_score(&self, s: &Status) -> u32 {
-        // Determine a weighted score for the status
-        // This will be used to determine which event to pick
-    }
+    // fn status_score(&self, s: &Status) -> u32 {
+    //     // Determine a weighted score for the status
+    //     // This will be used to determine which event to pick
+    // }
 }
