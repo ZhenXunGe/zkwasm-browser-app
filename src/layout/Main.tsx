@@ -28,6 +28,7 @@ import ItemDropChoices from "../components/ItemDrop";
 import EquippedItem from "../components/EquippedItem";
 import Inventory from "../components/Inventory";
 import ChangeInstance from "../components/ChangeInstance";
+import ConfirmRestart from "../components/ConfirmSuicide";
 import GameOver from "../components/GameOver";
 import HistorySummary from "../components/HistorySummary";
 import { eventsTable, itemsTable } from "../data/gameplay";
@@ -420,7 +421,7 @@ export function Main() {
           <Container>
             <HistorySummary
               instance={instance!}
-              restartGame={restartGame}
+              restartGame={() => setCurrentModal("confirm-restart")}
               stack={gameHistory}
             ></HistorySummary>
             <div>
@@ -464,6 +465,12 @@ export function Main() {
             handleClose={handleCloseModal}
             handleUse={useItem}
           ></Inventory>
+          <ConfirmRestart
+            handleRestart={restartGame}
+            show={currentModal === "confirm-restart"}
+            handleClose={handleCloseModal}
+            character={character}
+          ></ConfirmRestart>
           <ChangeInstance
             show={currentModal === "instance"}
             currentMap={currentMap}
