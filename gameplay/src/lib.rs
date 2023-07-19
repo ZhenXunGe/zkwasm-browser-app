@@ -16,7 +16,7 @@ mod items;
 mod skills;
 mod character;
 mod rule_engine;
-
+mod utils;
 use rule_engine::{RuleEngine};
 
 pub fn get_account(account: u32) -> [u64; 4] {

@@ -19,6 +19,7 @@ export default function Events(props: EventsProps) {
     if (selectedEventId !== null) {
       props.handleSelect(selectedEventId);
       setSelectedEventId(null);
+      setCurrentImage(null);
     }
   };
 
