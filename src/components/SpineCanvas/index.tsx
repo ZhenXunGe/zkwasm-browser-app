@@ -26,8 +26,11 @@ function GameCanvas(props: SpineProps) {
       let skeletonRenderer = new SkeletonRenderer(context!);
       skeletonRenderer.triangleRendering = true; // Accelerate rendering with WebGL.
 
+      let defaultDir = "spine_assets/spineboy/export/";
+      let fishDir = "spine_assets/fish-spine/";
+
       // Load the assets.
-      let assetManager = new AssetManager("spine_assets/fish-spine/");
+      let assetManager = new AssetManager(fishDir);
       assetManager.loadText("character.json");
       assetManager.loadTextureAtlas("character.atlas");
       await assetManager.loadAll();
