@@ -24,19 +24,20 @@ function GameCanvas(props: SpineProps) {
       }
       let context = canvas.getContext("2d");
       let skeletonRenderer = new SkeletonRenderer(context!);
+      skeletonRenderer.triangleRendering = true; // Accelerate rendering with WebGL.
 
       // Load the assets.
-      let assetManager = new AssetManager("spine_assets/spineboy/export/");
-      assetManager.loadText("spineboy-ess.json");
-      assetManager.loadTextureAtlas("spineboy.atlas");
+      let assetManager = new AssetManager("spine_assets/fish-spine/");
+      assetManager.loadText("character.json");
+      assetManager.loadTextureAtlas("character.atlas");
       await assetManager.loadAll();
 
       // Create the texture atlas and skeleton data.
-      let atlas = assetManager.require("spineboy.atlas");
+      let atlas = assetManager.require("character.atlas");
       let atlasLoader = new AtlasAttachmentLoader(atlas);
       let skeletonJson = new SkeletonJson(atlasLoader);
       let skeletonData = skeletonJson.readSkeletonData(
-        assetManager.require("spineboy-ess.json")
+        assetManager.require("character.json")
       );
 
       // Instantiate a new skeleton based on the atlas and skeleton data.

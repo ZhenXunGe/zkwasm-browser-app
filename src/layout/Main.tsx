@@ -231,14 +231,14 @@ export function Main() {
     if (isMoving) {
       switch (currentAction) {
         case ActionType.Working:
-          return "walk";
+          return "animation";
         case ActionType.Exploring:
-          return "run";
+          return "animation";
         case ActionType.Coasting:
-          return "aim";
+          return "animation";
       }
     } else {
-      return "idle";
+      return "animation";
     }
   };
   return (
