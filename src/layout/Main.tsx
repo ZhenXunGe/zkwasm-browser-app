@@ -22,6 +22,7 @@ import "bootswatch/dist/slate/bootstrap.min.css";
 import CurrencyDisplay from "../components/Currency";
 import { Container } from "react-bootstrap";
 import { MainNavBar } from "../components/Nav";
+import SpineCanvas from "../components/SpineCanvas";
 import Events from "../components/Events";
 import ItemDropChoices from "../components/ItemDrop";
 import EquippedItem from "../components/EquippedItem";
@@ -244,9 +245,24 @@ export function Main() {
     // Clean up interval on unmount
     return () => clearInterval(intervalId);
   }, [isMoving]);
+  const getAnimation = () => {
+    if (isMoving) {
+      switch (currentAction) {
+        case ActionType.Working:
+          return "animation";
+        case ActionType.Exploring:
+          return "animation";
+        case ActionType.Coasting:
+          return "animation";
+      }
+    } else {
+      return "animation";
+    }
+  };
   return (
     <>
       <MainNavBar currency={0} handleRestart={restartGame}></MainNavBar>
+      <Container className="d-flex justify-content-center"></Container>
       <Container className="justify-content-center mb-4">
         <Row className="mt-3">
           <Col>
@@ -382,7 +398,8 @@ export function Main() {
                     {/* <div className="health-amount"></div> */}
                   </div>
                 </div>
-                <div className="character-art"></div>
+                <SpineCanvas animation={getAnimation()}></SpineCanvas>
+                {/* <div className="character-art"></div> */}
               </div>
 
               <div
