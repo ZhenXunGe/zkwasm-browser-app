@@ -27,6 +27,7 @@ pub fn set_account(account: u32, data:&[u64; 4]) {
     Merkle::set(account as u64, data)
 }
 
+#[derive(Copy, Clone, FromPrimitive)]
 pub enum Command {
     Action = 0,
     Choice = 1,
@@ -277,6 +278,23 @@ pub fn get_item_context() -> Vec<u32> {
     }
 }
 
+fn parse_command_value(raw_command: u32, value: u32) {
+    
+    let command: Command = num::FromPrimitive::from_u32(raw_command).unwrap();
+    match command {
+        Command::Action => action(value as u32),
+        Command::Choice => choose(value as usize),
+        Command::ItemDrop => choose_item(value as usize),
+        Command::UseItem => use_item(value as usize),
+        Command::RemoveItem => sell_item(value as usize),
+    }
+}
+
 #[wasm_bindgen]
 pub fn zkmain() {
+    init_rg();
+    reset_character();
+
+    parse_command_value(0, 0);
+
 }
