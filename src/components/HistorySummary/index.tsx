@@ -11,6 +11,19 @@ export default function History(props: HistoryProps) {
 
   //TODO: From the information in each year, create a summary of the year
 
+  const parseActionValue = (value: number) => {
+    switch (value) {
+      case 0:
+        return "W";
+      case 1:
+        return "E";
+      case 2:
+        return "C";
+      default:
+        return "N";
+    }
+  };
+
   return (
     <div className="historys">
       <div className="suicide" onClick={() => props.restartGame()}></div>
@@ -22,8 +35,8 @@ export default function History(props: HistoryProps) {
               {years[years.length - 1].map((input, index) => {
                 if (input.player_input !== InputType.Action) return;
                 return (
-                  <div key={index}>
-                    {input.player_input} - {input.value}
+                  <div key={index} className="stamp">
+                    {parseActionValue(input.value)}
                   </div>
                 );
               })}
@@ -40,8 +53,8 @@ export default function History(props: HistoryProps) {
               {years[years.length - 2].map((input, index) => {
                 if (input.player_input !== InputType.Action) return;
                 return (
-                  <div key={index}>
-                    {input.player_input} - {input.value}
+                  <div key={index} className="stamp">
+                    {parseActionValue(input.value)}
                   </div>
                 );
               })}
@@ -57,8 +70,8 @@ export default function History(props: HistoryProps) {
               {years[years.length - 3].map((input, index) => {
                 if (input.player_input !== InputType.Action) return;
                 return (
-                  <div key={index}>
-                    {input.player_input} - {input.value}
+                  <div key={index} className="stamp">
+                    {parseActionValue(input.value)}
                   </div>
                 );
               })}
