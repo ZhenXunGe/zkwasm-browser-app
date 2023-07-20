@@ -116,7 +116,7 @@ export function Main() {
       console.log("event description:", event.description);
       console.log("event choices:", event.choices.length);
       console.log("choose from", event.choices);
-    }, 500);
+    }, 3000);
   };
 
   const handleChangeMap = (newMapIndex: number) => {
@@ -250,21 +250,21 @@ export function Main() {
     if (isMoving) {
       switch (currentAction) {
         case ActionType.Working:
-          return "animation";
+          return "walk";
         case ActionType.Exploring:
-          return "animation";
+          return "run";
         case ActionType.Coasting:
-          return "animation";
+          return "lying down";
       }
     } else {
-      return "animation";
+      return "idle";
     }
   };
   return (
     <>
       <MainNavBar currency={0} handleRestart={restartGame}></MainNavBar>
       <Container className="d-flex justify-content-center"></Container>
-      <Container className="justify-content-center mb-4">
+      <Container className="justify-content-center">
         <Row className="mt-3">
           <Col>
             <div className="content">
@@ -418,7 +418,7 @@ export function Main() {
 
       {instance && (
         <>
-          <Container>
+          <Container style={{ position: "relative", top: "-10px" }}>
             <HistorySummary
               instance={instance!}
               restartGame={() => setCurrentModal("confirm-restart")}

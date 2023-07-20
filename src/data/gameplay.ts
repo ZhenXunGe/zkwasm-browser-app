@@ -32,7 +32,7 @@ const choiceMapping = [
   },
   {
     name: "Lower Money (Cost)",
-    image: EvilEventImage,
+    image: AttackEventImage,
   },
   {
     name: "Decrease HP",

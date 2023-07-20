@@ -1,3 +1,4 @@
+import React from "react";
 import StarIcon from "../../assets/main/star.png";
 import { itemsTable } from "../../data/gameplay";
 import "./style.scss";
@@ -38,5 +39,11 @@ export function StarIndicator({ level }: IndicatorProps) {
   for (let i = 0; i < level; i++) {
     stars.push(<img src={StarIcon}></img>);
   }
-  return <div className="star-level">{stars.map((s) => s)}</div>;
+  return (
+    <div className="star-level">
+      {stars.map((s, index) => (
+        <React.Fragment key={index}>{s}</React.Fragment>
+      ))}
+    </div>
+  );
 }
