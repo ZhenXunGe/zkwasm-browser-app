@@ -133,17 +133,8 @@ impl Status {
         self.age = clamp((self.age as i32) + consq.age, 0, i32::MAX) as u32;
         self.currency = clamp((self.currency as i32) + consq.currency, 0, i32::MAX) as u32;
     
-        let new_life = clamp((self.life as i32) + consq.life, 0, 100);
-        self.life = new_life as u32;
-
-        //Check for life overflow over 100 or under 0
-        if (((self.life as i32) + consq.life ) as u32) > 100 {
-            self.life = 100;
-            return;
-        } else if (((self.life as i32) + consq.life ) as i32) < 0 {
-            self.life = 0;
-            return;
-        } 
+        let new_life = clamp((self.life as i32) + consq.life, 0, 100) as u32;
+        self.life = new_life;
        
     }
 }

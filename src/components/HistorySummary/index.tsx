@@ -10,6 +10,7 @@ export default function History(props: HistoryProps) {
   const years = GetYearSummary(props.stack);
 
   //TODO: From the information in each year, create a summary of the year
+
   return (
     <div className="historys">
       <div className="suicide" onClick={() => props.restartGame()}></div>
@@ -18,7 +19,14 @@ export default function History(props: HistoryProps) {
           <>
             <div className="age">{years.length + "yr"}</div>
             <div className="summary">
-              {<>{years[years.length - 1].length} Inputs</>}
+              {years[years.length - 1].map((input, index) => {
+                if (input.player_input !== InputType.Action) return;
+                return (
+                  <div key={index}>
+                    {input.player_input} - {input.value}
+                  </div>
+                );
+              })}
             </div>
           </>
         )}
@@ -29,7 +37,14 @@ export default function History(props: HistoryProps) {
             {" "}
             <div className="age">{years.length - 1 + "yr"}</div>
             <div className="summary">
-              {<>{years[years.length - 2].length} Inputs</>}
+              {years[years.length - 2].map((input, index) => {
+                if (input.player_input !== InputType.Action) return;
+                return (
+                  <div key={index}>
+                    {input.player_input} - {input.value}
+                  </div>
+                );
+              })}
             </div>
           </>
         )}
@@ -39,7 +54,14 @@ export default function History(props: HistoryProps) {
           <>
             <div className="age">{years.length - 2 + "yr"}</div>
             <div className="summary">
-              {<>{years[years.length - 3].length} Inputs</>}
+              {years[years.length - 3].map((input, index) => {
+                if (input.player_input !== InputType.Action) return;
+                return (
+                  <div key={index}>
+                    {input.player_input} - {input.value}
+                  </div>
+                );
+              })}
             </div>
           </>
         )}

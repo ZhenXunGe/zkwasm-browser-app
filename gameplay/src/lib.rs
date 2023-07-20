@@ -277,7 +277,6 @@ pub fn get_item_context() -> Vec<u32> {
     }
 }
 
-
 #[wasm_bindgen]
 pub fn zkmain() {
 }

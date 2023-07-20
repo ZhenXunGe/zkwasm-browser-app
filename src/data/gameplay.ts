@@ -47,14 +47,17 @@ const choiceMapping = [
 export const eventsTable = [
   {
     description: "Event 1",
+    image: EvilEventImage,
     choices: [choiceMapping[0], choiceMapping[1], choiceMapping[2]],
   },
   {
     description: "Event 2",
+    image: GodEventImage,
     choices: [choiceMapping[3], choiceMapping[4], choiceMapping[2]],
   },
   {
     description: "Event 3",
+    image: AttackEventImage,
     choices: [choiceMapping[5], choiceMapping[5], choiceMapping[2]],
   },
 ];

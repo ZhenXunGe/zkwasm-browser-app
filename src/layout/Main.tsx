@@ -253,7 +253,7 @@ export function Main() {
       case ActionType.Exploring:
         return 0.75;
       case ActionType.Coasting:
-        return 0.1;
+        return 0;
     }
   };
 
