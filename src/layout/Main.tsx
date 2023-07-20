@@ -105,6 +105,7 @@ export function Main() {
     });
     toggleScrollBackground();
     setCurrentAction(newAction);
+    setMovingSpeed(getBackgroundSpeed(newAction));
     setIsMoving(true);
     instance!.action(newAction);
     let event_id = instance!.get_event();
@@ -226,14 +227,12 @@ export function Main() {
   // Start or stop scrolling the background when the 'scroll' state changes
   useEffect(() => {
     let intervalId: any;
-
     const bg = document.querySelector("." + currentBgClass) as HTMLElement;
-
     if (isMoving && bg) {
       // Start scrolling
 
       intervalId = setInterval(() => {
-        offset.current = offset.current + 0.5; // Change '1' to control the speed of scrolling
+        offset.current = offset.current + movingSpeed; // Change '1' to control the speed of scrolling
         // const bg = document.querySelector(currentBgClass) as HTMLElement;
         bg.style.backgroundPositionX = `${offset.current}%`;
       }, 10); // Change '100' to control the speed of scrolling
@@ -245,7 +244,19 @@ export function Main() {
 
     // Clean up interval on unmount
     return () => clearInterval(intervalId);
-  }, [isMoving]);
+  }, [isMoving, movingSpeed]);
+
+  const getBackgroundSpeed = (action: ActionType) => {
+    switch (action) {
+      case ActionType.Working:
+        return 0.4;
+      case ActionType.Exploring:
+        return 0.75;
+      case ActionType.Coasting:
+        return 0.1;
+    }
+  };
+
   const getAnimation = () => {
     if (isMoving) {
       switch (currentAction) {
