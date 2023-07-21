@@ -55,6 +55,14 @@
       }
       .proofsubmit {
         margin-left: auto;
+        .proof {
+          &:hover {
+            color: grey;
+          }
+          color: black;
+          display: flex;
+          justify-content: center;
+        }
       }
     }
   }

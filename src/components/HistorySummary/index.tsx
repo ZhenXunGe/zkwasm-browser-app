@@ -82,7 +82,7 @@ const HistorySummary = ({ years, year }: HistorySummaryProps) => {
                     target="_blank"
                     className="proof"
                   >
-                    <Spinner></Spinner>
+                    View <Spinner style={{ marginLeft: "5px" }}></Spinner>
                   </a>
                 </>
               ) : (
