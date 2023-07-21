@@ -1,4 +1,5 @@
 import { GameHistory, InputType, WasmInstance } from "../../types/game";
+import { NewProveTask } from "../../modals/addNewProveTask";
 import "./style.scss";
 interface HistoryProps {
   restartGame: () => void;
@@ -24,9 +25,26 @@ export default function History(props: HistoryProps) {
     }
   };
 
+  function packGameHistoryToU64(gameHistory: GameHistory): string {
+    const u64 =
+      ((gameHistory.player_input as number) << 32) | (gameHistory.value >>> 0);
+    return "0x" + u64.toString(16) + ":bytes-packed";
+  }
+
+  const getWitness = (inputs: GameHistory[]) => {
+    const witnessData = inputs.map((input) => packGameHistoryToU64(input));
+
+    return witnessData;
+  };
+
   return (
     <div className="historys">
       <div className="suicide" onClick={() => props.restartGame()}></div>
+      <NewProveTask
+        md5="00064A779FC4F1EB13047A01D6AB03E9"
+        inputs={`${years[years.length - 1].length}:i64`}
+        witness={getWitness(years[years.length - 1])}
+      ></NewProveTask>
       <div className="history">
         {years[years.length - 1] && (
           <>
@@ -47,7 +65,7 @@ export default function History(props: HistoryProps) {
       <div className="history">
         {years[years.length - 2] && (
           <>
-            {" "}
+            addNewProveTask
             <div className="age">{years.length - 1 + "yr"}</div>
             <div className="summary">
               {years[years.length - 2].map((input, index) => {

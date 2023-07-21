@@ -435,13 +435,13 @@ export function Main() {
               restartGame={() => setCurrentModal("confirm-restart")}
               stack={gameHistory}
             ></HistorySummary>
-            <div>
+            {/* <div>
               {gameHistory.map((a, index) => (
                 <div key={index}>
                   ACTION: {a.player_input} - VALUE: {a.value}
                 </div>
               ))}
-            </div>
+            </div> */}
           </Container>
           {activeItemIndexSelected !== null && (
             <ActiveItem
@@ -490,8 +490,6 @@ export function Main() {
           ></ChangeInstance>
         </>
       )}
-
-      <History md5="77DA9B5A42FABD295FD67CCDBDF2E348"></History>
     </>
   );
 }
