@@ -1,5 +1,5 @@
 import { Spinner } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GameHistory, InputType, WasmInstance } from "../../types/game";
 import { NewProveTask } from "../../modals/addNewProveTask";
 import "./style.scss";
@@ -51,6 +51,10 @@ const HistorySummary = ({ years, year }: HistorySummaryProps) => {
     setTaskId(newTaskId);
   };
 
+  useEffect(() => {
+    setTaskId("");
+  }, [years]);
+
   return (
     <div className="history">
       {years[year] && (
@@ -70,7 +74,7 @@ const HistorySummary = ({ years, year }: HistorySummaryProps) => {
             <div className="proofsubmit">
               {showProveButton(year) ? (
                 <NewProveTask
-                  md5="04B774EC034C07334A1B28D5F2689AB1"
+                  md5="5AFFC5ED1EF5339F60DF7BBEBCCDEA2E"
                   inputs={`${years[year].length}:i64`}
                   witness={getWitness(years[year])}
                   OnTaskSubmitSuccess={handleTaskSubmit}
@@ -109,11 +113,22 @@ const parseActionValue = (value: number) => {
   }
 };
 
+function padAndReverseBytes(hex: string): string {
+  const padded = hex.padStart(8, "0");
+  return (
+    padded.slice(6, 8) +
+    padded.slice(4, 6) +
+    padded.slice(2, 4) +
+    padded.slice(0, 2)
+  );
+}
+
 function packGameHistoryToU64(gameHistory: GameHistory): string {
-  const player_input_hex = (gameHistory.player_input >>> 0)
-    .toString(16)
-    .padStart(8, "0");
-  const value_hex = (gameHistory.value >>> 0).toString(16).padStart(8, "0");
+  const player_input_hex = padAndReverseBytes(
+    (gameHistory.player_input >>> 0).toString(16)
+  );
+
+  const value_hex = padAndReverseBytes((gameHistory.value >>> 0).toString(16));
   return "0x" + value_hex + player_input_hex + ":bytes-packed";
 }
 
