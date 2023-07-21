@@ -18,6 +18,21 @@ export function reset_character() {
 /**
 * @returns {number}
 */
+export function get_current_instance() {
+    const ret = wasm.get_current_instance();
+    return ret >>> 0;
+}
+
+/**
+* @param {number} instance
+*/
+export function update_instance(instance) {
+    wasm.update_instance(instance);
+}
+
+/**
+* @returns {number}
+*/
 export function get_wisdom() {
     const ret = wasm.get_wisdom();
     return ret >>> 0;
@@ -152,10 +167,10 @@ export function get_inventory() {
 }
 
 /**
-* @param {number} at
+* @param {number} action
 */
-export function action(at) {
-    wasm.action(at);
+export function action(action) {
+    wasm.action(action);
 }
 
 /**
@@ -191,6 +206,24 @@ export function use_item(item_id) {
 */
 export function stop_use_item(item_id) {
     wasm.stop_use_item(item_id);
+}
+
+/**
+* @param {number} item_id
+* @returns {number}
+*/
+export function get_active_item_level(item_id) {
+    const ret = wasm.get_active_item_level(item_id);
+    return ret >>> 0;
+}
+
+/**
+* @param {number} item_id
+* @returns {number}
+*/
+export function get_inventory_item_level(item_id) {
+    const ret = wasm.get_inventory_item_level(item_id);
+    return ret >>> 0;
 }
 
 /**

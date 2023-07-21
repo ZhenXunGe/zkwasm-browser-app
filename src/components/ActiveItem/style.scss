@@ -4,14 +4,12 @@
   height: 273px;
   position: relative;
   color: black;
-  .item-image {
-    background-image: url("../../assets/inventory/small_icon.png");
-    background-size: contain;
+  .item {
     width: 140px;
     height: 140px;
     position: absolute;
     left: 10%;
-    top: 10%;
+    top: 15%;
   }
   .name {
     position: absolute;

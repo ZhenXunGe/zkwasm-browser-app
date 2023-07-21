@@ -114,9 +114,9 @@ export interface GameHistory {
 }
 
 export enum InputType {
-  Action = "action",
-  Choice = "choice",
-  ItemDrop = "itemdrop",
-  ItemUse = "itemuse",
-  ItemRemove = "itemremove",
+  Action = 0,
+  Choice = 1,
+  ItemDrop = 2,
+  ItemUse = 3,
+  ItemRemove = 4,
 }

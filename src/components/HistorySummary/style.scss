@@ -1,0 +1,102 @@
+.historys {
+  margin: auto;
+  background-size: contain;
+  background-image: url("../../assets/main/history.png");
+  background-repeat: no-repeat;
+
+  width: var(--content-width);
+  height: 600px;
+
+  padding: 5% 4%;
+  position: relative;
+  .inner-container {
+  }
+  .suicide {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("../../assets/main/suicide.png");
+    width: 30%;
+    height: 15%;
+    left: 80%;
+    top: 3%;
+    cursor: pointer;
+  }
+  .history {
+    width: 98%;
+    height: 20%;
+    margin: 10px;
+    background-size: contain;
+    background-image: url("../../images/layer3_message.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    padding: 0 10%;
+    padding-right: 5%;
+    display: flex;
+    align-items: center;
+    font-family: Averia Serif Libre;
+    color: black;
+    .age {
+      width: 8%;
+      min-width: 8%;
+    }
+    .summary {
+      position: relative;
+      margin-left: 5%;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      .stamps {
+        display: grid;
+        //2  rows of 6 grid
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        .stamp {
+          margin: 0 14px;
+          width: 26px;
+          height: 26px;
+          background-size: contain;
+          .month {
+            position: relative;
+            left: 105%;
+            top: 15%;
+            font-size: 12px;
+          }
+        }
+        .stamp-run {
+          background-image: url("../../assets/history/run.png");
+        }
+        .stamp-walk {
+          background-image: url("../../assets/history/walk.png");
+        }
+        .stamp-coast {
+          background-image: url("../../assets/history/lying\ down.png");
+        }
+        .stamp-empty {
+          background-image: url("../../assets/history/blank.png");
+        }
+      }
+      .proofsubmit {
+        position: relative;
+        left: 5%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .proof {
+          background-image: url("../../assets/history/proving.png");
+          width: 80px;
+          height: 30px;
+          background-size: contain;
+          background-repeat: no-repeat;
+          &:hover {
+            color: grey;
+          }
+          color: black;
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}

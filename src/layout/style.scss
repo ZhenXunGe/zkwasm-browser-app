@@ -95,24 +95,18 @@ div.content {
       align-items: center;
       justify-content: center;
       .item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        position: relative;
+        //   display: flex;
+        //   flex-direction: column;
+        //   align-items: center;
+        //   justify-content: center;
+        //   position: relative;
         width: 12%;
-        min-height: 50%;
+        //min-height: 60%;
         margin: 10px;
-        background-size: contain;
-        background-image: url("../images/layer3_sticker3.png");
-        background-repeat: no-repeat;
-        cursor: pointer;
-        .active-item {
-          position: absolute;
-          top: 20%;
-          left: 10%;
-          color: black;
-        }
+        //   background-size: contain;
+        //   background-image: url("../images/layer3_sticker3.png");
+        //   background-repeat: no-repeat;
+        //   cursor: pointer;
       }
     }
   }
@@ -326,9 +320,10 @@ div.content {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("../images/layer1_instance_btn.png");
+  cursor: pointer;
 }
 
-.scrolling-bg {
+.scrolling-bg-1 {
   position: absolute;
   left: 2%;
   top: 2%;
@@ -340,6 +335,18 @@ div.content {
   z-index: -1;
 }
 
+.scrolling-bg-2 {
+  position: absolute;
+  left: 2%;
+  top: 2%;
+  width: 96%;
+  height: 96%;
+  background-size: cover;
+  background-image: url("../assets/main/bg2.png");
+  background-repeat: repeat-x;
+  z-index: -1;
+}
+
 .character {
   position: absolute;
   left: calc(50%);
@@ -347,6 +354,14 @@ div.content {
   width: 40%;
   height: 40%;
   transform: translate(-50%, -70%);
+
+  canvas {
+    position: absolute;
+    left: -25%;
+    top: 25%;
+    width: 150%;
+    height: 100%;
+  }
 
   .character-art {
     position: relative;
@@ -390,51 +405,18 @@ div.content {
   }
 }
 
-.historys {
-  margin: auto;
-  background-size: contain;
-  background-image: url("../assets/main/history.png");
-  background-repeat: no-repeat;
-
-  width: var(--content-width);
-  height: 600px;
-
-  padding: 5% 4%;
-  position: relative;
-  .inner-container {
-  }
-  .suicide {
-    position: absolute;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url("../assets/main/suicide.png");
-    width: 30%;
-    height: 15%;
-    left: 80%;
-    top: 5%;
-    cursor: pointer;
-  }
-  .history {
-    width: 95%;
-    height: 20%;
-    margin: 10px;
-    background-size: 430px 80px;
-    background-image: url("../images/layer3_message.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-}
-
 .sell-button {
   border: none;
+  //background-image: url("../assets/history/proving.png");
+  margin-left: auto;
   background-color: var(--button-main);
-  padding: 5px 30px;
+  padding: 5px 10px;
   border-radius: 5px;
   color: var(--info-text-color);
   font-family: "Be Vietnam";
   font-style: normal;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 10px;
   transition: 0.3s all ease;
   &:hover {
     background-color: var(--button-hover);

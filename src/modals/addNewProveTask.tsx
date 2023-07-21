@@ -22,8 +22,10 @@ import {
 
 interface NewWASMImageProps {
   md5: string;
-  inputs: string;
-  witness: string;
+  inputs: string; // Length of Data
+  witness: string[]; // Data
+  OnTaskSubmitSuccess?: (receipt: any) => void;
+  OnTaskSubmitFail?: (error: any) => void;
 }
 
 export async function signMessage(message: string) {
@@ -60,7 +62,7 @@ export function NewProveTask(props: NewWASMImageProps) {
       user_address: account!.address.toLowerCase(),
       md5: props.md5,
       public_inputs: [props.inputs],
-      private_inputs: [props.witness],
+      private_inputs: props.witness,
     };
 
     let msgString = ZkWasmUtil.createProvingSignMessage(info);
@@ -91,9 +93,13 @@ export function NewProveTask(props: NewWASMImageProps) {
     dispatch(addProvingTask(task))
       .unwrap()
       .then((res) => {
+        if (props.OnTaskSubmitSuccess) props.OnTaskSubmitSuccess(res);
+
+        console.log(res);
         setStatus(ModalStatus.PostConfirm);
       })
       .catch((err) => {
+        if (props.OnTaskSubmitFail) props.OnTaskSubmitFail(err);
         console.log("new prove task error", err);
         setMessage("Error creating new prove task.");
         setStatus(ModalStatus.PreConfirm);

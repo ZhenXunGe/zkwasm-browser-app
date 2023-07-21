@@ -3,4 +3,6 @@ export type ModalOptions =
   | "itemdrop"
   | "inventory"
   | "active-item"
+  | "instance"
+  | "confirm-restart"
   | "gameover";

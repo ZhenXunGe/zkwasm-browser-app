@@ -2,9 +2,12 @@ import { Modal } from "react-bootstrap";
 import { itemsTable } from "../../data/gameplay";
 import { useState } from "react";
 import "./style.scss";
+import { WasmInstance } from "../../types/game";
+import ItemMain from "../ItemMain";
 interface InventoryProps {
   show: boolean;
   ownedItems: number[];
+  instance: WasmInstance;
   handleClose: () => void;
   handleUse: (item: number) => void;
 }
@@ -13,6 +16,7 @@ export default function Inventory(props: InventoryProps) {
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
     null
   );
+  //console.log(props.instance.get_active_item_level(0));
   return (
     <Modal show={props.show} className="game-dialog">
       <div className="close-bag"></div>
@@ -20,9 +24,18 @@ export default function Inventory(props: InventoryProps) {
         <div className="current-item">
           {selectedItemIndex !== null && (
             <>
-              <div className="item-image"></div>
+              <ItemMain
+                level={props.instance.get_inventory_item_level(
+                  selectedItemIndex
+                )}
+                item_id={selectedItemIndex}
+                style={{ width: "120px", height: "120px" }}
+              ></ItemMain>
               <div className="details">
-                <div className="name">Item index - {selectedItemIndex}</div>
+                <div className="name">
+                  {itemsTable[selectedItemIndex].name} - Level:{" "}
+                  {props.instance.get_inventory_item_level(selectedItemIndex)}
+                </div>
                 <div className="stats">
                   <div>Wisdom +12</div>
                   <div>Speed +20</div>
@@ -34,7 +47,10 @@ export default function Inventory(props: InventoryProps) {
               </div>
               <div
                 className="use"
-                onClick={() => props.handleUse(selectedItemIndex)}
+                onClick={() => {
+                  setSelectedItemIndex(null);
+                  props.handleUse(selectedItemIndex);
+                }}
               ></div>
             </>
           )}
@@ -52,13 +68,15 @@ export default function Inventory(props: InventoryProps) {
           <div className="inventory-items">
             {props.ownedItems.map((item, index) => {
               return (
-                <div
+                <ItemMain
                   key={index}
-                  className="item"
+                  className={
+                    (selectedItemIndex === item ? "selected" : "") + " item"
+                  }
+                  level={props.instance.get_inventory_item_level(item)}
+                  item_id={item}
                   onClick={() => setSelectedItemIndex(item)}
-                >
-                  {itemsTable[item].name} - Item Index {item}
-                </div>
+                ></ItemMain>
               );
             })}
           </div>

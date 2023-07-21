@@ -1,0 +1,57 @@
+.item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1;
+
+  background-image: url("../../assets/inventory/small_icon.png");
+  &.placeholder-0 {
+    background-image: url("../../assets/equipment/items/placeholder_0.png");
+  }
+  &.placeholder-1 {
+    background-image: url("../../assets/equipment/items/placeholder_1.png");
+  }
+  &.placeholder-2 {
+    background-image: url("../../assets/equipment/items/placeholder_2.png");
+  }
+  &.placeholder-3 {
+    background-image: url("../../assets/equipment/items/placeholder_3.png");
+  }
+  &.placeholder-4 {
+    background-image: url("../../assets/equipment/items/placeholder_4.png");
+  }
+  &.placeholder-5 {
+    background-image: url("../../assets/equipment/items/placeholder_5.png");
+  }
+  background-size: contain;
+  background-repeat: no-repeat;
+  &.selected {
+    background-image: url("../../assets/inventory/small_icon_selected.png");
+  }
+  &:hover {
+    cursor: pointer;
+
+    //background-image: url("../../assets/inventory/small_icon_hover.png");
+  }
+  .item-img {
+    margin-top: 10%;
+    max-width: 65%;
+    max-height: 65%;
+    align-self: center;
+  }
+  .star-level {
+    position: absolute;
+    left: 8%;
+    top: 8%;
+    width: 80%;
+    display: flex;
+
+    img {
+      //position them from left to right
+      margin: 0 2%;
+      max-width: 25%;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+.instance-body {
+  width: 1045px;
+  height: 656px;
+  background-image: url("../../assets/instance/instance.png");
+  background-repeat: no-repeat;
+}
+
+.x-marker {
+  width: 53px;
+  height: 60px;
+  background-image: url("../../assets/instance/X_map.png");
+  background-repeat: no-repeat;
+  position: absolute;
+  cursor: pointer;
+}
+
+.location-name {
+  position: absolute;
+  left: 5%;
+  top: 85%;
+  font-family: Averia Serif Libre;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 39px;
+  letter-spacing: 0em;
+  text-align: center;
+
+  cursor: pointer;
+}

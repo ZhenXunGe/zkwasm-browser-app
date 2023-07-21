@@ -9,6 +9,14 @@ export function reset_character(): void;
 /**
 * @returns {number}
 */
+export function get_current_instance(): number;
+/**
+* @param {number} instance
+*/
+export function update_instance(instance: number): void;
+/**
+* @returns {number}
+*/
 export function get_wisdom(): number;
 /**
 * @returns {number}
@@ -60,9 +68,9 @@ export function get_event(): number;
 */
 export function get_inventory(): Uint32Array;
 /**
-* @param {number} at
+* @param {number} action
 */
-export function action(at: number): void;
+export function action(action: number): void;
 /**
 * @param {number} at
 */
@@ -83,6 +91,16 @@ export function use_item(item_id: number): void;
 * @param {number} item_id
 */
 export function stop_use_item(item_id: number): void;
+/**
+* @param {number} item_id
+* @returns {number}
+*/
+export function get_active_item_level(item_id: number): number;
+/**
+* @param {number} item_id
+* @returns {number}
+*/
+export function get_inventory_item_level(item_id: number): number;
 /**
 * @returns {Uint32Array}
 */

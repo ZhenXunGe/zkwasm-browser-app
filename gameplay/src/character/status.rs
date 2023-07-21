@@ -1,5 +1,6 @@
 use crate::rule_engine::RuleEngine;
 use crate::ActionType;
+use crate::utils::{clamp};
 pub struct Status {
     pub wisdom: u32,
     pub attack: u32,
@@ -122,24 +123,18 @@ impl Status {
     }
 
     pub fn apply_consequence(&mut self, consq: Consequence) {
-        self.wisdom = ((self.wisdom as i32) + consq.wisdom)as u32;
-        self.attack = ((self.attack as i32) + consq.attack)as u32;
-        self.luck = ((self.luck as i32) + consq.luck)as u32;
-        self.charm = ((self.charm as i32) + consq.charm)as u32;
-        self.family = ((self.family as i32) + consq.family)as u32;
-        self.speed = ((self.speed as i32) + consq.speed)as u32;
-        self.defence = ((self.defence as i32) + consq.defence)as u32;
-        self.age = ((self.age as i32) + consq.age)as u32;
-        self.currency = ((self.currency as i32) + consq.currency)as u32;
-
-        //Check for life overflow over 100 or under 0
-        if (((self.life as i32) + consq.life ) as u32) > 100 {
-            self.life = 100;
-            return;
-        } else if (((self.life as i32) + consq.life ) as i32) < 0 {
-            self.life = 0;
-            return;
-        } 
-        self.life = ((self.life as i32) + consq.life)as u32;
+        self.wisdom = clamp((self.wisdom as i32) + consq.wisdom, 0, i32::MAX) as u32;
+        self.attack = clamp((self.attack as i32) + consq.attack, 0, i32::MAX) as u32;
+        self.luck = clamp((self.luck as i32) + consq.luck, 0, i32::MAX) as u32;
+        self.charm = clamp((self.charm as i32) + consq.charm, 0, i32::MAX) as u32;
+        self.family = clamp((self.family as i32) + consq.family, 0, i32::MAX) as u32;
+        self.speed = clamp((self.speed as i32) + consq.speed, 0, i32::MAX) as u32;
+        self.defence = clamp((self.defence as i32) + consq.defence, 0, i32::MAX) as u32;
+        self.age = clamp((self.age as i32) + consq.age, 0, i32::MAX) as u32;
+        self.currency = clamp((self.currency as i32) + consq.currency, 0, i32::MAX) as u32;
+    
+        let new_life = clamp((self.life as i32) + consq.life, 0, 100) as u32;
+        self.life = new_life;
+       
     }
 }

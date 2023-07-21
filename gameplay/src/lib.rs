@@ -4,7 +4,7 @@ use zkwasm_rust_sdk::{
     wasm_input,
     Merkle,
     require,
-    wasm_dbg,
+    //wasm_dbg,
 };
 use once_cell::sync::Lazy;
 extern crate num;
@@ -16,7 +16,7 @@ mod items;
 mod skills;
 mod character;
 mod rule_engine;
-
+mod utils;
 use rule_engine::{RuleEngine};
 
 pub fn get_account(account: u32) -> [u64; 4] {
@@ -27,6 +27,7 @@ pub fn set_account(account: u32, data:&[u64; 4]) {
     Merkle::set(account as u64, data)
 }
 
+#[derive(Copy, Clone)]
 pub enum Command {
     Action = 0,
     Choice = 1,
@@ -40,7 +41,7 @@ static mut RG: Option<RuleEngine> = None;
 static mut CHARACTER: Lazy<Character> = Lazy::new(|| Character::new());
 
 
-#[derive(Copy, Clone, FromPrimitive)]
+#[derive(Copy, Clone)]
 pub enum ActionType {
     Working = 0,
     Exploring,
@@ -50,7 +51,7 @@ pub enum ActionType {
 #[wasm_bindgen]
 pub fn init_rg() {
     unsafe {
-        RG = Some (RuleEngine::new(vec![stdpack::standard_pack()]))
+        RG = Some (RuleEngine::new(vec![stdpack::standard_pack()], 0))
     }
 }
 
@@ -60,6 +61,27 @@ pub fn reset_character() {
         CHARACTER = Lazy::new(|| Character::new());
     }
 }
+
+#[wasm_bindgen]
+pub fn get_current_instance() -> u32 {
+    unsafe {
+        match RG {
+            Some(ref rg) => rg.get_current_instance() as u32,
+            None => 0,
+        }
+    }
+}
+
+#[wasm_bindgen]
+pub fn update_instance(instance: u32) {
+    unsafe {
+        match RG {
+            Some(ref mut rg) => rg.set_current_instance(instance as usize),
+            None => (),
+        }
+    }
+}
+
 
 #[wasm_bindgen]
 pub fn get_wisdom() -> u32{
@@ -155,8 +177,15 @@ pub fn get_inventory() -> Vec<u32> {
 }
 
 #[wasm_bindgen]
-pub fn action(at: u32) {
-    let action_type = num::FromPrimitive::from_u32(at).unwrap();
+pub fn action(action: u32) {
+
+    let action_type = match action {
+        0 => ActionType::Working,
+        1 => ActionType::Exploring,
+        2 => ActionType::Coasting,
+        _ => panic!("Invalid action"),
+    };
+    
     unsafe {
         CHARACTER.act(action_type, RG.as_ref().unwrap());
     }
@@ -194,6 +223,20 @@ pub fn use_item(item_id: usize) {
 pub fn stop_use_item(item_id: usize) {
     unsafe {
         CHARACTER.stop_use_item(item_id);
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_active_item_level(item_id: u32) -> u32 {
+    unsafe {
+        CHARACTER.get_active_item_level(item_id)
+    }
+}
+
+#[wasm_bindgen]
+pub fn get_inventory_item_level(item_id: u32) -> u32 {
+    unsafe {
+        CHARACTER.get_inventory_item_level(item_id)
     }
 }
 
@@ -242,7 +285,39 @@ pub fn get_item_context() -> Vec<u32> {
     }
 }
 
+fn unpack_u64_to_game_history(data: u64) -> (u32, u32) {
+    let bytes = data.to_le_bytes();
+    let player_input = u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]);
+    let value: u32 = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
+    (player_input, value)
+}
 
+fn parse_command_value(raw_command: u32, value: u32) {
+    match raw_command {
+        0 => action(value as u32),
+        1 => choose(value as usize),
+        2 => choose_item(value as usize),
+        3 => use_item(value as usize),
+        4 => stop_use_item(value as usize),
+        _ => panic!("Invalid command"),
+    }
+}
 #[wasm_bindgen]
 pub fn zkmain() {
+    unsafe {
+        init_rg();
+        reset_character();
+        let input_len = wasm_input(1);
+        let mut cursor = 0;
+        
+        while cursor < input_len {
+
+            let encoded = wasm_input(0);
+            //Convert encoded u64 into two u32s
+            let (command, value) = unpack_u64_to_game_history(encoded);
+
+            parse_command_value(command, value);
+            cursor += 1;
+        }
+    }
 }
