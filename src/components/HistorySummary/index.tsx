@@ -74,7 +74,7 @@ const HistorySummary = ({ years, year }: HistorySummaryProps) => {
             <div className="proofsubmit">
               {showProveButton(year) ? (
                 <NewProveTask
-                  md5="5AFFC5ED1EF5339F60DF7BBEBCCDEA2E"
+                  md5="FCB139441BD7FB6B20FC785E82BFFFB5"
                   inputs={`${years[year].length}:i64`}
                   witness={getWitness(years[year])}
                   OnTaskSubmitSuccess={handleTaskSubmit}
@@ -113,12 +113,22 @@ const parseActionValue = (value: number) => {
   }
 };
 
-function packGameHistoryToU64(gameHistory: GameHistory): string {
-  const player_input_hex = gameHistory.player_input
-    .toString(16)
-    .padStart(8, "0");
+function padAndReverseBytes(hex: string): string {
+  const padded = hex.padStart(8, "0");
+  return (
+    padded.slice(6, 8) +
+    padded.slice(4, 6) +
+    padded.slice(2, 4) +
+    padded.slice(0, 2)
+  );
+}
 
-  const value_hex = gameHistory.value.toString(16).padStart(8, "0");
+function packGameHistoryToU64(gameHistory: GameHistory): string {
+  const player_input_hex = padAndReverseBytes(
+    gameHistory.player_input.toString(16)
+  );
+
+  const value_hex = padAndReverseBytes(gameHistory.value.toString(16));
   return "0x" + player_input_hex + value_hex + ":bytes-packed";
 }
 

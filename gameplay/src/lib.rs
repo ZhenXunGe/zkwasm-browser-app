@@ -287,8 +287,8 @@ pub fn get_item_context() -> Vec<u32> {
 
 fn unpack_u64_to_game_history(data: u64) -> (u32, u32) {
     let bytes = data.to_le_bytes();
-    let player_input = u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]);
-    let value: u32 = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
+    let player_input = u32::from_le_bytes([bytes[7], bytes[6], bytes[5], bytes[4]]);
+    let value: u32 = u32::from_le_bytes([bytes[3], bytes[2], bytes[1], bytes[0]]);
     (player_input, value)
 }
 
