@@ -65,9 +65,9 @@ const HistorySummary = ({ years, year }: HistorySummaryProps) => {
     setProofSubmitted(true);
   };
 
-  // useEffect(() => {
-  //   setTaskId("");
-  // }, [years]);
+  useEffect(() => {
+    setTaskId("");
+  }, [years]);
 
   const placeholderStamps = () => {
     // Default stamps
