@@ -167,10 +167,10 @@ export function get_inventory() {
 }
 
 /**
-* @param {number} at
+* @param {number} action
 */
-export function action(at) {
-    wasm.action(at);
+export function action(action) {
+    wasm.action(action);
 }
 
 /**

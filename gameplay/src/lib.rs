@@ -27,7 +27,7 @@ pub fn set_account(account: u32, data:&[u64; 4]) {
     Merkle::set(account as u64, data)
 }
 
-#[derive(Copy, Clone, FromPrimitive)]
+#[derive(Copy, Clone)]
 pub enum Command {
     Action = 0,
     Choice = 1,
@@ -41,7 +41,7 @@ static mut RG: Option<RuleEngine> = None;
 static mut CHARACTER: Lazy<Character> = Lazy::new(|| Character::new());
 
 
-#[derive(Copy, Clone, FromPrimitive)]
+#[derive(Copy, Clone)]
 pub enum ActionType {
     Working = 0,
     Exploring,
@@ -177,8 +177,15 @@ pub fn get_inventory() -> Vec<u32> {
 }
 
 #[wasm_bindgen]
-pub fn action(at: u32) {
-    let action_type = num::FromPrimitive::from_u32(at).unwrap();
+pub fn action(action: u32) {
+
+    let action_type = match action {
+        0 => ActionType::Working,
+        1 => ActionType::Exploring,
+        2 => ActionType::Coasting,
+        _ => panic!("Invalid action"),
+    };
+    
     unsafe {
         CHARACTER.act(action_type, RG.as_ref().unwrap());
     }
@@ -281,23 +288,24 @@ pub fn get_item_context() -> Vec<u32> {
 fn unpack_u64_to_game_history(data: u64) -> (u32, u32) {
     let bytes = data.to_le_bytes();
     let player_input = u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]);
-    let value = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
+    let value: u32 = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
     (player_input, value)
 }
 
-
 fn parse_command_value(raw_command: u32, value: u32) {
+    unsafe {
+        wasm_dbg(raw_command as u64);
+    }
     
-    let command: Command = num::FromPrimitive::from_u32(raw_command).unwrap();
-    match command {
-        Command::Action => action(value as u32),
-        Command::Choice => choose(value as usize),
-        Command::ItemDrop => choose_item(value as usize),
-        Command::UseItem => use_item(value as usize),
-        Command::RemoveItem => sell_item(value as usize),
+    match raw_command {
+        0 => action(value as u32),
+        1 => choose(value as usize),
+        2 => choose_item(value as usize),
+        3 => use_item(value as usize),
+        4 => stop_use_item(value as usize),
+        _ => panic!("Invalid command"),
     }
 }
-
 #[wasm_bindgen]
 pub fn zkmain() {
     unsafe {

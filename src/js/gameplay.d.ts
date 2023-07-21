@@ -68,9 +68,9 @@ export function get_event(): number;
 */
 export function get_inventory(): Uint32Array;
 /**
-* @param {number} at
+* @param {number} action
 */
-export function action(at: number): void;
+export function action(action: number): void;
 /**
 * @param {number} at
 */
