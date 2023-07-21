@@ -113,23 +113,13 @@ const parseActionValue = (value: number) => {
   }
 };
 
-function padAndReverseBytes(hex: string): string {
-  const padded = hex.padStart(8, "0");
-  return (
-    padded.slice(6, 8) +
-    padded.slice(4, 6) +
-    padded.slice(2, 4) +
-    padded.slice(0, 2)
-  );
-}
-
 function packGameHistoryToU64(gameHistory: GameHistory): string {
-  const player_input_hex = padAndReverseBytes(
-    (gameHistory.player_input >>> 0).toString(16)
-  );
+  const player_input_hex = gameHistory.player_input
+    .toString(16)
+    .padStart(8, "0");
 
-  const value_hex = padAndReverseBytes((gameHistory.value >>> 0).toString(16));
-  return "0x" + value_hex + player_input_hex + ":bytes-packed";
+  const value_hex = gameHistory.value.toString(16).padStart(8, "0");
+  return "0x" + player_input_hex + value_hex + ":bytes-packed";
 }
 
 const getWitness = (inputs: GameHistory[]) => {
