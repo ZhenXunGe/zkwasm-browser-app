@@ -35,6 +35,7 @@ export default function ConfirmRestart(props: ConfirmRestart) {
           }}
         ></button>
         <button
+          className="keep-going"
           onClick={() => {
             //TODO: Do not restart yet, as maybe want to do proof submission
             props.handleClose();

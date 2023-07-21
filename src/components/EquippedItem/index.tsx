@@ -1,7 +1,6 @@
 import { itemsTable } from "../../data/gameplay";
 import { WasmInstance } from "../../types/game";
 import ItemMain from "../ItemMain";
-import { StarIndicator } from "../ItemMain";
 interface EquippedItemProps {
   slotIndex: number;
   instance: WasmInstance | null;
@@ -14,7 +13,8 @@ export default function EquippedItem({
   onSelect,
 }: EquippedItemProps) {
   const itemIndex = instance?.get_active_items()[slotIndex];
-  if (itemIndex === undefined) return <div className="item"></div>;
+  if (itemIndex === undefined)
+    return <div className={`placeholder-${slotIndex} item`}></div>;
   return (
     <>
       <ItemMain

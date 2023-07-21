@@ -19,11 +19,11 @@
     width: 30%;
     height: 15%;
     left: 80%;
-    top: 5%;
+    top: 3%;
     cursor: pointer;
   }
   .history {
-    width: 95%;
+    width: 98%;
     height: 20%;
     margin: 10px;
     background-size: contain;
@@ -38,24 +38,57 @@
     font-family: Averia Serif Libre;
     color: black;
     .age {
-      width: 10%;
+      width: 8%;
+      min-width: 8%;
     }
     .summary {
+      position: relative;
       margin-left: 5%;
       width: 100%;
       display: flex;
       flex-direction: row;
       .stamps {
+        display: grid;
+        //2  rows of 6 grid
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
         .stamp {
-          margin: 0 5px;
+          margin: 0 14px;
+          width: 26px;
+          height: 26px;
+          background-size: contain;
+          .month {
+            position: relative;
+            left: 105%;
+            top: 15%;
+            font-size: 12px;
+          }
         }
-
-        display: flex;
-        flex-direction: row;
+        .stamp-run {
+          background-image: url("../../assets/history/run.png");
+        }
+        .stamp-walk {
+          background-image: url("../../assets/history/walk.png");
+        }
+        .stamp-coast {
+          background-image: url("../../assets/history/lying\ down.png");
+        }
+        .stamp-empty {
+          background-image: url("../../assets/history/blank.png");
+        }
       }
       .proofsubmit {
-        margin-left: auto;
+        position: relative;
+        left: 5%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         .proof {
+          background-image: url("../../assets/history/proving.png");
+          width: 80px;
+          height: 30px;
+          background-size: contain;
+          background-repeat: no-repeat;
           &:hover {
             color: grey;
           }

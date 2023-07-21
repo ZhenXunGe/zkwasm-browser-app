@@ -7,6 +7,24 @@
   aspect-ratio: 1 / 1;
 
   background-image: url("../../assets/inventory/small_icon.png");
+  &.placeholder-0 {
+    background-image: url("../../assets/equipment/items/placeholder_0.png");
+  }
+  &.placeholder-1 {
+    background-image: url("../../assets/equipment/items/placeholder_1.png");
+  }
+  &.placeholder-2 {
+    background-image: url("../../assets/equipment/items/placeholder_2.png");
+  }
+  &.placeholder-3 {
+    background-image: url("../../assets/equipment/items/placeholder_3.png");
+  }
+  &.placeholder-4 {
+    background-image: url("../../assets/equipment/items/placeholder_4.png");
+  }
+  &.placeholder-5 {
+    background-image: url("../../assets/equipment/items/placeholder_5.png");
+  }
   background-size: contain;
   background-repeat: no-repeat;
   &.selected {
