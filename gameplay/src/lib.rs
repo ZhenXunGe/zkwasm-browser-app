@@ -278,6 +278,14 @@ pub fn get_item_context() -> Vec<u32> {
     }
 }
 
+fn unpack_u64_to_game_history(data: u64) -> (u32, u32) {
+    let bytes = data.to_le_bytes();
+    let player_input = u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]);
+    let value = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
+    (player_input, value)
+}
+
+
 fn parse_command_value(raw_command: u32, value: u32) {
     
     let command: Command = num::FromPrimitive::from_u32(raw_command).unwrap();
@@ -292,9 +300,20 @@ fn parse_command_value(raw_command: u32, value: u32) {
 
 #[wasm_bindgen]
 pub fn zkmain() {
-    init_rg();
-    reset_character();
+    unsafe {
+        init_rg();
+        reset_character();
+        let input_len = wasm_input(1);
+        let mut cursor = 0;
+        
+        while cursor < input_len {
 
-    parse_command_value(0, 0);
+            let encoded = wasm_input(0);
+            //Convert encoded u64 into two u32s
+            let (command, value) = unpack_u64_to_game_history(encoded);
 
+            parse_command_value(command, value);
+            cursor += 1;
+        }
+    }
 }
