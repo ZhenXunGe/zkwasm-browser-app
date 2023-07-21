@@ -1,5 +1,5 @@
 import { Spinner } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GameHistory, InputType, WasmInstance } from "../../types/game";
 import { NewProveTask } from "../../modals/addNewProveTask";
 import "./style.scss";
@@ -10,13 +10,16 @@ interface HistoryProps {
 }
 
 export default function History(props: HistoryProps) {
-  const years = GetYearSummary(props.stack);
-
-  //TODO: From the information in each year, create a summary of the year
+  let years = GetYearSummary(props.stack);
 
   return (
     <div className="historys">
-      <div className="suicide" onClick={() => props.restartGame()}></div>
+      <div
+        className="suicide"
+        onClick={() => {
+          props.restartGame();
+        }}
+      ></div>
       <HistorySummary
         years={years}
         year={years.length - 1}
@@ -66,7 +69,10 @@ const HistorySummary = ({ years, year }: HistorySummaryProps) => {
   };
 
   useEffect(() => {
-    setTaskId("");
+    if (years[0].length === 0) {
+      setTaskId("");
+      setProofSubmitted(false);
+    }
   }, [years]);
 
   const placeholderStamps = () => {

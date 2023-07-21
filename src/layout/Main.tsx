@@ -211,6 +211,7 @@ export function Main() {
   function restartGame() {
     instance!.reset_character();
     updateState(instance!);
+
     setGameHistory([]);
   }
 
