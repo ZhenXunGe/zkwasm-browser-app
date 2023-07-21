@@ -293,9 +293,6 @@ fn unpack_u64_to_game_history(data: u64) -> (u32, u32) {
 }
 
 fn parse_command_value(raw_command: u32, value: u32) {
-    unsafe {
-        wasm_dbg(raw_command as u64);
-    }
     
     match raw_command {
         0 => action(value as u32),
@@ -308,20 +305,20 @@ fn parse_command_value(raw_command: u32, value: u32) {
 }
 #[wasm_bindgen]
 pub fn zkmain() {
-    unsafe {
-        init_rg();
-        reset_character();
-        let input_len = wasm_input(1);
-        let mut cursor = 0;
+    // unsafe {
+    //     init_rg();
+    //     reset_character();
+    //     let input_len = wasm_input(1);
+    //     let mut cursor = 0;
         
-        while cursor < input_len {
+    //     while cursor < input_len {
 
-            let encoded = wasm_input(0);
-            //Convert encoded u64 into two u32s
-            let (command, value) = unpack_u64_to_game_history(encoded);
+    //         let encoded = wasm_input(0);
+    //         //Convert encoded u64 into two u32s
+    //         let (command, value) = unpack_u64_to_game_history(encoded);
 
-            parse_command_value(command, value);
-            cursor += 1;
-        }
-    }
+    //         parse_command_value(command, value);
+    //         cursor += 1;
+    //     }
+    // }
 }

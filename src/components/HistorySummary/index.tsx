@@ -1,3 +1,5 @@
+import { Spinner } from "react-bootstrap";
+import { useState } from "react";
 import { GameHistory, InputType, WasmInstance } from "../../types/game";
 import { NewProveTask } from "../../modals/addNewProveTask";
 import "./style.scss";
@@ -12,94 +14,115 @@ export default function History(props: HistoryProps) {
 
   //TODO: From the information in each year, create a summary of the year
 
-  const parseActionValue = (value: number) => {
-    switch (value) {
-      case 0:
-        return "W";
-      case 1:
-        return "E";
-      case 2:
-        return "C";
-      default:
-        return "N";
-    }
-  };
-
-  function packGameHistoryToU64(gameHistory: GameHistory): string {
-    const u64 =
-      ((gameHistory.player_input as number) << 32) | (gameHistory.value >>> 0);
-    return "0x" + u64.toString(16) + ":bytes-packed";
-  }
-
-  const getWitness = (inputs: GameHistory[]) => {
-    const witnessData = inputs.map((input) => packGameHistoryToU64(input));
-
-    return witnessData;
-  };
-
   return (
     <div className="historys">
       <div className="suicide" onClick={() => props.restartGame()}></div>
-      <NewProveTask
-        md5="00064A779FC4F1EB13047A01D6AB03E9"
-        inputs={`${years[years.length - 1].length}:i64`}
-        witness={getWitness(years[years.length - 1])}
-      ></NewProveTask>
-      <div className="history">
-        {years[years.length - 1] && (
-          <>
-            <div className="age">{years.length + "yr"}</div>
-            <div className="summary">
-              {years[years.length - 1].map((input, index) => {
-                if (input.player_input !== InputType.Action) return;
-                return (
-                  <div key={index} className="stamp">
-                    {parseActionValue(input.value)}
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        )}
-      </div>
-      <div className="history">
-        {years[years.length - 2] && (
-          <>
-            addNewProveTask
-            <div className="age">{years.length - 1 + "yr"}</div>
-            <div className="summary">
-              {years[years.length - 2].map((input, index) => {
-                if (input.player_input !== InputType.Action) return;
-                return (
-                  <div key={index} className="stamp">
-                    {parseActionValue(input.value)}
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        )}
-      </div>
-      <div className="history">
-        {years[years.length - 3] && (
-          <>
-            <div className="age">{years.length - 2 + "yr"}</div>
-            <div className="summary">
-              {years[years.length - 3].map((input, index) => {
-                if (input.player_input !== InputType.Action) return;
-                return (
-                  <div key={index} className="stamp">
-                    {parseActionValue(input.value)}
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        )}
-      </div>
+      <HistorySummary years={years} year={years.length - 1}></HistorySummary>
+      <HistorySummary years={years} year={years.length - 2}></HistorySummary>
+      <HistorySummary years={years} year={years.length - 3}></HistorySummary>
     </div>
   );
 }
+
+interface HistorySummaryProps {
+  years: GameHistory[][];
+  year: number;
+}
+
+const HistorySummary = ({ years, year }: HistorySummaryProps) => {
+  const [taskId, setTaskId] = useState<string>("");
+
+  const showProveButton = (year: number) => {
+    if (!years[year]) return false;
+    if (taskId.length != 0) return false;
+    let actionCount = years[year].filter(
+      (input) => input.player_input === InputType.Action
+    ).length;
+
+    if (actionCount === 12) {
+      return true;
+    }
+    return false;
+  };
+
+  const handleTaskSubmit = (data: any) => {
+    console.log(data);
+    let newTaskId = data.id;
+    setTaskId(newTaskId);
+  };
+
+  return (
+    <div className="history">
+      {years[year] && (
+        <>
+          <div className="age">{year + 1 + "yr"}</div>
+          <div className="summary">
+            <div className="stamps">
+              {years[year].map((input, index) => {
+                if (input.player_input !== InputType.Action) return;
+                return (
+                  <div key={index} className="stamp">
+                    {parseActionValue(input.value)}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="proofsubmit">
+              {showProveButton(year) ? (
+                <NewProveTask
+                  md5="04B774EC034C07334A1B28D5F2689AB1"
+                  inputs={`${years[year].length}:i64`}
+                  witness={getWitness(years[year])}
+                  OnTaskSubmitSuccess={handleTaskSubmit}
+                ></NewProveTask>
+              ) : taskId ? (
+                <>
+                  <a
+                    href={`https://zkwasm-explorer.delphinuslab.com/task/${taskId}`}
+                    target="_blank"
+                    className="proof"
+                  >
+                    <Spinner></Spinner>
+                  </a>
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+const parseActionValue = (value: number) => {
+  switch (value) {
+    case 0:
+      return "W";
+    case 1:
+      return "E";
+    case 2:
+      return "C";
+    default:
+      return "N";
+  }
+};
+
+function packGameHistoryToU64(gameHistory: GameHistory): string {
+  const player_input_hex = (gameHistory.player_input >>> 0)
+    .toString(16)
+    .padStart(8, "0");
+  const value_hex = (gameHistory.value >>> 0).toString(16).padStart(8, "0");
+  return "0x" + value_hex + player_input_hex + ":bytes-packed";
+}
+
+const getWitness = (inputs: GameHistory[]) => {
+  const witnessData = inputs.map((input) => packGameHistoryToU64(input));
+  console.log("witnessData", witnessData);
+  return witnessData;
+};
+
 const GetYearSummary = (input_stack: GameHistory[]) => {
   let year = 0;
   let actionCount = 0; // Count for 'Action' input type occurrences

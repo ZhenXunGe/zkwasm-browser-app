@@ -407,14 +407,15 @@ div.content {
 
 .sell-button {
   border: none;
+  margin-left: auto;
   background-color: var(--button-main);
-  padding: 5px 30px;
+  padding: 5px 10px;
   border-radius: 5px;
   color: var(--info-text-color);
   font-family: "Be Vietnam";
   font-style: normal;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 10px;
   transition: 0.3s all ease;
   &:hover {
     background-color: var(--button-hover);

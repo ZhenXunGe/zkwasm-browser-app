@@ -32,6 +32,7 @@
     background-size: contain;
 
     padding: 0 10%;
+    padding-right: 5%;
     display: flex;
     align-items: center;
     font-family: Averia Serif Libre;
@@ -41,10 +42,19 @@
     }
     .summary {
       margin-left: 5%;
+      width: 100%;
       display: flex;
       flex-direction: row;
-      .stamp {
-        margin: 0 5px;
+      .stamps {
+        .stamp {
+          margin: 0 5px;
+        }
+
+        display: flex;
+        flex-direction: row;
+      }
+      .proofsubmit {
+        margin-left: auto;
       }
     }
   }
