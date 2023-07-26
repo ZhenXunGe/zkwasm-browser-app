@@ -1,64 +1,10 @@
 import makeWasm from "./gameplay.wasm";
 import { __wbg_set_wasm } from "./gameplay.wasm_bg";
 import CryptoJS from 'crypto-js';
+import { convertUint8ArrayToWordArray, Sha256Context, Generator } from './hostapi.js';
 const { Module, instantiate, Memory, Table } = WebAssembly;
 
 var instance = null;
-
-function convertUint8ArrayToWordArray(u8Array) {
-  var words = [], i = 0, len = u8Array.length;
-
-  while (i < len) {
-    words.push(
-      (u8Array[i++] << 24) |
-      (u8Array[i++] << 16) |
-      (u8Array[i++] << 8)  |
-      (u8Array[i++])
-    );
-  }
-
-  return {
-    sigBytes: words.length * 4,
-    words: words
-  };
-}
-
-class Generator {
-  constructor(cursor, values) {
-    if(isNaN(cursor)) {
-      console.log("The cursor must be a number.");
-      return;
-    } else {
-      this.cursor = cursor;
-    }
-    if(values instanceof Array) {
-      this.values = values;
-    } else {
-      console.log("The values must be an array.");
-      return;
-    }
-  }
-
-  // Get value at index cursor
-  gen() {
-    let value = this.values[this.cursor];
-    this.cursor += 1;
-    return value;
-  }
-}
-
-class Sha256Context {
-  constructor(hasher, generator, size) {
-    this.hasher = hasher;
-    this.generator = new Generator(generator.cursor, generator.values);
-    // size is max bytes of hasher's message
-    if(isNaN(size)) {
-      console.log("The size must be a number.");
-    } else {
-      this.size = size;
-    }
-  }
-}
 
 var sha256Context = new Sha256Context(undefined, new Generator(0, []), 0);
 
@@ -158,8 +104,8 @@ function sha256Finalize(context) {
     }
     context.generator.values = uint64Array;
     context.hasher = undefined;
-    this.finalized = true; 
-    return context.generator.gen(); 
+    this.finalized = true;
+    return context.generator.gen();
   } catch(e) {
     console.log(e);
   }
