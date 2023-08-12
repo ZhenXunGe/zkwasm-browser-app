@@ -321,3 +321,32 @@ pub fn zkmain() {
         }
     }
 }
+
+#[wasm_bindgen(module = "/hostapi.js")]
+extern "C" {
+  pub type Sha256Context;
+
+  //#[wasm_bindgen(constructor)]
+  //fn new_sha256_context(hasher: &Sha256, generator: &Generator, size: usize) -> sha256Context;
+
+  fn sha256New(context: &Sha256Context, size: u64);
+
+  fn sha256Push(context: &Sha256Context, message: u64);
+
+  fn sha256Finalize(context: &Sha256Context);
+}
+
+#[wasm_bindgen]
+pub extern "C" fn sha256_new(context: &Sha256Context, size: u64) {
+  sha256New(context, size);
+}
+
+#[wasm_bindgen]
+pub extern "C" fn sha256_push(context: &Sha256Context, message: u64) {
+  sha256Push(context, message);
+}
+
+#[wasm_bindgen]
+pub extern "C" fn sha256_finalize(context: &Sha256Context) {
+  sha256Finalize(context);
+}
