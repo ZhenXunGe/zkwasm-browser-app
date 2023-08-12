@@ -1,6 +1,5 @@
 import makeWasm from "./gameplay.wasm";
-import { __wbg_set_wasm } from "./gameplay.wasm_bg.js";
-const { sha256New, sha256Push, sha256Finalize } =  require('./hostapi.js');
+import { __wbg_set_wasm } from "./gameplay.wasm_bg";
 const { Module, instantiate, Memory, Table } = WebAssembly;
 
 var instance = null;
@@ -27,10 +26,7 @@ export default async function () {
         wasm_input: () => {
           console.error("wasm_input should not been called in non-zkwasm mode");
           throw new Error("Unsupported wasm api: wasm_input");
-        },
-        sha256New: sha256New,
-        sha256Push: sha256Push,
-        sha256Finalize: sha256Finalize
+        }
       },
     });
     console.log("module loaded", module); // "3

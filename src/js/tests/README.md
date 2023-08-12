@@ -1,3 +1,3 @@
-## How to run `sha256Test.js`
-1. Modify function parameter in `sha256Test.js`
-2. Run `node sha256Test.js`
+## How to run `sha256test.js`
+1. Modify function parameter in `sha256test.js`
+2. Run `node sha256test.js`
