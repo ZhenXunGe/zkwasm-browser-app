@@ -26,7 +26,7 @@ export default async function () {
         wasm_input: () => {
           console.error("wasm_input should not been called in non-zkwasm mode");
           throw new Error("Unsupported wasm api: wasm_input");
-        },
+        }
       },
     });
     console.log("module loaded", module); // "3

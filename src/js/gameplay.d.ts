@@ -121,3 +121,17 @@ export function get_item_context(): Uint32Array;
 /**
 */
 export function zkmain(): void;
+/**
+* @param {any} context
+* @param {bigint} size
+*/
+export function sha256_new(context: any, size: bigint): void;
+/**
+* @param {any} context
+* @param {bigint} message
+*/
+export function sha256_push(context: any, message: bigint): void;
+/**
+* @param {any} context
+*/
+export function sha256_finalize(context: any): void;

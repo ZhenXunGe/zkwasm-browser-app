@@ -1,3 +1,5 @@
+import { sha256New, sha256Push, sha256Finalize } from './snippets/zkwasm-rust-app-909603ca9486d4f3/hostapi.js';
+
 let wasm;
 export function __wbg_set_wasm(val) {
     wasm = val;
@@ -282,4 +284,64 @@ export function get_item_context() {
 export function zkmain() {
     wasm.zkmain();
 }
+
+const heap = new Array(128).fill(undefined);
+
+heap.push(undefined, null, true, false);
+
+function getObject(idx) { return heap[idx]; }
+
+let stack_pointer = 128;
+
+function addBorrowedObject(obj) {
+    if (stack_pointer == 1) throw new Error('out of js stack');
+    heap[--stack_pointer] = obj;
+    return stack_pointer;
+}
+/**
+* @param {any} context
+* @param {bigint} size
+*/
+export function sha256_new(context, size) {
+    try {
+        wasm.sha256_new(addBorrowedObject(context), size);
+    } finally {
+        heap[stack_pointer++] = undefined;
+    }
+}
+
+/**
+* @param {any} context
+* @param {bigint} message
+*/
+export function sha256_push(context, message) {
+    try {
+        wasm.sha256_push(addBorrowedObject(context), message);
+    } finally {
+        heap[stack_pointer++] = undefined;
+    }
+}
+
+/**
+* @param {any} context
+*/
+export function sha256_finalize(context) {
+    try {
+        wasm.sha256_finalize(addBorrowedObject(context));
+    } finally {
+        heap[stack_pointer++] = undefined;
+    }
+}
+
+export function __wbg_sha256New_f3e69e720ee09870(arg0, arg1) {
+    sha256New(getObject(arg0), BigInt.asUintN(64, arg1));
+};
+
+export function __wbg_sha256Push_8eedccf064df5644(arg0, arg1) {
+    sha256Push(getObject(arg0), BigInt.asUintN(64, arg1));
+};
+
+export function __wbg_sha256Finalize_edf4779241845665(arg0) {
+    sha256Finalize(getObject(arg0));
+};
 
